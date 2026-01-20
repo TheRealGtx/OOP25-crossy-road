@@ -13,6 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 class TestPositionablePlayer {
     private static final Position INITIAL_POSITION = new Position(10, 2);
+    private static final Position EXPECTED_MOVE_UP_POSITION = new Position(INITIAL_POSITION.x(), INITIAL_POSITION.y() - 1);
+    private static final Position EXPECTED_MOVE_DOWN_POSITION = new Position(INITIAL_POSITION.x(), INITIAL_POSITION.y() + 1);
+    private static final Position EXPECTED_MOVE_LEFT_POSITION = new Position(INITIAL_POSITION.x() - 1, INITIAL_POSITION.y());
+    private static final Position EXPECTED_MOVE_RIGHT_POSITION = new Position(INITIAL_POSITION.x() + 1, INITIAL_POSITION.y());
 
     private PositionablePlayer player;
 
@@ -38,7 +42,7 @@ class TestPositionablePlayer {
     @Test
     void testMoveUp() {
         this.player.move(Direction.UP);
-        assertEquals(new Position(10, 1), this.player.getPosition());
+        assertEquals(EXPECTED_MOVE_UP_POSITION, this.player.getPosition());
     }
 
     /**
@@ -47,7 +51,7 @@ class TestPositionablePlayer {
     @Test
     void testMoveDown() {
         this.player.move(Direction.DOWN);
-        assertEquals(new Position(10, 3), this.player.getPosition());
+        assertEquals(EXPECTED_MOVE_DOWN_POSITION, this.player.getPosition());
     }
 
     /**
@@ -56,7 +60,7 @@ class TestPositionablePlayer {
     @Test
     void testMoveLeft() {
         this.player.move(Direction.LEFT);
-        assertEquals(new Position(9, 2), this.player.getPosition());
+        assertEquals(EXPECTED_MOVE_LEFT_POSITION, this.player.getPosition());
     }
 
     /**
@@ -65,7 +69,7 @@ class TestPositionablePlayer {
     @Test
     void testMoveRight() {
         this.player.move(Direction.RIGHT);
-        assertEquals(new Position(11, 2), this.player.getPosition());
+        assertEquals(EXPECTED_MOVE_RIGHT_POSITION, this.player.getPosition());
     }
 
     /**
