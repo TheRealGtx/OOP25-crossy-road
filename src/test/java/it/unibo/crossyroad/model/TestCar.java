@@ -11,6 +11,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Test class for the {@link Car} class.
+ */
 class TestCar {
     private static final Position INITIAL_POSITION_CAR_LEFT_DIRECTION = new Position(20, 5);
     private static final Position INITIAL_POSITION_CAR_RIGHT_DIRECTION = new Position(0, 4);
@@ -23,12 +26,18 @@ class TestCar {
     private Car carWithLeftDirection;
     private Car carWithRightDirection;
 
+    /**
+     * Sets up two Car instances before each test, one moving left and the other moving right.
+     */
     @BeforeEach
     void setUp() {
         this.carWithLeftDirection = new Car(INITIAL_POSITION_CAR_LEFT_DIRECTION, SPEED, Direction.LEFT);
         this.carWithRightDirection = new Car(INITIAL_POSITION_CAR_RIGHT_DIRECTION, SPEED, Direction.RIGHT);
     }
 
+    /**
+     * Tests that creating a Car with UP or DOWN direction throws an IllegalArgumentException.
+     */
     @Test
     void testCarUpOrDownDirectionNotAllowed() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -39,12 +48,18 @@ class TestCar {
         });
     }
 
+    /**
+     * Tests the collision type and entity type of the Car.
+     */
     @Test
     void testCollisionTypeAndEntityType() {
         assertEquals(CollisionType.DEADLY, this.carWithLeftDirection.getCollisionType());
         assertEquals(EntityType.CAR, this.carWithLeftDirection.getEntityType());
     }
 
+    /**
+     * Tests that creating a Car with zero speed throws an IllegalArgumentException.
+     */
     @Test
     void testCarZeroSpeedNotAllowed() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -52,12 +67,18 @@ class TestCar {
         });
     }
 
+    /**
+     * Tests the initial positions of the Cars.
+     */
     @Test
     void testInitialPositionCarLeftAndRightDirection() {
         assertEquals(INITIAL_POSITION_CAR_LEFT_DIRECTION, this.carWithLeftDirection.getPosition());
         assertEquals(INITIAL_POSITION_CAR_RIGHT_DIRECTION, this.carWithRightDirection.getPosition());
     }
 
+    /**
+     * Tests the movement of the Car with LEFT direction.
+     */
     @Test
     void testMoveCarLeftDirection() {
         this.carWithLeftDirection.update(DELTA_TIME, SPEED_MULTIPLIER);
@@ -69,6 +90,9 @@ class TestCar {
         assertEquals(expectedPosition, this.carWithLeftDirection.getPosition());
     }
 
+    /**
+     * Tests the movement of the Car with RIGHT direction.
+     */
     @Test
     void testMoveCarRightDirection() {
         this.carWithRightDirection.update(DELTA_TIME, SPEED_MULTIPLIER);
@@ -80,6 +104,9 @@ class TestCar {
         assertEquals(expectedPosition, this.carWithRightDirection.getPosition());
     }
 
+    /**
+     * Tests multiple updates of the Cars in both LEFT and RIGHT directions.
+     */
     @Test
     void testMultipleUpdates() {
         final double deltaX = SPEED * SPEED_MULTIPLIER * DELTA_TIME / 1000.0 * UPDATES_COUNT;

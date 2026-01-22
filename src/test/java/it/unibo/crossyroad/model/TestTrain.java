@@ -11,6 +11,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Test class for the {@link Train} class.
+ */
 class TestTrain {
     private static final Position INITIAL_POSITION_TRAIN = new Position(0, 4);
     private static final double SPEED_MULTIPLIER = 1.0;
@@ -21,11 +24,17 @@ class TestTrain {
 
     private Train train;
 
+    /**
+     * Sets up a Train instance before each test.
+     */
     @BeforeEach
     void setUp() {
         this.train = new Train(INITIAL_POSITION_TRAIN, SPEED, Direction.RIGHT);
     }
 
+    /**
+     * Tests that creating a Train with UP or DOWN direction throws an IllegalArgumentException.
+     */
     @Test
     void testTrainUpOrDownDirectionNotAllowed() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -36,12 +45,18 @@ class TestTrain {
         });
     }
 
+    /**
+     * Tests the collision type and entity type of the Train.
+     */
     @Test
     void testCollisionTypeAndEntityType() {
         assertEquals(CollisionType.DEADLY, this.train.getCollisionType());
         assertEquals(EntityType.TRAIN, this.train.getEntityType());
     }
 
+    /**
+     * Tests that creating a Train with zero speed throws an IllegalArgumentException.
+     */
     @Test
     void testTrainZeroSpeedNotAllowed() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -49,11 +64,17 @@ class TestTrain {
         });
     }
 
+    /**
+     * Tests the initial position of the Train.
+     */
     @Test
     void testInitialPositionTrain() {
         assertEquals(INITIAL_POSITION_TRAIN, this.train.getPosition());
     }
 
+    /**
+     * Tests the movement of the Train after a single update.
+     */
     @Test
     void testMoveTrain() {
         this.train.update(DELTA_TIME, SPEED_MULTIPLIER);
@@ -62,6 +83,9 @@ class TestTrain {
         assertEquals(expectedPosition, this.train.getPosition());
     }
 
+    /**
+     * Tests the movement of the Train after multiple updates.
+     */
     @Test
     void testMultipleUpdates() {
         final double deltaX = SPEED * SPEED_MULTIPLIER * DELTA_TIME / 1000.0 * UPDATES_COUNT;
