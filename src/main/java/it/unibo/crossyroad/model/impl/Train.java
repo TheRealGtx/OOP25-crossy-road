@@ -1,6 +1,11 @@
 package it.unibo.crossyroad.model.impl;
 
-import it.unibo.crossyroad.model.api.*;
+import it.unibo.crossyroad.model.api.Direction;
+import it.unibo.crossyroad.model.api.AbstractActiveObstacle;
+import it.unibo.crossyroad.model.api.CollisionType;
+import it.unibo.crossyroad.model.api.Position;
+import it.unibo.crossyroad.model.api.Dimension;
+import it.unibo.crossyroad.model.api.EntityType;
 
 /**
  * A class representing a train obstacle in the game.
@@ -8,14 +13,14 @@ import it.unibo.crossyroad.model.api.*;
 public class Train extends AbstractActiveObstacle {
 
     /**
-     * It creates a new active obstacle (train) with the initial position, dimension and direction.
+     * It creates a new active obstacle (train) with the initial position, speed and direction.
      *
      * @param position the initial position of the train.
-     * @param dimension the initial dimension of the train.
+     * @param speed the static speed of the train.
      * @param direction the direction of the movement of the train.
      */
-    public Train(final Position position, final Dimension dimension, final Direction direction) {
-        super(position, dimension, direction);
+    public Train(final Position position, final double speed, final Direction direction) {
+        super(position, new Dimension(8, 1), speed, direction);
     }
 
     /**
