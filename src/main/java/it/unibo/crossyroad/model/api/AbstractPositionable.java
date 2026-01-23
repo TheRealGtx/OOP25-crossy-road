@@ -1,5 +1,7 @@
 package it.unibo.crossyroad.model.api;
 
+import java.util.Objects;
+
 /**
  * An abstract class representing an entity that has a position in a 2D space.
  */
@@ -12,10 +14,11 @@ public abstract class AbstractPositionable implements Positionable {
      *
      * @param initialPosition the initial position of the entity
      * @param dimension the dimension of the entity
+     * @throws NullPointerException if initialPosition or dimension is null
      */
     public AbstractPositionable(final Position initialPosition, final Dimension dimension) {
-        this.position = initialPosition;
-        this.dimension = dimension;
+        this.position = Objects.requireNonNull(initialPosition, "Initial position cannot be null");
+        this.dimension = Objects.requireNonNull(dimension, "Dimension cannot be null");
     }
 
     /**
@@ -30,9 +33,10 @@ public abstract class AbstractPositionable implements Positionable {
      * Set a new position to the entity.
      *
      * @param position the new position
+     * @throws NullPointerException if position is null
      */
     protected void setPosition(final Position position) {
-        this.position = position;
+        this.position = Objects.requireNonNull(position, "Position cannot be null");
     }
 
     /**

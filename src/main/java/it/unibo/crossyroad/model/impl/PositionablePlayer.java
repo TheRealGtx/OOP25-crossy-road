@@ -7,6 +7,8 @@ import it.unibo.crossyroad.model.api.Position;
 import it.unibo.crossyroad.model.api.Direction;
 import it.unibo.crossyroad.model.api.Player;
 
+import java.util.Objects;
+
 /**
  * A class representing the player (chicken) entity in the game.
  */
@@ -14,7 +16,7 @@ public class PositionablePlayer extends AbstractPositionable implements Player {
     /**
      * It creates a new positionable entity with the given initial position and a dimension of 1x1.
      *
-     * @param initialPosition the initial position of the entity
+     * @param initialPosition the initial position of the entity (not null)
      */
     public PositionablePlayer(final Position initialPosition) {
         super(initialPosition, new Dimension(1, 1));
@@ -33,6 +35,7 @@ public class PositionablePlayer extends AbstractPositionable implements Player {
      */
     @Override
     public void move(final Direction direction) {
+        Objects.requireNonNull(direction, "Direction cannot be null");
         this.setPosition(direction.apply(this.getPosition()));
     }
 }
