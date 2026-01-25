@@ -17,10 +17,4 @@ public interface Chunk extends Positionable {
      * @see Obstacle
      */
     List<Obstacle> getObstacles();
-
-    //TODO update
-
-    //TODO getPickables
-
-    //TODO geActivePowerUps
 }
