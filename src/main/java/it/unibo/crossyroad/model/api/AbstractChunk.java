@@ -57,7 +57,7 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
     private void moveObstacles(GameParameters g, long deltaTime) {
         for (Obstacle obs : this.obstacles) {
             if (obs instanceof ActiveObstacle) {
-                ((ActiveObstacle)obs).update(deltaTime, g.getCarSpeedMultiplier()); //TODO pass all parameters.
+                ((ActiveObstacle)obs).update(deltaTime, g);
             }
         }
     }

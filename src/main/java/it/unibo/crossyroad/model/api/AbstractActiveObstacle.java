@@ -32,11 +32,20 @@ public abstract class AbstractActiveObstacle extends AbstractPositionable implem
      * {@inheritDoc}
      */
     @Override
-    public void update(final long deltaTime, final double speedMultiplier) {
+    public void update(final long deltaTime, final GameParameters parameters) {
+        final double speedMultiplier = getSpeedMultiplier(parameters);
         if (speedMultiplier <= 0) {
             throw new IllegalArgumentException("Speed multiplier must be positive");
         }
         final double deltaX = this.speed * speedMultiplier * deltaTime / 1000.0 * (this.direction == Direction.LEFT ? -1 : 1);
         super.setPosition(new Position(super.getPosition().x() + deltaX, super.getPosition().y()));
     }
+
+    /**
+     * Get the speed multiplier based on the type of active obstacle.
+     *
+     * @param parameters the game parameters.
+     * @return the speed multiplier.
+     */
+    protected abstract double getSpeedMultiplier(GameParameters parameters);
 }

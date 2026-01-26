@@ -13,7 +13,7 @@ public abstract class AbstractActiveChunk extends AbstractChunk implements Activ
     public void update(GameParameters params, long deltaTime) {
         for (Obstacle obs : this.getObstacles()) {
             if (obs instanceof ActiveObstacle) {
-                ((ActiveObstacle)obs).update(deltaTime, params.getCarSpeedMultiplier());
+                ((ActiveObstacle)obs).update(deltaTime, params);
             }
         }
     }
