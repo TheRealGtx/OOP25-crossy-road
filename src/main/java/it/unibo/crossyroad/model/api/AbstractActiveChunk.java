@@ -1,8 +1,18 @@
 package it.unibo.crossyroad.model.api;
 
+/**
+ * Represents a chunk with active obstacle on top of it.
+ */
 public abstract class AbstractActiveChunk extends AbstractChunk implements ActiveChunk {
-    
-    public AbstractActiveChunk(Position initialPosition, Dimension dimension) {
+
+    /**
+     * Initializes the Chunk.
+     * 
+     * @param initialPosition the Chunk's initial position.
+     * 
+     * @param dimension the Chunk's dimension.
+     */
+    public AbstractActiveChunk(final Position initialPosition, final Dimension dimension) {
         super(initialPosition, dimension);
     }
 
@@ -10,10 +20,10 @@ public abstract class AbstractActiveChunk extends AbstractChunk implements Activ
      * {@inheritDoc}
      */
     @Override
-    public void update(GameParameters params, long deltaTime) {
-        for (Obstacle obs : this.getObstacles()) {
+    public void update(final GameParameters params, final long deltaTime) {
+        for (final Obstacle obs : this.getObstacles()) {
             if (obs instanceof ActiveObstacle) {
-                ((ActiveObstacle)obs).update(deltaTime, params);
+                ((ActiveObstacle) obs).update(deltaTime, params);
             }
         }
     }

@@ -3,11 +3,21 @@ package it.unibo.crossyroad.model.api;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Represents a Chunk.
+ */
 public abstract class AbstractChunk extends AbstractPositionable implements Chunk {
-    
+
     private final List<Obstacle> obstacles;
 
-    public AbstractChunk(Position initialPosition, Dimension dimension) {
+    /**
+     * Initializes the Chunk.
+     * 
+     * @param initialPosition the Chunk's initial position.
+     * 
+     * @param dimension the Chunk's dimension.
+     */
+    public AbstractChunk(final Position initialPosition, final Dimension dimension) {
         super(initialPosition, dimension);
         this.obstacles = new LinkedList<>();
     }
@@ -38,11 +48,14 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
      * 
      * @see Obstacle.
      */
-    protected void addObstacle(Obstacle obs) {
+    protected void addObstacle(final Obstacle obs) {
         this.obstacles.add(obs);
     }
 
-    protected void clearObstacles() {
+    /**
+     * Deletes all the obstacles present on the Chunk.
+     */
+    protected final void clearObstacles() {
         this.obstacles.clear();
     }
 
@@ -53,11 +66,15 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
 
     /**
      * Updates the positions of the Obstacles on the Chunk.
+     * 
+     * @param g the game parameters.
+     * 
+     * @param deltaTime time since last update.
      */
-    private void moveObstacles(GameParameters g, long deltaTime) {
-        for (Obstacle obs : this.obstacles) {
+    private void moveObstacles(final GameParameters g, final long deltaTime) {
+        for (final Obstacle obs : this.obstacles) {
             if (obs instanceof ActiveObstacle) {
-                ((ActiveObstacle)obs).update(deltaTime, g);
+                ((ActiveObstacle) obs).update(deltaTime, g);
             }
         }
     }
@@ -65,5 +82,5 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
     /**
      * Updates the positions of the Pickables on the Chunk.
      */
-    private void movePickables() {}
+    private void movePickables() { }
 }

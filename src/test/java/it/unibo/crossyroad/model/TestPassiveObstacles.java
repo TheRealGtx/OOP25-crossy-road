@@ -13,13 +13,15 @@ import it.unibo.crossyroad.model.impl.Rock;
 import it.unibo.crossyroad.model.impl.Tree;
 
 class TestPassiveObstacles {
+    private static final Position OBSTACLE_POS_1 = new Position(6, 6);
+    private static final Position OBSTACLE_POS_2 = new Position(5, 5);
     private Rock rock;
     private Tree tree;
 
     @BeforeEach
-    void setup() {
-        this.rock = new Rock(new Position(6, 6), new Dimension(1, 1));
-        this.tree = new Tree(new Position(5, 5), new Dimension(1, 1));
+    void setUp() {
+        this.rock = new Rock(OBSTACLE_POS_1, new Dimension(1, 1));
+        this.tree = new Tree(OBSTACLE_POS_2, new Dimension(1, 1));
     }
 
     @Test
