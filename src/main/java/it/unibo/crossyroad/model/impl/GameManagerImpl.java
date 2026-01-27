@@ -19,19 +19,24 @@ import it.unibo.crossyroad.model.api.Positionable;
 
 /**
  * Implementation of the GameManager interface.
+ * 
  * @see GameManager
  */
 public class GameManagerImpl implements GameManager {
 
-    private final static Position PLAYER_START_POSITION = new Position(5, 0);
-    private final static Position CHUNK_START_POSITION = new Position(0, 0);
-    private final static int Y_MOVE_MAP_MARK = 4;
-    private final static int Y_DISPOSE_CHUNK_MARK = 12;
-    private final static int Y_CREATE_CHUNK_MARK = 2;
-    private final static int Y_MAP_MOVEMENT = 1;
-    private final static Dimension CHUNK_DIMENSION = new Dimension(10, 3);
-    private final static int MAP_WIDTH = 10;
-    private final static int MAP_HEIGHT = 3;
+    private static final Position PLAYER_START_POSITION = new Position(5, 0);
+    private static final Position CHUNK_START_POSITION = new Position(0, 0);
+    private static final Position CHUNK_FIRST_POSITION = new Position(3, 0);
+    private static final Position CHUNK_SECOND_POSITION = new Position(6, 0);
+    private static final Position CHUNK_THIRD_POSITION = new Position(9, 0);
+    private static final Random RANDOM = new Random();
+    private static final int Y_MOVE_MAP_MARK = 4;
+    private static final int Y_DISPOSE_CHUNK_MARK = 12;
+    private static final int Y_CREATE_CHUNK_MARK = 2;
+    private static final int Y_MAP_MOVEMENT = 1;
+    private static final Dimension CHUNK_DIMENSION = new Dimension(10, 3);
+    private static final int MAP_WIDTH = 10;
+    private static final int MAP_HEIGHT = 3;
     private PositionablePlayer player;
     private final GameParameters gameParameters;
     private List<Chunk> chunks;
@@ -41,8 +46,8 @@ public class GameManagerImpl implements GameManager {
      * 
      * @param g the GameParameters to use in the game.
      */
-    public GameManagerImpl(GameParameters g) {
-        this.gameParameters = g;
+    public GameManagerImpl(final GameParameters g) {
+        this.gameParameters = g;    //TODO fix spotbugs.
         this.reset();
     }
 
@@ -53,6 +58,7 @@ public class GameManagerImpl implements GameManager {
     public List<Positionable> getPositionables() {
         final List<Positionable> positionables = new LinkedList<>();
         positionables.add(this.player);
+        positionables.addAll(this.chunks);
         positionables.addAll(this.getObstaclesOnMap());
 
         return List.copyOf(positionables);   //TODO update when i get Pickables.
@@ -71,10 +77,10 @@ public class GameManagerImpl implements GameManager {
      * {@inheritDoc}
      */
     @Override
-    public void update(long deltaTime) {
+    public void update(final long deltaTime) {
         this.chunks.stream()
                    .filter(c -> c instanceof ActiveChunk)
-                   .map(c -> (ActiveChunk)c)
+                   .map(c -> (ActiveChunk) c)
                    .forEach(ac -> ac.update(this.gameParameters, deltaTime));
 
         // this.checkCoinsCollisions();
@@ -85,7 +91,7 @@ public class GameManagerImpl implements GameManager {
      * {@inheritDoc}
      */
     @Override
-    public void movePlayer(Direction d) {
+    public void movePlayer(final Direction d) {
         if (this.canPlayerMove(d)) {
             this.player.move(d);
 
@@ -107,25 +113,24 @@ public class GameManagerImpl implements GameManager {
      * {@inheritDoc}
      */
     @Override
-    public void reset() {
+    public final void reset() {
         this.player = new PositionablePlayer(PLAYER_START_POSITION);
         this.chunks = new LinkedList<>();
 
         //Adds the first chunks to start the game
         this.chunks.add(new Grass(CHUNK_START_POSITION, CHUNK_DIMENSION));
-        this.chunks.add(new Grass(new Position(3, 0), CHUNK_DIMENSION));
-        this.chunks.add(new Grass(new Position(6, 0), CHUNK_DIMENSION));
-        this.chunks.add(new Grass(new Position(9, 0), CHUNK_DIMENSION));
+        this.chunks.add(new Grass(CHUNK_FIRST_POSITION, CHUNK_DIMENSION));
+        this.chunks.add(new Grass(CHUNK_SECOND_POSITION, CHUNK_DIMENSION));
+        this.chunks.add(new Grass(CHUNK_THIRD_POSITION, CHUNK_DIMENSION));
     }
 
     /**
      * Generates a new Chunk.
      */
     private void generateChunk() {
-        final Random rnd = new Random();
 
         //TODO add new Chunks when ready.
-        switch (rnd.nextInt(3)) {
+        switch (RANDOM.nextInt(3)) {
             case 0:
                 this.chunks.add(new Grass(CHUNK_START_POSITION, CHUNK_DIMENSION));
                 break;
@@ -135,6 +140,8 @@ public class GameManagerImpl implements GameManager {
             // case 2:
             //     this.chunks.add(new Railway(CHUNK_START_POSITION, CHUNK_DIMENSION));
             //     break;
+            default:
+                break;
         }
     }
 
@@ -145,20 +152,16 @@ public class GameManagerImpl implements GameManager {
      * 
      * @return true if the player can move, false otherwise.
      */
-    private boolean canPlayerMove(Direction d) {
+    private boolean canPlayerMove(final Direction d) {
         //Checks Passive obstacles collisions
-        for (Obstacle obs : this.getObstaclesOnMap()) {
-            if ((obs instanceof Rock || obs instanceof Tree) && d.apply(this.player.getPosition()) == obs.getPosition()) {
+        for (final Obstacle obs : this.getObstaclesOnMap()) {
+            if ((obs instanceof Rock || obs instanceof Tree) && d.apply(this.player.getPosition()).equals(obs.getPosition())) {
                 return false;
             }
         }
 
         //Checks map border collisions
-        if (d.apply(this.player.getPosition()).y() > MAP_WIDTH || d.apply(this.player.getPosition()).x() > MAP_HEIGHT) {
-            return false;
-        }
-
-        return true;
+        return !(d.apply(this.player.getPosition()).y() > MAP_WIDTH || d.apply(this.player.getPosition()).x() > MAP_HEIGHT);
     }
 
     /**
@@ -167,8 +170,8 @@ public class GameManagerImpl implements GameManager {
      * @return true if there's a collision, false otherwise.
      */
     private boolean checkDeadlyCollisions() {
-        for (Obstacle obs : this.getObstaclesOnMap()) {
-            if (obs instanceof ActiveObstacle && obs.getPosition() == this.player.getPosition()) {
+        for (final Obstacle obs : this.getObstaclesOnMap()) {
+            if (obs instanceof ActiveObstacle && obs.getPosition().equals(this.player.getPosition())) {
                 return true;
             }
         }
@@ -178,7 +181,7 @@ public class GameManagerImpl implements GameManager {
 
     //TODO when I have the object
     // private int checkCoinsCollision() {
-        
+
     // }
 
     //TODO when I have the object
@@ -206,8 +209,8 @@ public class GameManagerImpl implements GameManager {
         this.chunks.removeIf(c -> c.getPosition().y() >= Y_DISPOSE_CHUNK_MARK);
 
         //Elements movement
-        for (Chunk c : this.chunks) {
-            for (Obstacle o : c.getObstacles()) {
+        for (final Chunk c : this.chunks) {
+            for (final Obstacle o : c.getObstacles()) {
                 o.increaseY(Y_MAP_MOVEMENT); //TODO update when i get Pickables.
             }
         }

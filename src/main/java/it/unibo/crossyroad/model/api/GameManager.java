@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * GameManager interface. The Game Manager purpose is to manage the game, by generating/updating e disposing the objects that occupy the game terrain.
+ * GameManager interface.
+ * The Game Manager purpose is to manage the game, by generating/updating e disposing the objects that occupy the game terrain.
  */
 public interface GameManager {
 

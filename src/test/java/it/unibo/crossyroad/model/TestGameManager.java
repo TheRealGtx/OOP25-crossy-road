@@ -1,6 +1,5 @@
 package it.unibo.crossyroad.model;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,21 +11,19 @@ import it.unibo.crossyroad.model.impl.GameParametersBuilder;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class GameManagerTest {
+class TestGameManager {
     private GameManager gameManager;
-    private GameParameters gameParameters;
-
 
     @BeforeEach
-    void setup() {
-        this.gameParameters = new GameParametersBuilder()
+    void setUpGameManager() {
+        final GameParameters gameParameters = new GameParametersBuilder()
                               .setCoinMultiplier(1)
                               .setCarSpeedMultiplier(1)
                               .setTrainSpeedMultiplier(1)
                               .setInvincibility(false)
                               .setCoinCount(0)
                               .build();
-        this.gameManager = new GameManagerImpl(this.gameParameters);
+        this.gameManager = new GameManagerImpl(gameParameters);
     }
 
     @Test
