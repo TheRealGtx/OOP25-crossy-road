@@ -1,6 +1,7 @@
 package it.unibo.crossyroad.model.api;
 
 public abstract class AbstractActiveChunk extends AbstractChunk implements ActiveChunk {
+    private long timeSinceLastGeneration;
 
     public AbstractActiveChunk(Position initialPosition, Dimension dimension) {
         super(initialPosition, dimension);
@@ -28,5 +29,20 @@ public abstract class AbstractActiveChunk extends AbstractChunk implements Activ
      * @param deltaTime the time elapsed since the last update
      * @return true if new obstacles should be generated, false otherwise
      */
-    protected abstract boolean shouldGenerateNewObstacles(long deltaTime);
+    private boolean shouldGenerateNewObstacles(final long deltaTime) {
+        this.timeSinceLastGeneration += deltaTime;
+
+        if (this.timeSinceLastGeneration >= this.getGenerationInterval()) {
+            this.timeSinceLastGeneration = 0;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns the interval between obstacle generations (in ms).
+     *
+     * @return The ms that must pass between two generations
+     */
+    protected abstract long getGenerationInterval();
 }

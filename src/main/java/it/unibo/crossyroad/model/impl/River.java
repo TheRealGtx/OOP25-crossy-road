@@ -18,7 +18,6 @@ public class River extends AbstractActiveChunk {
 
     private final Direction direction;
     private final long logInterval;
-    private long timeSinceLastLog;
 
     /**
      * Constructor for River.
@@ -36,7 +35,6 @@ public class River extends AbstractActiveChunk {
 
         this.direction = direction;
         this.logInterval = (long) (LOGS_DISTANCE / LOGS_SPEED * 1000);
-        this.timeSinceLastLog = 0;
     }
 
     /**
@@ -52,21 +50,12 @@ public class River extends AbstractActiveChunk {
      * {@inheritDoc}
      */
     @Override
-    protected boolean shouldGenerateNewObstacles(final long deltaTime) {
-        this.timeSinceLastLog += deltaTime;
-
-        if (this.timeSinceLastLog >= this.logInterval) {
-            this.timeSinceLastLog = 0;
-            return true;
-        }
-        return false;
+    protected long getGenerationInterval() {
+        return this.logInterval;
     }
 
     private void addWater() {
-        final Obstacle water = new Water(
-            this.getPosition(),
-            this.getDimension()
-        );
+        final Obstacle water = new Water(this.getPosition(), this.getDimension());
 
         this.addObstacle(water);
     }
