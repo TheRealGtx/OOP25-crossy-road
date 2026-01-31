@@ -8,6 +8,7 @@ public class GameParametersBuilder {
     private double carSpeedMultiplier;
     private double trainSpeedMultiplier;
     private boolean invincibility;
+    private double logSpeedMultiplier;
     private int coinCount;
 
     /**
@@ -55,6 +56,17 @@ public class GameParametersBuilder {
     }
 
     /**
+     * Sets the log speed multiplier.
+     *
+     * @param multiplier the log speed multiplier
+     * @return the builder instance
+     */
+    public GameParametersBuilder setLogSpeedMultiplier(final double multiplier) {
+        this.logSpeedMultiplier = multiplier;
+        return this;
+    }
+
+    /**
      * Sets the coin count.
      *
      * @param coin the init coin.
@@ -76,6 +88,7 @@ public class GameParametersBuilder {
                 this.carSpeedMultiplier,
                 this.trainSpeedMultiplier,
                 this.invincibility,
+                this.logSpeedMultiplier,
                 this.coinCount
         );
     }
