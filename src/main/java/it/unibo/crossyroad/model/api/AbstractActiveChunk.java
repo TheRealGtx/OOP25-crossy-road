@@ -26,5 +26,17 @@ public abstract class AbstractActiveChunk extends AbstractChunk implements Activ
                 ((ActiveObstacle) obs).update(deltaTime, params);
             }
         }
+        spawnIfNeeded(deltaTime);
+        removeOutOfBoundObstacles();
     }
+
+    /**
+     * Spawns new obstacles if needed.
+     */
+    protected abstract void spawnIfNeeded(long deltaTime);
+
+    /**
+     * Removes out of bound obstacles from the chunk.
+     */
+    protected abstract void removeOutOfBoundObstacles();
 }
