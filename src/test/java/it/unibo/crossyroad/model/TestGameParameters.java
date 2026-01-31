@@ -22,11 +22,13 @@ class TestGameParameters {
     private static final double DEFAULT_CAR_SPEED_MULTIPLIER = 1.0;
     private static final double DEFAULT_TRAIN_SPEED_MULTIPLIER = 1.0;
     private static final boolean DEFAULT_INVINCIBILITY = false;
+    private static final double DEFAULT_LOG_SPEED_MULTIPLIER = 1.0;
     private static final int DEFAULT_COIN_START_COUNT = 0;
     private static final int TEST_COIN_MULTIPLIER = 2;
     private static final double TEST_CAR_SPEED_MULTIPLIER = 1.5;
     private static final double TEST_TRAIN_SPEED_MULTIPLIER = 2.0;
     private static final boolean TEST_INVINCIBILITY = true;
+    private static final double TEST_LOG_SPEED_MULTIPLIER = 1.8;
     private static final int TEST_COIN_START_COUNT = 5;
     private static final int INCREMENT_TIMES = 7;
 
@@ -43,6 +45,7 @@ class TestGameParameters {
                 .setTrainSpeedMultiplier(DEFAULT_TRAIN_SPEED_MULTIPLIER)
                 .setCoinMultiplier(DEFAULT_COIN_MULTIPLIER)
                 .setInvincibility(DEFAULT_INVINCIBILITY)
+                .setLogSpeedMultiplier(DEFAULT_LOG_SPEED_MULTIPLIER)
                 .build();
     }
 
@@ -56,6 +59,7 @@ class TestGameParameters {
         assertEquals(DEFAULT_TRAIN_SPEED_MULTIPLIER, this.gameParameters.getTrainSpeedMultiplier());
         assertEquals(DEFAULT_INVINCIBILITY, this.gameParameters.isInvincible());
         assertEquals(DEFAULT_COIN_START_COUNT, this.gameParameters.getCoinCount());
+        assertEquals(DEFAULT_LOG_SPEED_MULTIPLIER, this.gameParameters.getLogSpeedMultiplier());
     }
 
     /**
@@ -68,11 +72,13 @@ class TestGameParameters {
         this.gameParameters.setTrainSpeedMultiplier(TEST_TRAIN_SPEED_MULTIPLIER);
         this.gameParameters.setInvincibility(TEST_INVINCIBILITY);
         this.gameParameters.setCoinCount(TEST_COIN_START_COUNT);
+        this.gameParameters.setLogSpeedMultiplier(TEST_LOG_SPEED_MULTIPLIER);
 
         assertEquals(TEST_COIN_MULTIPLIER, this.gameParameters.getCoinMultiplier());
         assertEquals(TEST_CAR_SPEED_MULTIPLIER, this.gameParameters.getCarSpeedMultiplier());
         assertEquals(TEST_TRAIN_SPEED_MULTIPLIER, this.gameParameters.getTrainSpeedMultiplier());
         assertTrue(this.gameParameters.isInvincible());
+        assertEquals(TEST_LOG_SPEED_MULTIPLIER, this.gameParameters.getLogSpeedMultiplier());
         assertEquals(TEST_COIN_START_COUNT, this.gameParameters.getCoinCount());
     }
 
@@ -92,6 +98,9 @@ class TestGameParameters {
         );
         assertThrows(IllegalArgumentException.class, () ->
                 this.gameParameters.setCoinCount(-1)
+        );
+        assertThrows(IllegalArgumentException.class, () ->
+                this.gameParameters.setLogSpeedMultiplier(0)
         );
     }
 
@@ -118,6 +127,11 @@ class TestGameParameters {
         assertThrows(IllegalArgumentException.class, () ->
                 new GameParametersBuilder()
                         .setCoinCount(-1)
+                        .build()
+        );
+        assertThrows(IllegalArgumentException.class, () ->
+                new GameParametersBuilder()
+                        .setLogSpeedMultiplier(0)
                         .build()
         );
     }
@@ -149,6 +163,7 @@ class TestGameParameters {
                      "carSpeedMultiplier": 1.5,
                      "trainSpeedMultiplier": 2.0,
                      "invincibility": true,
+                     "logSpeedMultiplier": 1.8,
                      "coinCount": 5
                     }
                 """);
@@ -161,6 +176,7 @@ class TestGameParameters {
         assertEquals(TEST_COIN_MULTIPLIER, this.gameParameters.getCoinMultiplier());
         assertEquals(TEST_CAR_SPEED_MULTIPLIER, this.gameParameters.getCarSpeedMultiplier());
         assertEquals(TEST_TRAIN_SPEED_MULTIPLIER, this.gameParameters.getTrainSpeedMultiplier());
+        assertEquals(TEST_LOG_SPEED_MULTIPLIER, this.gameParameters.getLogSpeedMultiplier());
         assertTrue(this.gameParameters.isInvincible());
         assertEquals(TEST_COIN_START_COUNT, this.gameParameters.getCoinCount());
 

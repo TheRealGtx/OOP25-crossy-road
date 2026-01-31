@@ -8,7 +8,7 @@ public interface ActiveObstacle extends Obstacle {
      * Updates the position of the active obstacle base on the given speed.
      *
      * @param deltaTime time since last update.
-     * @param speedMultiplier the speed of the obstacle.
+     * @param parameters the speed of the obstacle.
      */
-    void update(long deltaTime, double speedMultiplier);
+    void update(long deltaTime, GameParameters parameters);
 }
