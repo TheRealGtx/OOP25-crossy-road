@@ -16,12 +16,12 @@ public class WoodLog extends AbstractActiveObstacle {
     /**
      * Constructor for WoodLog.
      *
-     * @param speed Speed of the log.
+     * @param position  Initial position of the log
+     * @param length    Length of the log.
+     * @param speed     Speed of the log.
      * @param direction Direction of the log.
-     * @param position Initial position of the log
-     * @param length Length of the log.
      */
-    public WoodLog(final double speed, final Direction direction, final Position position, final double length) {
+    public WoodLog(final Position position, final double length, final double speed, final Direction direction) {
         super(position, new Dimension(length, 1), speed, direction);
     }
 
