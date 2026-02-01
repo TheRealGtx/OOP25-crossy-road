@@ -19,7 +19,7 @@ public class PositionablePlayer extends AbstractPositionable implements Player {
      * @param initialPosition the initial position of the entity (not null)
      */
     public PositionablePlayer(final Position initialPosition) {
-        super(initialPosition, new Dimension(1, 1));
+        super(initialPosition, Dimension.unit());
     }
 
     /**
@@ -34,8 +34,12 @@ public class PositionablePlayer extends AbstractPositionable implements Player {
      * {@inheritDoc}
      */
     @Override
-    public void move(final Direction direction) {
+    public void move(final Direction direction, final double steps) {
         Objects.requireNonNull(direction, "Direction cannot be null");
-        this.setPosition(direction.apply(this.getPosition()));
+        if (steps <= 0) {
+            throw new IllegalArgumentException("Steps must be greater than 0");
+        }
+
+        this.setPosition(direction.getDelta().scale(steps).relative(this.getPosition()));
     }
 }

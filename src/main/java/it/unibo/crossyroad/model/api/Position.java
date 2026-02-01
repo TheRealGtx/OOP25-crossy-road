@@ -25,6 +25,16 @@ public record Position(double x, double y) {
      * @return the sum of the two Positions
      */
     public Position relative(final Position p) {
-        return new Position(this.x + p.x(), this.y + p.y());
+        return of(this.x + p.x(), this.y + p.y());
+    }
+
+    /**
+     * Returns a new Position that is this Position scaled by the given factor.
+     *
+     * @param factor the scaling factor
+     * @return the scaled Position
+     */
+    public Position scale(final double factor) {
+        return of(this.x * factor, this.y * factor);
     }
 }
