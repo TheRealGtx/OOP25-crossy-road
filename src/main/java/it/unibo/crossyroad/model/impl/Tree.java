@@ -7,9 +7,21 @@ import it.unibo.crossyroad.model.api.EntityType;
 import it.unibo.crossyroad.model.api.Obstacle;
 import it.unibo.crossyroad.model.api.Position;
 
-public class Tree extends AbstractPositionable implements Obstacle {
+/**
+ * Passive obstacle, spawns on Grass.
+ * 
+ * @see Grass
+ */
+public final class Tree extends AbstractPositionable implements Obstacle {
 
-    public Tree(Position initialPosition, Dimension dimension) {
+    /**
+     * Initializes the Obstacle.
+     * 
+     * @param initialPosition the Obstacle's initial position.
+     * 
+     * @param dimension the Obstacle's dimension.
+     */
+    public Tree(final Position initialPosition, final Dimension dimension) {
         super(initialPosition, dimension);
     }
 

@@ -14,11 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 class TestGrass {
     private static final int MAX_OBS_EXPECTED = 15;
     private static final int MIN_OBS_EXPECTED = 0;
+    private static final int LOOPS = 10_000_000;
+    private static final Position CHUNK_INITIAL_POSITION = new Position(0, 0);
     private Grass grass;
-    
+
     @BeforeEach
     void setUp() {
-        this.grass = new Grass(new Position(0, 9), new Dimension(10, 3));
+        this.grass = new Grass(CHUNK_INITIAL_POSITION, new Dimension(10, 3));
     }
 
     @Test
@@ -31,9 +33,9 @@ class TestGrass {
         int max = MIN_OBS_EXPECTED;
         int min = MAX_OBS_EXPECTED;
 
-        for (int i = 0; i < 10000000; i++) {
+        for (int i = 0; i < LOOPS; i++) {
             this.grass.init();
-            int nOfObstacles = this.grass.getObstacles().size();
+            final int nOfObstacles = this.grass.getObstacles().size();
 
             if (nOfObstacles > max) {
                 max = nOfObstacles;
@@ -45,7 +47,7 @@ class TestGrass {
         }
 
         assertNotEquals(max, min);
-        assertEquals(0, MIN_OBS_EXPECTED);
-        assertEquals(15, MAX_OBS_EXPECTED);
+        assertEquals(MIN_OBS_EXPECTED, min);
+        assertEquals(MAX_OBS_EXPECTED, max);
     }
 }
