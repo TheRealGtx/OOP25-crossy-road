@@ -2,6 +2,11 @@ package it.unibo.crossyroad.model.api;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
+
+import it.unibo.crossyroad.model.impl.Coin;
+import it.unibo.crossyroad.model.impl.Invincibility;
+import it.unibo.crossyroad.model.impl.SlowCars;
 
 /**
  * Represents a Chunk.
@@ -9,6 +14,7 @@ import java.util.List;
 public abstract class AbstractChunk extends AbstractPositionable implements Chunk {
 
     private final List<Obstacle> obstacles;
+    private final List<Pickable> pickables;
 
     /**
      * Initializes the Chunk.
@@ -20,6 +26,7 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
     public AbstractChunk(final Position initialPosition, final Dimension dimension) {
         super(initialPosition, dimension);
         this.obstacles = new LinkedList<>();
+        this.pickables = new LinkedList<>();
     }
 
     /**
@@ -28,7 +35,9 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
     @Override
     public void init() {
         this.clearObstacles();
+        this.clearPickables();
         this.generateObstacles();
+        this.generatePickables();
     }
 
     /**
@@ -37,6 +46,26 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
     @Override
     public List<Obstacle> getObstacles() { 
         return List.copyOf(this.obstacles);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Pickable> getPickables() {
+        return List.copyOf(this.pickables);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<PowerUp> getActivePowerUp() {
+        return List.copyOf(this.pickables.stream()
+                                         .filter(p -> p instanceof PowerUp)
+                                         .map(p -> (PowerUp) p)
+                                         .filter(p -> p.isPickedUp())
+                                         .toList());
     }
 
     /**
@@ -65,25 +94,44 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
     /**
      * Generates random Pickables objects on the Chunk.
      */
-    private void generatePickables() { }
+    private void generatePickables() {
+        final Random rnd = new Random();
+        final double xLimit = this.getPosition().x() + this.getDimension().height();
+        final double yLlimit = this.getPosition().y() + this.getDimension().width();
 
-    /**
-     * Updates the positions of the Obstacles on the Chunk.
-     * 
-     * @param g the game parameters.
-     * 
-     * @param deltaTime time since last update.
-     */
-    private void moveObstacles(final GameParameters g, final long deltaTime) {
-        for (final Obstacle obs : this.obstacles) {
-            if (obs instanceof ActiveObstacle) {
-                ((ActiveObstacle) obs).update(deltaTime, g);
+        for (int i = 0; i < rnd.nextInt(3); i++) {
+            final Position randomPosition = new Position(rnd.nextDouble(xLimit), rnd.nextDouble(yLlimit));
+
+            switch (rnd.nextInt(3)) {
+                case 0:
+                    this.addPickable(new Coin(randomPosition));
+                    break;
+                case 1:
+                    this.addPickable(new Invincibility(randomPosition));
+                    break;
+                case 2:
+                    this.addPickable(new SlowCars(randomPosition));
+                default:
+                    break;
             }
         }
     }
 
     /**
-     * Updates the positions of the Pickables on the Chunk.
+     * Adds a new piackable to the list.
+     * 
+     * @param pick the piackable to add to the list.
+     * 
+     * @see Pickable.
      */
-    private void movePickables() { }
+    private void addPickable(final Pickable pick) {
+        this.pickables.add(pick);
+    }
+
+    /**
+     * Deletes all the piackables present on the Chunk.
+     */
+    protected final void clearPickables() {
+        this.pickables.clear();
+    }
 }
