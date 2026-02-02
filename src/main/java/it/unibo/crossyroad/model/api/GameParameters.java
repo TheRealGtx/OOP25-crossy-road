@@ -47,6 +47,14 @@ public interface GameParameters {
     void setCoinCount(int coinCount);
 
     /**
+     * Sets the new log speed multiplier.
+     *
+     * @param logSpeedMultiplier the new log speed multiplier.
+     * @throws IllegalArgumentException if logSpeedMultiplier is <= 0.
+     */
+    void setLogSpeedMultiplier(double logSpeedMultiplier);
+
+    /**
      * Gets the current coin multiplier.
      *
      * @return the coin multiplier.
@@ -73,6 +81,13 @@ public interface GameParameters {
      * @return true if invincible, false otherwise.
      */
     boolean isInvincible();
+
+    /**
+     * Gets the current log speed multiplier.
+     *
+     * @return the log speed multiplier.
+     */
+    double getLogSpeedMultiplier();
 
     /**
      * Gets the current coin count.
