@@ -5,7 +5,6 @@ import it.unibo.crossyroad.model.api.Dimension;
 import it.unibo.crossyroad.model.api.EntityType;
 import it.unibo.crossyroad.model.api.Position;
 import it.unibo.crossyroad.model.api.Direction;
-import it.unibo.crossyroad.model.api.GameParameters;
 
 import java.util.Random;
 
@@ -38,8 +37,8 @@ public class Railway extends AbstractActiveChunk {
     protected void spawnIfNeeded(final long deltaTime) {
         final boolean hasTrain = this.getObstacles().stream()
                 .anyMatch(obs -> obs instanceof Train);
-        if (!hasTrain) {
-            spawnTrain();
+        if (!hasTrain) { //Spawna treni in continuazione
+            generateObstacles();
         }
     }
 
@@ -47,25 +46,8 @@ public class Railway extends AbstractActiveChunk {
      * {@inheritDoc}
      */
     @Override
-    protected void removeOutOfBoundObstacles() {
-        this.getObstacles().removeIf(obs -> obs instanceof Train &&
-                (direction == Direction.LEFT && obs.getPosition().x() > this.getPosition().x() + this.getDimension().width() + 10 ||
-                 direction == Direction.RIGHT && obs.getPosition().x() < this.getPosition().x() - 10));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     protected void generateObstacles() {
-        spawnTrain();
-    }
-
-    /**
-     * Spawns a train at a random position on the railway chunk.
-     */
-    private void spawnTrain() {
-        final double y = this.getPosition().y() + rnd.nextDouble(getDimension().height());
+        final double y = this.getPosition().y() + rnd.nextDouble(getDimension().height()); //??
         final double x = direction == Direction.LEFT
                 ? this.getPosition().x() + this.getDimension().width() + 10
                 : this.getPosition().x() - 10;

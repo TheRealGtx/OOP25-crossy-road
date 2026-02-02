@@ -26,8 +26,8 @@ public abstract class AbstractActiveChunk extends AbstractChunk implements Activ
                 ((ActiveObstacle) obs).update(deltaTime, params);
             }
         }
-        spawnIfNeeded(deltaTime);
         removeOutOfBoundObstacles();
+        spawnIfNeeded(deltaTime);
     }
 
     /**
@@ -38,5 +38,8 @@ public abstract class AbstractActiveChunk extends AbstractChunk implements Activ
     /**
      * Removes out of bound obstacles from the chunk.
      */
-    protected abstract void removeOutOfBoundObstacles();
+    private void removeOutOfBoundObstacles() {
+        this.getObstacles().removeIf(obs -> obs.getPosition().x() < this.getPosition().x() - (obs.getDimension().width() + 2) ||
+                obs.getPosition().x() > this.getPosition().x() + this.getDimension().width() + (obs.getDimension().width() + 2));
+    }
 }
