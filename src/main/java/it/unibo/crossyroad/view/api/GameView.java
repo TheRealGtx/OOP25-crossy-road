@@ -9,9 +9,10 @@ import java.util.Map;
 /**
  * Interface representing the game view.
  */
-public interface GameView {
+public interface GameView extends View {
     //void setController(GameController c);
-    //void render(List<Positionable> positionables);
+
+    void render(List<Positionable> positionables);
 
     /**
      * Updates the power-up time display.

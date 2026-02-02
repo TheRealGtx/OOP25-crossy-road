@@ -9,6 +9,11 @@ import java.util.Map;
 
 public class GameViewImpl implements GameView {
 
+    @Override
+    public void render(List<Positionable> positionables) {
+        //TODO: Giuli
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -22,6 +27,16 @@ public class GameViewImpl implements GameView {
      */
     @Override
     public void updateCoinCount(int count) {
+
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void hide() {
 
     }
 }
