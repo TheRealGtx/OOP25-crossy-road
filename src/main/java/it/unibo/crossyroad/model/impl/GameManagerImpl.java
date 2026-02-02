@@ -3,7 +3,6 @@ package it.unibo.crossyroad.model.impl;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -40,7 +39,7 @@ public class GameManagerImpl implements GameManager {
     private static final int Y_MAP_MOVEMENT = 1;
     private static final Dimension CHUNK_DIMENSION = new Dimension(10, 3);
     private static final int MAP_WIDTH = 10;
-    private static final int MAP_HEIGHT = 3;
+    private static final int MAP_HEIGHT = 9;
     private PositionablePlayer player;
     private final GameParameters gameParameters;
     private List<Chunk> chunks;
@@ -51,7 +50,7 @@ public class GameManagerImpl implements GameManager {
      * @param g the GameParameters to use in the game.
      */
     public GameManagerImpl(final GameParameters g) {
-        this.gameParameters = g;    //TODO fix spotbugs.
+        this.gameParameters = new GameParametersImpl(g);
         this.reset();
     }
 
@@ -74,10 +73,9 @@ public class GameManagerImpl implements GameManager {
      */
     @Override
     public Map<EntityType, Long> getActivePowerUps() {
-        return this.getPickablesOnMap().stream()
-                             .filter(p -> p instanceof PowerUp)
-                             .map(p -> (PowerUp) p)
-                             .collect(Collectors.toMap(Pickable::getEntityType, PowerUp::getRemaining));
+        return this.chunks.stream()
+                          .flatMap(c -> c.getActivePowerUp().stream())
+                          .collect(Collectors.toMap(Pickable::getEntityType, PowerUp::getRemaining));
     }
 
     /**
@@ -90,14 +88,8 @@ public class GameManagerImpl implements GameManager {
                    .map(c -> (ActiveChunk) c)
                    .forEach(ac -> ac.update(this.gameParameters, deltaTime));
 
-        if (this.checkCoinsCollision()) {
-            this.gameParameters.incrementCoinCount();
-        }
-
-        final Optional<PowerUp> powerUp = this.checkPowerUpCollisions();
-        if (powerUp.isPresent()) {
-            powerUp.get().pickUp(this.gameParameters);
-        }
+        this.checkCoinsCollision();
+        this.checkPowerUpCollisions();
     }
 
     /**
@@ -135,6 +127,8 @@ public class GameManagerImpl implements GameManager {
         this.chunks.add(new Grass(CHUNK_FIRST_POSITION, CHUNK_DIMENSION));
         this.chunks.add(new Grass(CHUNK_SECOND_POSITION, CHUNK_DIMENSION));
         this.chunks.add(new Grass(CHUNK_THIRD_POSITION, CHUNK_DIMENSION));
+
+        this.chunks.forEach(c -> c.getObstacles().stream().filter(o -> o.getPosition().equals(PLAYER_START_POSITION)));
     }
 
     /**
@@ -191,33 +185,25 @@ public class GameManagerImpl implements GameManager {
     }
 
     /**
-     * Checks if the player is colliding with a Coin.
-     * 
-     * @return true if the player is colliding with a Coin, false otherwise.
+     * Checks if the player is colliding with a Coin, if so pickup the coin.
      */
-    private boolean checkCoinsCollision() {
+    private void checkCoinsCollision() {
         for (final Pickable pick : this.getPickablesOnMap()) {
             if (pick instanceof Coin && pick.getPosition().equals(this.player.getPosition())) {
-                return true;
+                ((Coin) pick).applyEffect(this.gameParameters);
             }
         }
-
-        return false;
     }
 
     /**
-     * Checks if the player is colliding with a PowerUp.
-     * 
-     * @return the PowerUp the player is colliding with, Optional.empty if there's no collision.
+     * Picks up the PowerUps the player is colliding with. 
      */
-    private Optional<PowerUp> checkPowerUpCollisions() {
+    private void checkPowerUpCollisions() {
         for (final Pickable pick : this.getPickablesOnMap()) {
             if (pick instanceof PowerUp && pick.getPosition().equals(this.player.getPosition())) {
-                return Optional.of((PowerUp) pick);
+                pick.pickUp(this.gameParameters);
             }
         }
-
-        return Optional.empty();
     }
 
     /**

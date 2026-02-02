@@ -13,6 +13,7 @@ import it.unibo.crossyroad.model.impl.SlowCars;
  */
 public abstract class AbstractChunk extends AbstractPositionable implements Chunk {
 
+    private static final Random RND = new Random();
     private final List<Obstacle> obstacles;
     private final List<Pickable> pickables;
 
@@ -106,32 +107,31 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
      * Generates random Pickables objects on the Chunk.
      */
     private void generatePickables() {
-        final Random rnd = new Random();
-        final double xLimit = this.getPosition().x() + this.getDimension().height();
-        final double yLlimit = this.getPosition().y() + this.getDimension().width();
+        final int xLimit = (int) Math.round(this.getPosition().x() + this.getDimension().height());
+        final int yLlimit = (int) Math.round(this.getPosition().y() + this.getDimension().width());
 
-        for (int i = 0; i < rnd.nextInt(3); i++) {
-            final Position randomPosition = new Position(rnd.nextDouble(xLimit), rnd.nextDouble(yLlimit));
+        for (int i = 0; i < RND.nextInt(3); i++) {
+            final Position randomPosition = new Position(RND.nextInt(xLimit), RND.nextInt(yLlimit));
 
-            switch (rnd.nextInt(3)) {
-                case 0:
-                    this.addPickable(new Coin(randomPosition));
-                    break;
-                case 1:
-                    this.addPickable(new Invincibility(randomPosition));
-                    break;
-                case 2:
-                    this.addPickable(new SlowCars(randomPosition));
-                default:
-                    break;
+            if (!this.getPositionables().stream().anyMatch(p -> p.getPosition().equals(randomPosition))) {
+                switch (RND.nextInt(3)) {
+                    case 0:
+                        this.addPickable(new Invincibility(randomPosition));
+                        break;
+                    case 1:
+                        this.addPickable(new SlowCars(randomPosition));
+                    default:
+                        this.addPickable(new Coin(randomPosition));
+                        break;
+                }
             }
         }
     }
 
     /**
-     * Adds a new piackable to the list.
+     * Adds a new pickable to the list.
      * 
-     * @param pick the piackable to add to the list.
+     * @param pick the pickable to add to the list.
      * 
      * @see Pickable.
      */
@@ -140,7 +140,7 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
     }
 
     /**
-     * Deletes all the piackables present on the Chunk.
+     * Deletes all the pickables present on the Chunk.
      */
     protected final void clearPickables() {
         this.pickables.clear();
