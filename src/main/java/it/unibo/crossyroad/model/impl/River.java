@@ -11,13 +11,16 @@ import it.unibo.crossyroad.model.api.Position;
 /**
  * Class representing a River chunk in the game.
  */
-public class River extends AbstractActiveChunk {
+public final class River extends AbstractActiveChunk {
+    private static final int CHUNK_SECTIONS = 3;
     private static final int LOGS_DISTANCE = 3;
     private static final double LOGS_SPEED = 1.0;
     private static final int LOGS_LENGTH = 4;
 
+    private final double sectionHeight;
     private final Direction direction;
     private final long logInterval;
+    private long timeSinceLastGeneration;
 
     /**
      * Constructor for River.
@@ -33,6 +36,7 @@ public class River extends AbstractActiveChunk {
             throw new IllegalArgumentException("Direction must be LEFT or RIGHT for River logs.");
         }
 
+        this.sectionHeight = this.getDimension().height() / CHUNK_SECTIONS;
         this.direction = direction;
         this.logInterval = (long) (LOGS_DISTANCE / LOGS_SPEED * 1000);
     }
@@ -50,12 +54,21 @@ public class River extends AbstractActiveChunk {
      * {@inheritDoc}
      */
     @Override
-    protected long getGenerationInterval() {
-        return this.logInterval;
+    protected boolean shouldGenerateNewObstacles(final long deltaTime) {
+        this.timeSinceLastGeneration += deltaTime;
+
+        if (this.timeSinceLastGeneration >= this.logInterval) {
+            this.timeSinceLastGeneration = 0;
+            return true;
+        }
+        return false;
     }
 
     private void addWater() {
-        final Obstacle water = new Water(this.getPosition(), this.getDimension());
+        final Obstacle water = new Water(
+            Position.of(0, this.sectionHeight).relative(this.getPosition()),
+            Dimension.of(this.getDimension().width(), this.sectionHeight)
+        );
         this.addObstacle(water);
     }
 
@@ -76,8 +89,8 @@ public class River extends AbstractActiveChunk {
 
     private Position getLogStartPosition() {
         return switch (this.direction) {
-            case LEFT -> Position.of(this.getDimension().width(), 0).relative(this.getPosition());
-            case RIGHT -> Position.of(-LOGS_LENGTH, 0).relative(this.getPosition());
+            case LEFT -> Position.of(this.getDimension().width(), this.sectionHeight).relative(this.getPosition());
+            case RIGHT -> Position.of(-LOGS_LENGTH, this.sectionHeight).relative(this.getPosition());
             default -> throw new IllegalStateException("Direction must be LEFT or RIGHT");
         };
     }

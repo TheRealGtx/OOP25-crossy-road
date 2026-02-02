@@ -30,17 +30,22 @@ public class Railway extends AbstractActiveChunk {
         this.speed = rnd.nextDouble(8, 10);
     }
 
+    @Override
+    protected boolean shouldGenerateNewObstacles(final long deltaTime) {
+        return false;
+    }
+
     /**
      * {@inheritDoc}
      * */
-    @Override
+    /*@Override
     protected void spawnIfNeeded(final long deltaTime) {
         final boolean hasTrain = this.getObstacles().stream()
                 .anyMatch(obs -> obs instanceof Train);
         if (!hasTrain) {
             generateObstacles();
         }
-    }
+    } */
 
     /**
      * {@inheritDoc}

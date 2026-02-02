@@ -32,10 +32,15 @@ public class Road extends AbstractActiveChunk {
         this.laneSpeed = new Pair<>(rnd.nextDouble(2, 5), rnd.nextDouble(1, 4));
     }
 
+    @Override
+    protected boolean shouldGenerateNewObstacles(final long deltaTime) {
+        return false;
+    }
+
     /**
      * {@inheritDoc}
      */
-    @Override
+    /* @Override
     protected void spawnIfNeeded(final long deltaTime) {
         this.elapsedTime += deltaTime;
 
@@ -47,7 +52,7 @@ public class Road extends AbstractActiveChunk {
             generateObstacles();
             elapsedTime = 0;
         }
-    }
+    } */
 
     /**
      * {@inheritDoc}
