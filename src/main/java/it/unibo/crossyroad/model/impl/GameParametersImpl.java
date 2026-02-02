@@ -26,6 +26,7 @@ public class GameParametersImpl implements GameParameters {
      * @param trainSpeedMultiplier the train speed multiplier.
      * @param invincibility the invincibility status.
      * @param coinCount the initial coin count.
+     * @param logSpeedMultiplier the log multiplier.
      */
     public GameParametersImpl(final int coinMultiplier, final double carSpeedMultiplier,
                               final double trainSpeedMultiplier, final boolean invincibility,
@@ -43,7 +44,7 @@ public class GameParametersImpl implements GameParameters {
      * Default constructor initializing parameters to default values.
      */
     public GameParametersImpl() {
-        this(1, 1.0, 1.0, false, 1.0,0);
+        this(1, 1.0, 1.0, false, 1.0, 0);
     }
 
     /**
@@ -112,7 +113,7 @@ public class GameParametersImpl implements GameParameters {
      * {@inheritDoc}
      */
     @Override
-    public void setLogSpeedMultiplier(double logSpeedMultiplier) {
+    public void setLogSpeedMultiplier(final double logSpeedMultiplier) {
         if (logSpeedMultiplier <= 0.0) {
             throw new IllegalArgumentException("Log speed multiplier must be > 0.0");
         }
@@ -194,10 +195,11 @@ public class GameParametersImpl implements GameParameters {
      * @param carSpeedMult the car speed multiplier.
      * @param trainSpeedMult the train speed multiplier.
      * @param coinStart the coin start count.
+     * @param logSpeedMult he log speed multiplier.
      * @throws IllegalArgumentException if any parameter is invalid.
      */
     private void validateParameters(final int coinMult, final double carSpeedMult,
-                                       final double trainSpeedMult, final double logSpeedMult,final int coinStart) {
+                                       final double trainSpeedMult, final double logSpeedMult, final int coinStart) {
         if (coinMult < 1) {
             throw new IllegalArgumentException("Coin multiplier must be >= 1");
         }

@@ -37,7 +37,7 @@ public class Railway extends AbstractActiveChunk {
     protected void spawnIfNeeded(final long deltaTime) {
         final boolean hasTrain = this.getObstacles().stream()
                 .anyMatch(obs -> obs instanceof Train);
-        if (!hasTrain) { //Spawna treni in continuazione
+        if (!hasTrain) {
             generateObstacles();
         }
     }

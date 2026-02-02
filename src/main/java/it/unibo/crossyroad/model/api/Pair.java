@@ -2,14 +2,25 @@ package it.unibo.crossyroad.model.api;
 
 import java.util.Objects;
 
-public record Pair<E1, E2> (E1 e1, E2 e2) { 
+/**
+ * Represents a pair.
+ * 
+ * @param <T> type of the first element.
+ * 
+ * @param <U> type of the second element.
+ * 
+ * @param e1 first element.
+ * 
+ * @param e2 second element.
+ */
+public record Pair<T, U>(T e1, U e2) { 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         return Objects.hash(e1, e2);
     }
 
     @Override
-    public final boolean equals(Object arg0) {
+    public boolean equals(final Object arg0) {
         if (this == arg0) {
             return true;
         }
@@ -19,7 +30,7 @@ public record Pair<E1, E2> (E1 e1, E2 e2) {
         if (getClass() != arg0.getClass()) {
             return false;
         }
-        Pair<E1, E2> other = (Pair<E1, E2>) arg0;
+        final Pair<T, U> other = (Pair<T, U>) arg0;
         return Objects.equals(e1, other.e1) && Objects.equals(e2, other.e2);
     }
 }
