@@ -26,7 +26,10 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
      * {@inheritDoc}
      */
     @Override
-    public abstract void init();
+    public void init() {
+        this.clearObstacles();
+        this.generateObstacles();
+    }
 
     /**
      * {@inheritDoc}
