@@ -93,7 +93,7 @@ public class GameManagerImpl implements GameManager {
     @Override
     public void movePlayer(final Direction d) {
         if (this.canPlayerMove(d)) {
-            this.player.move(d);
+            this.player.move(d, 1);
 
             if (this.player.getPosition().y() >= Y_MOVE_MAP_MARK) {
                 this.moveMap();
