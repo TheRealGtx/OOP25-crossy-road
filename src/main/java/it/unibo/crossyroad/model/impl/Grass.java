@@ -50,10 +50,4 @@ public final class Grass extends AbstractChunk {
             }
         }
     }
-
-    @Override
-    public void init() {
-        this.clearObstacles();
-        this.generateObstacles();
-    }
 }

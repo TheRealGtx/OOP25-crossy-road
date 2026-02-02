@@ -14,6 +14,7 @@ public class GameParametersImpl implements GameParameters {
     private double carSpeedMultiplier;
     private double trainSpeedMultiplier;
     private boolean invincibility;
+    private double logSpeedMultiplier;
     private int coinCount;
 
     /**
@@ -28,12 +29,13 @@ public class GameParametersImpl implements GameParameters {
      */
     public GameParametersImpl(final int coinMultiplier, final double carSpeedMultiplier,
                               final double trainSpeedMultiplier, final boolean invincibility,
-                              final int coinCount) {
-        validateParameters(coinMultiplier, carSpeedMultiplier, trainSpeedMultiplier, coinCount);
+                              final double logSpeedMultiplier, final int coinCount) {
+        validateParameters(coinMultiplier, carSpeedMultiplier, trainSpeedMultiplier, logSpeedMultiplier, coinCount);
         this.coinMultiplier = coinMultiplier;
         this.carSpeedMultiplier = carSpeedMultiplier;
         this.trainSpeedMultiplier = trainSpeedMultiplier;
         this.invincibility = invincibility;
+        this.logSpeedMultiplier = logSpeedMultiplier;
         this.coinCount = coinCount;
     }
 
@@ -41,7 +43,17 @@ public class GameParametersImpl implements GameParameters {
      * Default constructor initializing parameters to default values.
      */
     public GameParametersImpl() {
-        this(1, 1.0, 1.0, false, 0);
+        this(1, 1.0, 1.0, false, 1.0,0);
+    }
+
+    /**
+     * Copy constructor.
+     *
+     * @param p the GameParameters instance to copy from.
+     */
+    public GameParametersImpl(final GameParameters p) {
+        this(p.getCoinMultiplier(), p.getCarSpeedMultiplier(), p.getTrainSpeedMultiplier(),
+                p.isInvincible(), p.getLogSpeedMultiplier(), p.getCoinCount());
     }
 
     /**
@@ -100,6 +112,17 @@ public class GameParametersImpl implements GameParameters {
      * {@inheritDoc}
      */
     @Override
+    public void setLogSpeedMultiplier(double logSpeedMultiplier) {
+        if (logSpeedMultiplier <= 0.0) {
+            throw new IllegalArgumentException("Log speed multiplier must be > 0.0");
+        }
+        this.logSpeedMultiplier = logSpeedMultiplier;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int getCoinMultiplier() {
         return this.coinMultiplier;
     }
@@ -132,6 +155,14 @@ public class GameParametersImpl implements GameParameters {
      * {@inheritDoc}
      */
     @Override
+    public double getLogSpeedMultiplier() {
+        return this.logSpeedMultiplier;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public int getCoinCount() {
         return this.coinCount;
     }
@@ -152,7 +183,7 @@ public class GameParametersImpl implements GameParameters {
         final ObjectMapper mapper = new ObjectMapper();
         final GameParameters newParameters = mapper.readValue(new File(filepath), GameParametersImpl.class);
         validateParameters(newParameters.getCoinMultiplier(), newParameters.getCarSpeedMultiplier(),
-                newParameters.getTrainSpeedMultiplier(), newParameters.getCoinCount());
+                newParameters.getTrainSpeedMultiplier(), newParameters.getLogSpeedMultiplier(), newParameters.getCoinCount());
         return newParameters;
     }
 
@@ -166,12 +197,15 @@ public class GameParametersImpl implements GameParameters {
      * @throws IllegalArgumentException if any parameter is invalid.
      */
     private void validateParameters(final int coinMult, final double carSpeedMult,
-                                       final double trainSpeedMult, final int coinStart) {
+                                       final double trainSpeedMult, final double logSpeedMult,final int coinStart) {
         if (coinMult < 1) {
             throw new IllegalArgumentException("Coin multiplier must be >= 1");
         }
         if (carSpeedMult <= 0.0 || trainSpeedMult <= 0.0) {
             throw new IllegalArgumentException("Speed multipliers must be > 0.0");
+        }
+        if (logSpeedMult <= 0.0) {
+            throw new IllegalArgumentException("Log speed multiplier must be > 0.0");
         }
         if (coinStart < 0) {
             throw new IllegalArgumentException("Coin count must be >= 0");
