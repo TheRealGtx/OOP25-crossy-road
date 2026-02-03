@@ -11,6 +11,7 @@ import it.unibo.crossyroad.model.api.Position;
  * Chunk without active obstacles on it, only passive ones.
  */
 public final class Grass extends AbstractChunk {
+    private static final Position PLAYER_START_POSITION = new Position(5, 0);
     private final Random rnd = new Random();
 
     /**
@@ -22,6 +23,7 @@ public final class Grass extends AbstractChunk {
      */
     public Grass(final Position initialPosition, final Dimension dimension) {
         super(initialPosition, dimension);
+        this.init();
     }
 
     @Override
@@ -31,21 +33,24 @@ public final class Grass extends AbstractChunk {
 
     @Override
     protected void generateObstacles() {
-        final double xLimit = this.getPosition().x() + this.getDimension().height();
-        final double yLlimit = this.getPosition().y() + this.getDimension().width();
+        final int xLimit = (int) Math.ceil(this.getPosition().x() + this.getDimension().height());
+        final int yLlimit = (int) Math.ceil(this.getPosition().y() + this.getDimension().width());
 
         for (int i = 0; i < this.rnd.nextInt(16); i++) {
-            final Position randomPosition = new Position(this.rnd.nextDouble(xLimit), this.rnd.nextDouble(yLlimit));
+            final Position randomPosition = new Position(this.rnd.nextInt(xLimit), this.rnd.nextInt(yLlimit));
 
-            switch (this.rnd.nextInt(2)) {
-                case 0:
-                    this.addObstacle(new Tree(randomPosition, new Dimension(1, 1)));
-                    break;
-                case 1:
-                    this.addObstacle(new Rock(randomPosition, new Dimension(1, 1)));
-                    break;
-                default:
-                    break;
+            if (randomPosition != PLAYER_START_POSITION
+                && !this.getPositionables().stream().anyMatch(p -> p.getPosition().equals(randomPosition))) {
+                switch (this.rnd.nextInt(2)) {
+                    case 0:
+                        this.addObstacle(new Tree(randomPosition, new Dimension(1, 1)));
+                        break;
+                    case 1:
+                        this.addObstacle(new Rock(randomPosition, new Dimension(1, 1)));
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

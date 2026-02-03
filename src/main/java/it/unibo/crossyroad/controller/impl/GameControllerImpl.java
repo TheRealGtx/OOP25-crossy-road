@@ -2,7 +2,12 @@ package it.unibo.crossyroad.controller.impl;
 
 import it.unibo.crossyroad.controller.api.GameController;
 
-public class GameControllerImpl implements GameController {
+/**
+ * Implementation of the GameController.
+ *
+ * @see GameController
+ */
+final class GameControllerImpl implements GameController {
 
     public GameControllerImpl() {
         
@@ -50,9 +55,9 @@ public class GameControllerImpl implements GameController {
         throw new UnsupportedOperationException("Unimplemented method 'processInput'");
     }
 
-    //private Skin getActiveSkin() { }  //TOOD
+    //private Skin getActiveSkin() { }  //TODO
 
-    private int getCoinCount() {
-        return 0;   //TODO
-    }
+    // private int getCoinCount() {
+    //     return 0;   //TODO
+    // }
 }

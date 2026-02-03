@@ -7,7 +7,6 @@ import it.unibo.crossyroad.model.api.Position;
 import it.unibo.crossyroad.model.api.AbstractActiveChunk;
 import it.unibo.crossyroad.model.api.Pair;
 
-
 import java.util.Random;
 
 /**
@@ -19,7 +18,7 @@ public class Road extends AbstractActiveChunk {
 
     private final Pair<Double, Double> laneSpeed;
     private final Random rnd = new Random();
-    private long elapsedTime = 0;
+    private long elapsedTime;
 
     /**
      * Initializes the Chunk.
@@ -30,7 +29,7 @@ public class Road extends AbstractActiveChunk {
      */
     public Road(final Position initialPosition, final Dimension dimension) {
         super(initialPosition, dimension);
-        this.laneSpeed = new Pair<Double, Double> (rnd.nextDouble(2, 5), rnd.nextDouble(1, 4));
+        this.laneSpeed = new Pair<>(rnd.nextDouble(2, 5), rnd.nextDouble(1, 4));
     }
 
     /**
@@ -40,7 +39,7 @@ public class Road extends AbstractActiveChunk {
     protected void spawnIfNeeded(final long deltaTime) {
         this.elapsedTime += deltaTime;
 
-        int activeCars = (int) getObstacles().stream()
+        final int activeCars = (int) getObstacles().stream()
                 .filter(obs -> obs instanceof Car)
                 .count();
 
@@ -57,9 +56,9 @@ public class Road extends AbstractActiveChunk {
     protected void generateObstacles() {
         final Direction dir;
         final double speed;
-        final int lane;
+        final int lane = this.rnd.nextInt(2);
 
-        switch (lane = this.rnd.nextInt(2)) {
+        switch (lane) {
             case 0:
                 dir = Direction.LEFT;
                 speed = this.laneSpeed.e2();

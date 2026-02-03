@@ -4,7 +4,7 @@ package it.unibo.crossyroad.controller.api;
  * Controller that manages the Game.
  */
 public interface GameController {
-    
+
     /**
      * Shows the game view.
      */

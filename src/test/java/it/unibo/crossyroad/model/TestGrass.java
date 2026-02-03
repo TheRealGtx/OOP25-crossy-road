@@ -12,8 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class TestGrass {
-    private static final int MAX_OBS_EXPECTED = 15;
+    private static final int MAX_OBS_EXPECTED = 14;
     private static final int MIN_OBS_EXPECTED = 0;
+    private static final int MAX_PICK_EXPECTED = 4;
+    private static final int MIN_PICK_EXPECTED = 0;
     private static final int LOOPS = 10_000_000;
     private static final Position CHUNK_INITIAL_POSITION = new Position(0, 0);
     private Grass grass;
@@ -29,25 +31,43 @@ class TestGrass {
     }
 
     @Test
-    void testObstaclegeneration() {
-        int max = MIN_OBS_EXPECTED;
-        int min = MAX_OBS_EXPECTED;
+    void testRandomGenerations() {
+        int maxObs = MIN_OBS_EXPECTED;
+        int minObs = MAX_OBS_EXPECTED;
+        int maxPick = MIN_PICK_EXPECTED;
+        int minPick = MAX_PICK_EXPECTED;
 
         for (int i = 0; i < LOOPS; i++) {
             this.grass.init();
             final int nOfObstacles = this.grass.getObstacles().size();
+            final int nOfPickables = this.grass.getPickables().size();
 
-            if (nOfObstacles > max) {
-                max = nOfObstacles;
+            if (nOfObstacles > maxObs) {
+                maxObs = nOfObstacles;
+            }
+            if (nOfObstacles < minObs) {
+                minObs = nOfObstacles;
             }
 
-            if (nOfObstacles < min) {
-                min = nOfObstacles;
+            if (nOfPickables > maxPick) {
+                maxPick = nOfPickables;
+            }
+            if (nOfPickables < minPick) {
+                minPick = nOfPickables;
             }
         }
 
-        assertNotEquals(max, min);
-        assertEquals(MIN_OBS_EXPECTED, min);
-        assertEquals(MAX_OBS_EXPECTED, max);
+        assertNotEquals(maxObs, minObs);
+        assertNotEquals(maxPick, minPick);
+        assertEquals(MIN_OBS_EXPECTED, minObs);
+        assertEquals(MAX_OBS_EXPECTED, maxObs);
+        assertEquals(MIN_PICK_EXPECTED, minPick);
+        assertEquals(MAX_PICK_EXPECTED, maxPick);
+    }
+
+    @Test
+    void testPositionablesCount() {
+        final int positionables = this.grass.getObstacles().size() + this.grass.getPickables().size();
+        assertEquals(positionables, this.grass.getPositionables().size());
     }
 }
