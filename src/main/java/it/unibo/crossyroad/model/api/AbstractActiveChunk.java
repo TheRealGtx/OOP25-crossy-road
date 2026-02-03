@@ -24,12 +24,11 @@ public abstract class AbstractActiveChunk extends AbstractChunk implements Activ
             if (obs instanceof ActiveObstacle) {
                 ((ActiveObstacle) obs).update(deltaTime, params);
             }
+        }
+        this.removeOutOfBoundObstacles();
 
-            this.removeOutOfBoundObstacles();
-
-            if (this.shouldGenerateNewObstacles(deltaTime)) {
-                this.generateObstacles();
-            }
+        if (this.shouldGenerateNewObstacles(deltaTime)) {
+            this.generateObstacles();
         }
     }
 
@@ -38,8 +37,10 @@ public abstract class AbstractActiveChunk extends AbstractChunk implements Activ
      */
     private void removeOutOfBoundObstacles() {
         this.getObstacles().stream()
-            .filter(obs -> obs.getPosition().x() < this.getPosition().x() - (obs.getDimension().width() + 2)
-                || obs.getPosition().x() > this.getPosition().x() + this.getDimension().width() + (obs.getDimension().width() + 2))
+            .filter(obs -> obs instanceof ActiveObstacle
+                    && obs.getPosition().x() < this.getPosition().x() - (obs.getDimension().width() + 2)
+                    || obs.getPosition().x() > this.getPosition().x() + this.getDimension().width()
+                                                                        + (obs.getDimension().width() + 2))
             .forEach(this::removeObstacle);
     }
 

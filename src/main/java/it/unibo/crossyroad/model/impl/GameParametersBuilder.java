@@ -4,11 +4,11 @@ package it.unibo.crossyroad.model.impl;
  * Builder class for {@link GameParametersImpl}.
  */
 public class GameParametersBuilder {
-    private int coinMultiplier;
-    private double carSpeedMultiplier;
-    private double trainSpeedMultiplier;
+    private int coinMultiplier = 1;
+    private double carSpeedMultiplier = 1.0;
+    private double trainSpeedMultiplier = 1.0;
     private boolean invincibility;
-    private double logSpeedMultiplier;
+    private double logSpeedMultiplier = 1.0;
     private int coinCount;
 
     /**

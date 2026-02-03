@@ -1,5 +1,7 @@
 package it.unibo.crossyroad.model.api;
 
+import java.util.Objects;
+
 /**
  * An abstract class representing an active obstacle that has a position in a 2D space.
  */
@@ -48,4 +50,35 @@ public abstract class AbstractActiveObstacle extends AbstractPositionable implem
      * @return the speed multiplier.
      */
     protected abstract double getSpeedMultiplier(GameParameters parameters);
+
+    /**
+     * Checks whether this active obstacle is equal to another object.
+     *
+     * @param o the object to compare with.
+     * @return true if the given object is considered equal to this obstacle, false otherwise
+     */
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final AbstractActiveObstacle other = (AbstractActiveObstacle) o;
+
+        return Objects.equals(this.getDimension(), other.getDimension())
+                && Objects.equals(this.getPosition(), other.getPosition())
+                && this.getEntityType() == other.getEntityType();
+    }
+
+    /**
+     * Computes the hash code for this active obstacle.
+     *
+     * @return an integer hash code consistent with equals
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(getEntityType(), getPosition(), getDimension(), speed, direction);
+    }
 }
