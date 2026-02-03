@@ -3,6 +3,7 @@ package it.unibo.crossyroad.model.api;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Objects;
 
 import it.unibo.crossyroad.model.impl.Coin;
 import it.unibo.crossyroad.model.impl.Invincibility;
@@ -93,7 +94,20 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
      * @see Obstacle.
      */
     protected void addObstacle(final Obstacle obs) {
+        Objects.requireNonNull(obs, "Obstacle cannot be null");
         this.obstacles.add(obs);
+    }
+
+    /**
+     * Removes an obstacle from the list.
+     * 
+     * @param obs the obstacle to remove from the list.
+     * 
+     * @see Obstacle.
+     */
+    protected void removeObstacle(final Obstacle obs) {
+        Objects.requireNonNull(obs, "Obstacle cannot be null");
+        this.obstacles.remove(obs);
     }
 
     /**
