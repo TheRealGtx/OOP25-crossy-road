@@ -4,6 +4,10 @@ import it.unibo.crossyroad.controller.api.GameController;
 
 public class GameControllerImpl implements GameController {
 
+    public GameControllerImpl() {
+        
+    }
+
     @Override
     public void showGame() {
         // TODO Auto-generated method stub
