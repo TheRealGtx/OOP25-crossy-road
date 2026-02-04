@@ -15,9 +15,11 @@ import java.util.Random;
 public class Road extends AbstractActiveChunk {
     private static final int MAX_CARS_PER_CHUNKS = 8;
     private static final long SPAWN_CAR_INTERVAL_MS = 1200;
+    private static final int MAX_SPEED = 5;
+    private static final int MIN_SPEED = 1;
+    private static final Random RND = new Random();
 
     private final Pair<Double, Double> laneSpeed;
-    private final Random rnd = new Random();
     private long elapsedTime;
 
     /**
@@ -29,24 +31,23 @@ public class Road extends AbstractActiveChunk {
      */
     public Road(final Position initialPosition, final Dimension dimension) {
         super(initialPosition, dimension);
-        this.laneSpeed = new Pair<>(rnd.nextDouble(2, 5), rnd.nextDouble(1, 4));
+        this.laneSpeed = new Pair<>(RND.nextDouble(MIN_SPEED, MAX_SPEED), RND.nextDouble(MIN_SPEED, MAX_SPEED));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void spawnIfNeeded(final long deltaTime) {
+    protected boolean shouldGenerateNewObstacles(final long deltaTime) {
         this.elapsedTime += deltaTime;
-
         final int activeCars = (int) getObstacles().stream()
                 .filter(obs -> obs instanceof Car)
                 .count();
-
         if (elapsedTime >= SPAWN_CAR_INTERVAL_MS && activeCars < MAX_CARS_PER_CHUNKS) {
-            generateObstacles();
-            elapsedTime = 0;
+            this.elapsedTime = 0;
+            return true;
         }
+        return false;
     }
 
     /**
@@ -56,7 +57,7 @@ public class Road extends AbstractActiveChunk {
     protected void generateObstacles() {
         final Direction dir;
         final double speed;
-        final int lane = this.rnd.nextInt(2);
+        final int lane = RND.nextInt(2);
 
         switch (lane) {
             case 0:

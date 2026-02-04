@@ -12,10 +12,10 @@ import java.util.Random;
  * Chunk representing a railway where trains can move.
  */
 public class Railway extends AbstractActiveChunk {
+    private static final Random RND = new Random();
 
     private final Direction direction;
     private final double speed;
-    private final Random rnd = new Random();
 
     /**
      * Initializes the Chunk.
@@ -26,20 +26,18 @@ public class Railway extends AbstractActiveChunk {
      */
     public Railway(final Position initialPosition, final Dimension dimension) {
         super(initialPosition, dimension);
-        this.direction = rnd.nextBoolean() ? Direction.LEFT : Direction.RIGHT;
-        this.speed = rnd.nextDouble(8, 10);
+        this.direction = RND.nextBoolean() ? Direction.LEFT : Direction.RIGHT;
+        this.speed = RND.nextDouble(8, 10);
     }
 
     /**
      * {@inheritDoc}
-     * */
+     */
     @Override
-    protected void spawnIfNeeded(final long deltaTime) {
+    protected boolean shouldGenerateNewObstacles(final long deltaTime) {
         final boolean hasTrain = this.getObstacles().stream()
                 .anyMatch(obs -> obs instanceof Train);
-        if (!hasTrain) {
-            generateObstacles();
-        }
+        return !hasTrain;
     }
 
     /**
@@ -47,7 +45,7 @@ public class Railway extends AbstractActiveChunk {
      */
     @Override
     protected void generateObstacles() {
-        final double y = this.getPosition().y() + rnd.nextDouble(getDimension().height()); //??
+        final double y = this.getPosition().y() + RND.nextDouble(getDimension().height()); //??
         final double x = direction == Direction.LEFT
                 ? this.getPosition().x() + this.getDimension().width() + 10
                 : this.getPosition().x() - 10;
@@ -59,6 +57,6 @@ public class Railway extends AbstractActiveChunk {
      */
     @Override
     public EntityType getEntityType() {
-        return EntityType.TRAIN;
+        return EntityType.RAILWAY;
     }
 }

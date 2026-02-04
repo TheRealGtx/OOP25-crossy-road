@@ -4,12 +4,11 @@ package it.unibo.crossyroad.model.api;
  * Represents a chunk with active obstacle on top of it.
  */
 public abstract class AbstractActiveChunk extends AbstractChunk implements ActiveChunk {
-
     /**
      * Initializes the Chunk.
-     * 
+     *
      * @param initialPosition the Chunk's initial position.
-     * 
+     *
      * @param dimension the Chunk's dimension.
      */
     public AbstractActiveChunk(final Position initialPosition, final Dimension dimension) {
@@ -26,22 +25,30 @@ public abstract class AbstractActiveChunk extends AbstractChunk implements Activ
                 ((ActiveObstacle) obs).update(deltaTime, params);
             }
         }
-        removeOutOfBoundObstacles();
-        spawnIfNeeded(deltaTime);
-    }
+        this.removeOutOfBoundObstacles();
 
-    /**
-     * Spawns new obstacles if needed.
-     * 
-     * @param deltaTime time since last update.
-     */
-    protected abstract void spawnIfNeeded(long deltaTime);
+        if (this.shouldGenerateNewObstacles(deltaTime)) {
+            this.generateObstacles();
+        }
+    }
 
     /**
      * Removes out of bound obstacles from the chunk.
      */
     private void removeOutOfBoundObstacles() {
-        this.getObstacles().removeIf(obs -> obs.getPosition().x() < this.getPosition().x() - (obs.getDimension().width() + 2)
-        || obs.getPosition().x() > this.getPosition().x() + this.getDimension().width() + (obs.getDimension().width() + 2));
+        this.getObstacles().stream()
+            .filter(obs -> obs instanceof ActiveObstacle
+                    && obs.getPosition().x() < this.getPosition().x() - (obs.getDimension().width() + 2)
+                    || obs.getPosition().x() > this.getPosition().x() + this.getDimension().width()
+                                                                        + (obs.getDimension().width() + 2))
+            .forEach(this::removeObstacle);
     }
+
+    /**
+     * A method to determine if new obstacles should be generated.
+     *
+     * @param deltaTime the time elapsed since the last update
+     * @return true if new obstacles should be generated, false otherwise
+     */
+    protected abstract boolean shouldGenerateNewObstacles(long deltaTime);
 }
