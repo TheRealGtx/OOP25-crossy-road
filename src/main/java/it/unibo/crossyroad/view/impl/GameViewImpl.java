@@ -21,13 +21,11 @@ import java.util.Map;
 public class GameViewImpl implements GameView {
 
     private final Map<EntityType, Label> powerUpLabels;
-    private final Map<EntityType, Timeline> timelines;
     private final VBox powerUpBox = new VBox(5);
     private final Label coinLabel = new Label();
 
     public GameViewImpl() {
         this.powerUpLabels = new EnumMap<>(EntityType.class);
-        this.timelines = new EnumMap<>(EntityType.class);
     }
 
     @Override
@@ -45,15 +43,13 @@ public class GameViewImpl implements GameView {
      */
     @Override
     public void updatePowerUpTime(Map<EntityType, Long> powerUps) {
+        powerUpBox.getChildren().clear();
         for (Map.Entry<EntityType, Long> entry: powerUps.entrySet()) {
             EntityType powerUpType = entry.getKey();
             final int duration = (int) (entry.getValue() / 1000);
 
             if (powerUpLabels.containsKey(powerUpType)) {
-                final Timeline oldTimeline = timelines.get(powerUpType);
-                if (oldTimeline != null) {
-                    oldTimeline.stop();
-                }
+
                 startPowerUpTimer(powerUpType, duration);
             } else {
                 final Label label = new Label(formatPowerUpText(powerUpType, duration));
@@ -62,30 +58,6 @@ public class GameViewImpl implements GameView {
                 startPowerUpTimer(powerUpType, duration);
             }
         }
-    }
-
-    /**
-     * Starts a timer for the given power-up type.
-     *
-     * @param type the power-up type
-     * @param totalSeconds the total duration in seconds
-     */
-    private void startPowerUpTimer(EntityType type, int totalSeconds) {
-        final Label label = powerUpLabels.get(type);
-        final Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
-            int timeleft = extractTime(label);
-            timeleft--;
-            if (timeleft <= 0) {
-                powerUpBox.getChildren().remove(label);
-                powerUpLabels.remove(type);
-                timelines.remove(type);
-            } else {
-                label.setText(formatPowerUpText(type, timeleft));
-            }
-        }));
-        timeline.setCycleCount(totalSeconds);
-        timeline.play();
-        timelines.put(type, timeline);
     }
 
     /**
