@@ -1,12 +1,19 @@
 package it.unibo.crossyroad;
 
+import it.unibo.crossyroad.view.api.MenuView;
+import it.unibo.crossyroad.view.impl.MenuViewImpl;
 import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
  * Entry point of the application. It initializes the MVC components and starts the JavaFX application.
  */
 public class EntryPoint extends Application {
+    private static final double WIDTH = 1000;
+    private static final double HEIGHT = 900;
+
     /**
      * It initializes the MVC components.
      *
@@ -25,6 +32,14 @@ public class EntryPoint extends Application {
      */
     @Override
     public void start(final Stage stage) throws Exception {
-        // todo: Link instances of controller, view and model (that are in private fields)
+        final StackPane root = new StackPane();
+        final Scene scene = new Scene(root, WIDTH, HEIGHT);
+
+        stage.setTitle("Crossy Road");
+        stage.setScene(scene);
+        stage.show();
+
+        final MenuView menuView = new MenuViewImpl(root);
+        menuView.show(); // todo: it will be menuController
     }
 }
