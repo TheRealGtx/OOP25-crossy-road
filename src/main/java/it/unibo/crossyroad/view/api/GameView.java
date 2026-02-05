@@ -11,8 +11,19 @@ import java.util.Map;
  * Interface representing the game view.
  */
 public interface GameView extends View {
+
+    /**
+     * Sets the controller that will manage the view.
+     * 
+     * @param c the game controller.
+     */
     void setController(GameController c);
 
+    /**
+     * Renders all the positionables on the map.
+     * 
+     * @param positionables the list of items to render.
+     */
     void render(List<Positionable> positionables);
 
     /**

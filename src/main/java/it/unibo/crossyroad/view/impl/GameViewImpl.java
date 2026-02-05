@@ -19,6 +19,7 @@ import java.util.Objects;
 public class GameViewImpl implements GameView {
 
     private final StackPane root;
+    private final StackPane currenPane;
     private final VBox powerUpBox = new VBox(5);
     private final Label coinLabel = new Label();
 
@@ -29,6 +30,9 @@ public class GameViewImpl implements GameView {
      */
     public GameViewImpl(final StackPane root) {
         this.root = Objects.requireNonNull(root, "root cannot be null");
+        this.currenPane = new StackPane();
+
+        this.root.getChildren().add(this.currenPane);
     }
 
     @Override
@@ -76,7 +80,7 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void show() {
-        this.root.setVisible(true);
+        this.currenPane.setVisible(true);
     }
 
     @Override
