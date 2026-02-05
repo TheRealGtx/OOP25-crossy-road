@@ -5,6 +5,7 @@ package it.unibo.crossyroad.controller.api;
  */
 public interface GameController {
 
+    //void addGameView(GameView gameView);
     /**
      * Shows the game view.
      */
