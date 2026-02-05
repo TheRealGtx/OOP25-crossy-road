@@ -1,7 +1,12 @@
 package it.unibo.crossyroad.controller.impl;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+
 import it.unibo.crossyroad.controller.api.AppController;
 import it.unibo.crossyroad.controller.api.GameController;
+import it.unibo.crossyroad.model.api.Direction;
 import it.unibo.crossyroad.model.api.GameManager;
 
 import it.unibo.crossyroad.model.api.GameParameters;
@@ -14,13 +19,15 @@ import it.unibo.crossyroad.view.api.GameView;
  *
  * @see GameController
  */
-final class GameControllerImpl implements GameController {
+final class GameControllerImpl extends Thread implements GameController {
 
     private final AppController appController;
     private final GameView gameView;
-    private final boolean pause;
+    private volatile boolean pause;
     private final GameManager gameManager;
     private final GameParameters parameters;
+    private final Loop loop;
+    private final LinkedBlockingQueue<Direction> queue;
 
     public GameControllerImpl(AppController appController, GameView gameView) {
         this.appController = appController;
@@ -36,11 +43,14 @@ final class GameControllerImpl implements GameController {
                             .setTrainSpeedMultiplier(1)
                             .build();
         this.gameManager = new GameManagerImpl(this.parameters);
+        this.loop = new Loop();
+        this.queue = new LinkedBlockingQueue<>();
     }
 
     @Override
     public void showGame() {
-
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'hideGame'");
     }
 
     @Override
@@ -55,34 +65,32 @@ final class GameControllerImpl implements GameController {
     }
 
     @Override
+    public void hideMenu() {
+        this.appController.hideMenu();
+    }
+
+    @Override
     public void startLoop() {
-        this.gameManager.reset();
-        long deltaTime = 0;
-        long lastUpdate = 0;
-
-        while (!this.pause && !this.gameManager.isGameOver()) {
-            deltaTime = System.currentTimeMillis() - lastUpdate;
-            lastUpdate = System.currentTimeMillis();
-            this.gameManager.update(deltaTime);
-        }
+        this.loop.start();
     }
 
     @Override
-    public void pause() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'pause'");
+    public void pauseGame() {
+        this.pause = true;
+        this.showMenu();
+        this.hideGame();
     }
 
     @Override
-    public void resume() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'resume'");
+    public void resumeGame() {
+        this.pause = false;
+        this.showGame();
+        this.hideMenu();
     }
 
     @Override
-    public void processInput() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'processInput'");
+    public void processInput(Direction d) {
+        this.queue.add(d);
     }
 
     private String getActiveSkin() {
@@ -91,5 +99,30 @@ final class GameControllerImpl implements GameController {
 
     private int getCoinCount() {
         return this.appController.getCoinCount();
+    }
+
+    private final class Loop extends Thread {
+
+        public void run() {
+            gameManager.reset();
+            long lastUpdate = 0;
+
+            while (!gameManager.isGameOver()) {
+                if (!pause) {
+                    lastUpdate = System.currentTimeMillis();
+                    gameView.render(gameManager.getPositionables());
+                    gameView.updatePowerUpTime(gameManager.getActivePowerUps());
+                    gameView.updateCoinCount(parameters.getCoinCount());
+                    gameManager.update(System.nanoTime() - lastUpdate);
+
+                    if (!queue.isEmpty()) {
+                        gameManager.movePlayer(queue.poll());
+                    }
+                }
+                else {
+                    lastUpdate = System.currentTimeMillis();
+                }
+            }
+        }
     }
 }
