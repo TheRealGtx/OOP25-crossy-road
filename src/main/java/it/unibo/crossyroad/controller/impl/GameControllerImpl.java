@@ -58,11 +58,11 @@ final class GameControllerImpl implements GameController {
     public void startLoop() {
         this.gameManager.reset();
         long deltaTime = 0;
-        long starTime = 0;
-        long endTime = 0;
+        long lastUpdate = 0;
 
-        //TODO time measuring
         while (!this.pause && !this.gameManager.isGameOver()) {
+            deltaTime = System.currentTimeMillis() - lastUpdate;
+            lastUpdate = System.currentTimeMillis();
             this.gameManager.update(deltaTime);
         }
     }
