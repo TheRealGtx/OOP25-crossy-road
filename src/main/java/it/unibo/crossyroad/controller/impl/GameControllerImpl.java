@@ -111,7 +111,7 @@ public final class GameControllerImpl implements GameController {
                     lastUpdate = System.currentTimeMillis();
                     gameView.render(gameManager.getPositionables());
                     gameView.updatePowerUpTime(gameManager.getActivePowerUps());
-                    gameView.updateCoinCount(parameters.getCoinCount());
+                    gameView.updateCoinCount(getCoinCount());
                     gameManager.update(System.nanoTime() - lastUpdate);
 
                     if (!queue.isEmpty()) {

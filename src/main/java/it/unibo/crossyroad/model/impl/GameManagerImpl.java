@@ -36,7 +36,7 @@ public class GameManagerImpl implements GameManager {
     private static final Position CHUNK_SECOND_POSITION = new Position(0, 3);
     private static final Position CHUNK_THIRD_POSITION = new Position(0, 6);
     private static final Random RANDOM = new Random();
-    private static final int Y_MOVE_MAP_MARK = Math.ceilDiv(MAP_HEIGHT, 2); 
+    private static final int Y_MOVE_MAP_MARK = 4; 
     private static final int Y_DISPOSE_CHUNK_MARK = MAP_WIDTH + 2;
     private static final int Y_MAP_MOVEMENT = 1;
     private static final int Y_CREATE_CHUNK_MARK = (int) CHUNK_DIMENSION.height() - Y_MAP_MOVEMENT;
@@ -99,8 +99,9 @@ public class GameManagerImpl implements GameManager {
     public void movePlayer(final Direction d) {
         if (this.canPlayerMove(d)) {
             this.player.move(d, 1);
+            System.out.println("Posizione player: " + this.player.getPosition());
 
-            if (this.player.getPosition().y() >= Y_MOVE_MAP_MARK) {
+            if (this.player.getPosition().y() <= Y_MOVE_MAP_MARK) {
                 this.moveMap();
             }
         }
@@ -170,7 +171,8 @@ public class GameManagerImpl implements GameManager {
         }
 
         //Checks map border collisions
-        return !(d.apply(this.player.getPosition()).y() > MAP_WIDTH || d.apply(this.player.getPosition()).x() > MAP_HEIGHT);
+        return !(d.apply(this.player.getPosition()).x() >= MAP_WIDTH || d.apply(this.player.getPosition()).x() < 0 ||
+                 d.apply(this.player.getPosition()).y() >=  MAP_HEIGHT || d.apply(this.player.getPosition()).y() < 0);
     }
 
     /**
