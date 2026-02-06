@@ -101,7 +101,7 @@ public class GameManagerImpl implements GameManager {
             this.player.move(d, 1);
             System.out.println("Posizione player: " + this.player.getPosition());
 
-            if (this.player.getPosition().y() <= Y_MOVE_MAP_MARK) {
+            if (d == Direction.UP && this.player.getPosition().y() <= Y_MOVE_MAP_MARK) {
                 this.moveMap();
             }
         }
