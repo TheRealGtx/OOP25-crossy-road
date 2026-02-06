@@ -159,20 +159,20 @@ public class GameViewImpl implements GameView {
      * Load the images for the various elements.
      */
     private void loadImages() {
-        this.images.put(EntityType.PLAYER, new Image("file:///home/giuli/Desktop/images/player.png"));
-        this.images.put(EntityType.GRASS, new Image("file:///home/giuli/Desktop/images/grass.png"));
-        this.images.put(EntityType.ROAD, new Image("file:///home/giuli/Desktop/images/road.png"));
+        this.images.put(EntityType.PLAYER, new Image("assets/player.png"));
+        this.images.put(EntityType.GRASS, new Image("assets/grass.png"));
+        this.images.put(EntityType.ROAD, new Image("assets/road.png"));
         // this.images.put(River.class, new Image("path"));
-        this.images.put(EntityType.CAR, new Image("file:///home/giuli/Desktop/images/car.png"));
+        //this.images.put(EntityType.CAR, new Image("assets/car.png"));
         // this.images.put(WoodLog.class, new Image("path"));
-        this.images.put(EntityType.RAILWAY, new Image("file:///home/giuli/Desktop/images/railway.png"));
-        this.images.put(EntityType.ROCK, new Image("file:///home/giuli/Desktop/images/rock.png"));
-        this.images.put(EntityType.TREE, new Image("file:///home/giuli/Desktop/images/tree.png"));
-        this.images.put(EntityType.TRAIN, new Image("file:///home/giuli/Desktop/images/train.png"));
-        this.images.put(EntityType.COIN, new Image("file:///home/giuli/Desktop/images/coin.png"));
-        this.images.put(EntityType.COIN_MULTIPLIER, new Image("file:///home/giuli/Desktop/images/coinMultiplier.png"));
-        this.images.put(EntityType.INVINCIBILITY, new Image("file:///home/giuli/Desktop/images/invincibility.png"));
-        this.images.put(EntityType.SLOW_CARS, new Image("file:///home/giuli/Desktop/images/obstacleSpeed.png"));
+        this.images.put(EntityType.RAILWAY, new Image("assets/railway.png"));
+        this.images.put(EntityType.ROCK, new Image("assets/rock.png"));
+        this.images.put(EntityType.TREE, new Image("assets/tree.png"));
+        //this.images.put(EntityType.TRAIN, new Image("assets/train.png"));
+        this.images.put(EntityType.COIN, new Image("assets/coin.png"));
+        this.images.put(EntityType.COIN_MULTIPLIER, new Image("assets/coinMultiplier.png"));
+        this.images.put(EntityType.INVINCIBILITY, new Image("assets/invincibility.png"));
+        this.images.put(EntityType.SLOW_CARS, new Image("assets/obstacleSpeed.png"));
         // this.images.put(Water.class, new Image("path"));
     }
 

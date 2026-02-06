@@ -44,10 +44,10 @@ public final class Grass extends AbstractChunk {
                 && !this.getPositionables().stream().anyMatch(p -> p.getPosition().equals(randomPosition))) {
                 switch (this.rnd.nextInt(2)) {
                     case 0:
-                        this.addObstacle(new Tree(randomPosition, new Dimension(0.5, 0.5)));
+                        this.addObstacle(new Tree(randomPosition, new Dimension(1, 1)));
                         break;
                     case 1:
-                        this.addObstacle(new Rock(randomPosition, new Dimension(0.5, 0.5)));
+                        this.addObstacle(new Rock(randomPosition, new Dimension(1, 1)));
                         break;
                     default:
                         break;
