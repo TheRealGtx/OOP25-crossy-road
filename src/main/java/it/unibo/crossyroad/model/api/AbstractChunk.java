@@ -129,17 +129,19 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
             final Position randomPosition = new Position(RND.nextInt(xLimit), RND.nextInt(yLlimit));
 
             if (!this.getPositionables().stream().anyMatch(p -> p.getPosition().equals(randomPosition))) {
-                switch (RND.nextInt(4)) {
-                    case 0:
-                        this.addPickable(new Invincibility(randomPosition));
-                        break;
-                    case 1:
-                        this.addPickable(new SlowCars(randomPosition));
-                    case 2:
-                        this.addPickable(new CoinMultiplier(randomPosition));
-                    default:
-                        this.addPickable(new Coin(randomPosition));
-                        break;
+
+                double number = RND.nextDouble();
+                if (number <= 0.70) {
+                    this.addPickable(new Coin(randomPosition));
+                }
+                else if (number > 0.70 && number <= 0.80) {
+                    this.addPickable(new Invincibility(randomPosition));
+                }
+                else if (number > 0.80 && number <= 0.90) {
+                    this.addPickable(new SlowCars(randomPosition));
+                }
+                else if (number > 0.90 && number <= 1) {
+                    this.addPickable(new CoinMultiplier(randomPosition));
                 }
             }
         }
