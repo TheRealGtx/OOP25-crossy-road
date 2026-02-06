@@ -8,25 +8,30 @@ import it.unibo.crossyroad.controller.api.MenuController;
  * Implementation of the AppController interface.
  */
 public class AppControllerImpl implements AppController {
-    private final GameController gameController;
-    private final MenuController menuController;
-    // private final ShopController shopController;
-
-    /**
-     * Constructor of AppControllerImpl.
-     *
-     * @param gameController the game controller
-     */
-    public AppControllerImpl(final GameController gameController, final MenuController menuController) { // todo: add shopController
-        this.gameController = gameController;
-        this.menuController = menuController;
-        // this.shopController = shopController;
-    }
+    private GameController gameController;
+    private MenuController menuController;
+    // private ShopController shopController;
 
     private void hideAllViews() {
         this.gameController.hideGame();
         this.menuController.hideMenu();
         // this.shopController.hideShop();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setGameController(final GameController gc) {
+        this.gameController = gc;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setMenuController(final MenuController mc) {
+        this.menuController = mc;
     }
 
     /**

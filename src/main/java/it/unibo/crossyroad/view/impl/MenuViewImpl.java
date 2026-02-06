@@ -1,16 +1,19 @@
 package it.unibo.crossyroad.view.impl;
 
+import it.unibo.crossyroad.controller.api.MenuController;
 import it.unibo.crossyroad.view.api.MenuView;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -30,7 +33,7 @@ public class MenuViewImpl implements MenuView {
 
     private final StackPane root;
     private final Pane menuPane;
-    // private MenuController controller;
+    private MenuController controller;
 
     /**
      * Constructor for MenuViewImpl.
@@ -49,8 +52,8 @@ public class MenuViewImpl implements MenuView {
      * {@inheritDoc}
      */
     @Override
-    public void setController() { // todo: MenuController controller) {
-        throw new UnsupportedOperationException("Unimplemented method 'setController'");
+    public void setController(final MenuController controller) {
+        this.controller = Objects.requireNonNull(controller, "controller cannot be null");
     }
 
     /**
@@ -109,11 +112,22 @@ public class MenuViewImpl implements MenuView {
 
     private List<Button> createButtons() {
         final List<Button> buttons = List.of(
-            createButton("Play", e -> { }),
-            createButton("Shop", e -> { }),
-            createButton("Load", e -> { }),
-            createButton("Save", e -> { }),
-            createButton("Save & exit", e -> { })
+            createButton("Play", e -> {
+                this.controller.showGame();
+            }),
+            createButton("Shop", e -> {
+                this.controller.showGame();
+            }),
+            createButton("Load", e -> {
+                //this.controller.load();
+            }),
+            createButton("Save", e -> {
+                //this.controller.save();
+            }),
+            createButton("Save & exit", e -> {
+                //this.controller.save();
+                Platform.exit();
+            })
         );
 
         this.adjustButtonSizes(buttons);
@@ -132,13 +146,18 @@ public class MenuViewImpl implements MenuView {
      * @param buttons the list of buttons to adjust
      */
     private void adjustButtonSizes(final List<Button> buttons) {
-        // Buttons' sizes can only be computed after layout is done
         Platform.runLater(() -> {
-            final double maxWidth = buttons.stream()
-                .mapToDouble(b -> b.prefWidth(-1))
-                .max()
-                .orElse(0);
-            buttons.forEach(b -> b.setPrefWidth(maxWidth));
+            buttons.forEach(Node::applyCss);
+            Platform.runLater(() -> {
+                final double maxWidth = buttons.stream()
+                    .mapToDouble(Region::getWidth)
+                    .max()
+                    .orElse(0);
+                buttons.forEach(b -> {
+                    b.setPrefWidth(maxWidth);
+                    b.setMinWidth(Region.USE_PREF_SIZE);
+                });
+            });
         });
     }
 }

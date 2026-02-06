@@ -16,7 +16,7 @@ import it.unibo.crossyroad.view.api.GameView;
  *
  * @see GameController
  */
-final class GameControllerImpl extends Thread implements GameController {
+public final class GameControllerImpl extends Thread implements GameController {
 
     private final AppController appController;
     private final GameView gameView;
