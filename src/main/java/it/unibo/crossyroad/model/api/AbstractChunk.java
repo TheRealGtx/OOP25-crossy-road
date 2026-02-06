@@ -122,12 +122,10 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
      * Generates random Pickables objects on the Chunk.
      */
     private void generatePickables() {
-        final int xLimit = (int) Math.round(this.getPosition().x() + this.getDimension().height());
-        final int yLlimit = (int) Math.round(this.getPosition().y() + this.getDimension().width());
-
         for (int i = 0; i < RND.nextInt(3); i++) {
-            final Position randomPosition = new Position(RND.nextInt(xLimit), RND.nextInt(yLlimit));
-
+            final int relativeX = RND.nextInt((int) this.getDimension().width());
+            final int relativeY = RND.nextInt((int) this.getDimension().height());
+            final Position randomPosition = new Position(this.getPosition().x() + relativeX, this.getPosition().y() + relativeY);
             if (!this.getPositionables().stream().anyMatch(p -> p.getPosition().equals(randomPosition))) {
 
                 double number = RND.nextDouble();
