@@ -49,14 +49,12 @@ final class GameControllerImpl extends Thread implements GameController {
 
     @Override
     public void showGame() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'hideGame'");
+        this.gameView.show();
     }
 
     @Override
     public void hideGame() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'hideGame'");
+        this.gameView.hide();
     }
 
     @Override
