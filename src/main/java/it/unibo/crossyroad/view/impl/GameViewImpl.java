@@ -77,7 +77,7 @@ public class GameViewImpl implements GameView {
         overlay.setPadding(new Insets(20));
         overlay.setAlignment(Pos.TOP_LEFT);
         overlay.setPickOnBounds(false);
-        overlay.setMaxWidth(150);
+        overlay.setMaxWidth(200);
         overlay.setMaxHeight(50);
         overlay.setBackground(Background.fill(Color.WHITE));
 

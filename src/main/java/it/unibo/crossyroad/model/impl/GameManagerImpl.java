@@ -98,11 +98,11 @@ public class GameManagerImpl implements GameManager {
     @Override
     public void movePlayer(final Direction d) {
         if (this.canPlayerMove(d)) {
-            this.player.move(d, 1);
-            System.out.println("Posizione player: " + this.player.getPosition());
-
             if (d == Direction.UP && this.player.getPosition().y() <= Y_MOVE_MAP_MARK) {
                 this.moveMap();
+            }
+            else {
+                this.player.move(d, 1);
             }
         }
     }
@@ -249,7 +249,6 @@ public class GameManagerImpl implements GameManager {
             }
         }
 
-        //Generate new Chunk if necessary
         if (this.chunks.stream().anyMatch(c -> c.getPosition().y() == Y_CREATE_CHUNK_MARK)) {
             this.generateChunk();
         }
