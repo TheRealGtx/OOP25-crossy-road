@@ -32,9 +32,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -72,9 +74,12 @@ public class GameViewImpl implements GameView {
 
         //CurrentPane on the canvas
         VBox overlay = new VBox(10);
-        overlay.setAlignment(Pos.TOP_LEFT);
         overlay.setPadding(new Insets(20));
+        overlay.setAlignment(Pos.TOP_LEFT);
         overlay.setPickOnBounds(false);
+        overlay.setMaxWidth(150);
+        overlay.setMaxHeight(50);
+        overlay.setBackground(Background.fill(Color.WHITE));
 
         //Bind canvas too root size
         this.canvas.widthProperty().bind(root.widthProperty());
@@ -115,6 +120,7 @@ public class GameViewImpl implements GameView {
 
         overlay.getChildren().addAll(this.powerUpBox, this.coinLabel);
         this.currentPane.getChildren().addAll(this.canvas, overlay);
+        StackPane.setAlignment(overlay, Pos.TOP_LEFT);
         this.root.getChildren().add(this.currentPane);
     }
 
