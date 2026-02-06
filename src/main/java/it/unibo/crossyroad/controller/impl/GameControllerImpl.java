@@ -1,17 +1,13 @@
 package it.unibo.crossyroad.controller.impl;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import it.unibo.crossyroad.controller.api.AppController;
 import it.unibo.crossyroad.controller.api.GameController;
 import it.unibo.crossyroad.model.api.Direction;
 import it.unibo.crossyroad.model.api.GameManager;
-
 import it.unibo.crossyroad.model.api.GameParameters;
 import it.unibo.crossyroad.model.impl.GameManagerImpl;
-import it.unibo.crossyroad.model.impl.GameParametersBuilder;
 import it.unibo.crossyroad.model.impl.GameParametersImpl;
 import it.unibo.crossyroad.view.api.GameView;
 
@@ -67,7 +63,7 @@ final class GameControllerImpl extends Thread implements GameController {
     public void resumeGame() {
         this.pause = false;
         this.showGame();
-        this.appController.hideMenu();
+        this.appController.showGame();
     }
 
     @Override
@@ -75,9 +71,9 @@ final class GameControllerImpl extends Thread implements GameController {
         this.queue.add(d);
     }
 
-    private String getActiveSkin() {
-        return this.appController.getActiveSkinId();
-    }
+    // private String getActiveSkin() {
+    //     return this.appController.getActiveSkinId();
+    // }
 
     private int getCoinCount() {
         return this.appController.getCoinCount();
