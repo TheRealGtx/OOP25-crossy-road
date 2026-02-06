@@ -30,11 +30,11 @@ public class GameManagerImpl implements GameManager {
     private static final int MAP_WIDTH = 10;
     private static final int MAP_HEIGHT = 9;
     private static final Position PLAYER_START_POSITION = new Position(5, 8);
-    private static final Dimension CHUNK_DIMENSION = new Dimension(MAP_WIDTH, MAP_HEIGHT / 3);
-    private static final Position CHUNK_START_POSITION = new Position(0, 0);
-    private static final Position CHUNK_FIRST_POSITION = new Position(0, CHUNK_DIMENSION.height());
-    private static final Position CHUNK_SECOND_POSITION = new Position(0, CHUNK_DIMENSION.height() + CHUNK_FIRST_POSITION.y());
-    private static final Position CHUNK_THIRD_POSITION = new Position(0, CHUNK_DIMENSION.height() + CHUNK_SECOND_POSITION.y());
+    private static final Dimension CHUNK_DIMENSION = new Dimension(MAP_WIDTH, MAP_HEIGHT / 3); 
+    private static final Position CHUNK_START_POSITION = new Position(0, -3);
+    private static final Position CHUNK_FIRST_POSITION = new Position(0, 0);
+    private static final Position CHUNK_SECOND_POSITION = new Position(0, 3);
+    private static final Position CHUNK_THIRD_POSITION = new Position(0, 6);
     private static final Random RANDOM = new Random();
     private static final int Y_MOVE_MAP_MARK = Math.ceilDiv(MAP_HEIGHT, 2); 
     private static final int Y_DISPOSE_CHUNK_MARK = MAP_WIDTH + 2;

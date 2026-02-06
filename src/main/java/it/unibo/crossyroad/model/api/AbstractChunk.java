@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.Objects;
 
 import it.unibo.crossyroad.model.impl.Coin;
+import it.unibo.crossyroad.model.impl.CoinMultiplier;
 import it.unibo.crossyroad.model.impl.Invincibility;
 import it.unibo.crossyroad.model.impl.SlowCars;
 
@@ -128,12 +129,14 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
             final Position randomPosition = new Position(RND.nextInt(xLimit), RND.nextInt(yLlimit));
 
             if (!this.getPositionables().stream().anyMatch(p -> p.getPosition().equals(randomPosition))) {
-                switch (RND.nextInt(3)) {
+                switch (RND.nextInt(4)) {
                     case 0:
                         this.addPickable(new Invincibility(randomPosition));
                         break;
                     case 1:
                         this.addPickable(new SlowCars(randomPosition));
+                    case 2:
+                        this.addPickable(new CoinMultiplier(randomPosition));
                     default:
                         this.addPickable(new Coin(randomPosition));
                         break;

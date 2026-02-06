@@ -144,12 +144,12 @@ public class GameViewImpl implements GameView {
         // this.images.put(WoodLog.class, new Image("path"));
         // this.images.put(Railway.class, new Image("path"));
         this.images.put(EntityType.ROCK, new Image("file:///home/giuli/Desktop/images/rock.png"));
-        // this.images.put(Tree.class, new Image("path"));
+        this.images.put(EntityType.TREE, new Image("file:///home/giuli/Desktop/images/tree.png"));
         // this.images.put(Train.class, new Image("path"));
-        // this.images.put(Coin.class, new Image("path"));
-        // this.images.put(CoinMultiplier.class, new Image("path"));
-        // this.images.put(Invincibility.class, new Image("path"));
-        // this.images.put(SlowCars.class, new Image("path"));
+        this.images.put(EntityType.COIN, new Image("file:///home/giuli/Desktop/images/coin.png"));
+        this.images.put(EntityType.COIN_MULTIPLIER, new Image("file:///home/giuli/Desktop/images/coinMultiplier.png"));
+        this.images.put(EntityType.INVINCIBILITY, new Image("file:///home/giuli/Desktop/images/invincibility.png"));
+        this.images.put(EntityType.SLOW_CARS, new Image("file:///home/giuli/Desktop/images/obstacleSpeed.png"));
         // this.images.put(Water.class, new Image("path"));
     }
 
