@@ -22,12 +22,21 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.logging.Logger;
+
 /**
  * Entry point of the application. It initializes the MVC components and starts the JavaFX application.
  */
 public class EntryPoint extends Application {
     private static final double WIDTH = 1000;
     private static final double HEIGHT = 900;
+    private static final Logger LOGGER = Logger.getLogger(EntryPoint.class.getName());
+    private static final Path SAVE_PATH = Paths.get(System.getProperty("user.home"), "crossyroad");
+
+    private StateManager stateManager;
 
     /**
      * It initializes the MVC components.
@@ -36,7 +45,10 @@ public class EntryPoint extends Application {
      */
     @Override
     public void init() throws Exception {
-        // todo: Create instances and assign them to private fields
+        final GameParameters gameParameters = new GameParametersImpl();
+        final SkinManager skinManager = new SkinManagerImpl();
+        skinManager.loadFromResources();
+        this.stateManager = new StateManagerImpl(gameParameters, skinManager);
     }
 
     /**
@@ -53,29 +65,42 @@ public class EntryPoint extends Application {
         stage.setTitle("Crossy Road");
         stage.setScene(scene);
         stage.show();
-        stage.setResizable(false);
 
-        final GameParameters gameParameters = new GameParametersImpl();
-        final SkinManager skinManager = new SkinManagerImpl();
         final MenuView menuView = new MenuViewImpl(root);
         final GameView gameView = new GameViewImpl(root);
-        //final StateManager stateManager = new StateManagerImpl(gameParameters, skinManager);
 
         final AppController appController = new AppControllerImpl();
         final GameController gameController = new GameControllerImpl(appController, gameView);
-        final MenuController menuController = new MenuControllerImpl(appController, menuView);//, stateManager);
-
-        stage.setOnCloseRequest(e -> {
-            gameController.endGame();
-            Platform.exit();
-        });
+        final MenuController menuController = new MenuControllerImpl(appController, menuView, this.stateManager);
 
         appController.setGameController(gameController);
         appController.setMenuController(menuController);
 
         gameView.setController(gameController);
         menuView.setController(menuController);
-        gameController.startLoop();
         appController.showMenu();
+
+        this.loadSave(menuController);
+        stage.setOnCloseRequest(e -> this.onClose(gameController, menuController));
+    }
+
+    private void loadSave(final MenuController menuController) {
+        if (SAVE_PATH.toFile().exists()) {
+            try {
+                menuController.load(SAVE_PATH);
+            } catch (final IOException e) {
+                LOGGER.info("Failed to load past game state");
+            }
+        }
+    }
+
+    private void onClose(final GameController gameController, final MenuController menuController) {
+        gameController.endGame();
+        try {
+            menuController.save(Paths.get(System.getProperty("user.home"), "crossyroad"));
+        } catch (final IOException ex) {
+            LOGGER.severe("Failed to save the game state");
+        }
+        Platform.exit();
     }
 }

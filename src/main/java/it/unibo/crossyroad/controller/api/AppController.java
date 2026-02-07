@@ -1,5 +1,7 @@
 package it.unibo.crossyroad.controller.api;
 
+import it.unibo.crossyroad.model.api.Skin;
+
 /**
  * Main controller, that links Menu, Shop and Game controllers.
  */
@@ -36,11 +38,16 @@ public interface AppController {
     void showShop();
 
     /**
-     * Gets the active skin id.
-     *
-     * @return the active skin id
+     * Method called by GameController when the game is over.
      */
-    //String getActiveSkinId();
+    void gameOver();
+
+    /**
+     * Gets the active skin.
+     *
+     * @return the active skin
+     */
+    Skin getActiveSkin();
 
     /**
      * Gets the actual coin count.
