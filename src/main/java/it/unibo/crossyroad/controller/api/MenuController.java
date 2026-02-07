@@ -1,5 +1,6 @@
 package it.unibo.crossyroad.controller.api;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
 /**
@@ -26,13 +27,15 @@ public interface MenuController {
      * Save application state.
      *
      * @param p the file path
+     * @throws IOException if an I/O error occurs.
      */
-    void save(Path p);
+    void save(Path p) throws IOException;
 
     /**
      * Load application state.
      *
      * @param p the file path
+     * @throws IOException if an I/O error occurs.
      */
-    void load(Path p);
+    void load(Path p) throws IOException;
 }
