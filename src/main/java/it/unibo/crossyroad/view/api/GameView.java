@@ -7,6 +7,9 @@ import it.unibo.crossyroad.controller.api.GameController;
 import it.unibo.crossyroad.model.api.EntityType;
 import it.unibo.crossyroad.model.api.Positionable;
 
+/**
+ * View interface for the game.
+ */
 public interface GameView extends View {
 
     /**

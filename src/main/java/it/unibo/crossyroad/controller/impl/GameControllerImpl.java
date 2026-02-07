@@ -1,7 +1,10 @@
 package it.unibo.crossyroad.controller.impl;
 
+import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Logger;
 
+import it.unibo.crossyroad.EntryPoint;
 import it.unibo.crossyroad.controller.api.AppController;
 import it.unibo.crossyroad.controller.api.GameController;
 import it.unibo.crossyroad.model.api.Direction;
@@ -25,9 +28,20 @@ public final class GameControllerImpl implements GameController {
     private final GameManager gameManager;
     private final GameParameters parameters;
     private final Loop loop;
-    private final LinkedBlockingQueue<Direction> queue;
+    private final Queue<Direction> queue;
 
-    public GameControllerImpl(AppController appController, GameView gameView) {
+    /**
+     * Initializes the Game controller.
+     * 
+     * @param appController the app controller.
+     * 
+     * @param gameView the game view.
+     * 
+     * @see Appcontroller
+     * 
+     * @see GameView
+     */
+    public GameControllerImpl(final AppController appController, final GameView gameView) {
         this.appController = appController;
         this.gameView = gameView;
         this.pause = false;
@@ -68,7 +82,7 @@ public final class GameControllerImpl implements GameController {
     }
 
     @Override
-    public void processInput(UserInput input) {
+    public void processInput(final UserInput input) {
         switch (input) {
             case UP:
                 this.queue.add(Direction.UP);
@@ -81,8 +95,6 @@ public final class GameControllerImpl implements GameController {
                 break;
             case RIGHT:
                 this.queue.add(Direction.RIGHT);
-                break;
-            default:
                 break;
         }
     }
@@ -101,12 +113,14 @@ public final class GameControllerImpl implements GameController {
     }
 
     private final class Loop extends Thread {
+        private static final Logger LOGGER = Logger.getLogger(EntryPoint.class.getName());
 
+        @Override
         public void run() {
             gameManager.reset();
             long lastUpdate = 0;
-            long currentTime = 0;
-            long deltaTime = 0;
+            long currentTime;
+            long deltaTime;
 
             while (!gameManager.isGameOver()) {
                 if (!pause) {
@@ -121,19 +135,19 @@ public final class GameControllerImpl implements GameController {
                     if (!queue.isEmpty()) {
                         gameManager.movePlayer(queue.poll());
                     }
-                }
-                else {
+                } else {
                     lastUpdate = System.currentTimeMillis();
                 }
                 try {
-                    Thread.sleep(10);
-                } catch (Exception e) { }
+                    sleep(10);
+                } catch (final InterruptedException e) {
+                    LOGGER.severe("Thread.sleep() error");
+                }
             }
 
             //TODO togliere
+            gameManager.reset();
             appController.showMenu();
         }
     }
-
-    
 }

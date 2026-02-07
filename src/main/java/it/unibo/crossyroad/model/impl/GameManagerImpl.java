@@ -3,7 +3,6 @@ package it.unibo.crossyroad.model.impl;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -29,7 +28,7 @@ import it.unibo.crossyroad.model.api.CollisionType;
  * 
  * @see GameManager
  */
-public class GameManagerImpl implements GameManager {
+public final class GameManagerImpl implements GameManager {
 
     private static final int MAP_WIDTH = 10;
     private static final int MAP_HEIGHT = 9;
@@ -44,6 +43,9 @@ public class GameManagerImpl implements GameManager {
     private static final int Y_DISPOSE_CHUNK_MARK = MAP_WIDTH + 2;
     private static final int Y_MAP_MOVEMENT = 1;
     private static final int Y_CREATE_CHUNK_MARK = 0;
+    private static final double FIRST_PROBABILITY = 0.3;
+    private static final double SECOND_PROBABILITY = 0.6;
+    private static final double THIRD_PROBABILITY = 0.8;
     private PositionablePlayer player;
     private final GameParameters gameParameters;
     private List<Chunk> chunks;
@@ -105,8 +107,7 @@ public class GameManagerImpl implements GameManager {
         if (this.canPlayerMove(d)) {
             if (d == Direction.UP && this.player.getPosition().y() <= Y_MOVE_MAP_MARK) {
                 this.moveMap();
-            }
-            else {
+            } else {
                 this.player.move(d, 1);
             }
         }
@@ -144,27 +145,24 @@ public class GameManagerImpl implements GameManager {
      * Generates a new Chunk.
      */
     private void generateChunk() {
-        if (this.lastGenerated.e1() == EntityType.RAILWAY || (this.lastGenerated.e1() == EntityType.ROAD && this.lastGenerated.e2() >= 2)) {
+        if (this.lastGenerated.e1() == EntityType.RAILWAY
+            || this.lastGenerated.e1() == EntityType.ROAD && this.lastGenerated.e2() >= 2) {
             this.chunks.add(new Grass(CHUNK_START_POSITION, CHUNK_DIMENSION));
             this.lastGenerated = new Pair<>(EntityType.GRASS, 1);
-        }
-        else {
+        } else {
             final double number = RANDOM.nextDouble();
 
-            if (number <= 0.3) {
+            if (number <= FIRST_PROBABILITY) {
                 this.chunks.add(new Grass(CHUNK_START_POSITION, CHUNK_DIMENSION));
                 this.updateLastGenerated(EntityType.GRASS);
-            }
-            else if (number > 0.3 && number <= 0.6) {
+            } else if (number > FIRST_PROBABILITY && number <= SECOND_PROBABILITY) {
                 this.chunks.add(new Road(CHUNK_START_POSITION, CHUNK_DIMENSION));
                 this.updateLastGenerated(EntityType.ROAD);
 
-            }
-            else if (number > 0.6 && number <= 0.8) {
+            } else if (number > SECOND_PROBABILITY && number <= THIRD_PROBABILITY) {
                 this.chunks.add(new Railway(CHUNK_START_POSITION, CHUNK_DIMENSION));
                 this.updateLastGenerated(EntityType.RAILWAY);
-            }
-            else {
+            } else {
                 final Direction riverDirection = RANDOM.nextInt(2) == 0 ? Direction.LEFT : Direction.RIGHT;
                 this.chunks.add(new River(CHUNK_START_POSITION, CHUNK_DIMENSION, riverDirection));
             }
@@ -176,11 +174,10 @@ public class GameManagerImpl implements GameManager {
      * 
      * @param type the last generated type of Chunk.
      */
-    private void updateLastGenerated(EntityType type) {
+    private void updateLastGenerated(final EntityType type) {
         if (this.lastGenerated.e1() == type) {
             this.lastGenerated = new Pair<>(type, lastGenerated.e2() + 1);
-        }
-        else {
+        } else {
             this.lastGenerated = new Pair<>(type, 1);
         }
     }
@@ -201,8 +198,8 @@ public class GameManagerImpl implements GameManager {
         }
 
         //Checks map border collisions
-        return !(d.apply(this.player.getPosition()).x() >= MAP_WIDTH || d.apply(this.player.getPosition()).x() < 0 ||
-                 d.apply(this.player.getPosition()).y() >=  MAP_HEIGHT || d.apply(this.player.getPosition()).y() < 0);
+        return !(d.apply(this.player.getPosition()).x() >= MAP_WIDTH || d.apply(this.player.getPosition()).x() < 0
+                || d.apply(this.player.getPosition()).y() >= MAP_HEIGHT || d.apply(this.player.getPosition()).y() < 0);
     }
 
     /**
@@ -215,13 +212,12 @@ public class GameManagerImpl implements GameManager {
         boolean transportCollision = false;
 
         for (final Obstacle obs : this.getObstaclesOnMap()) {
-            Range<Double> xRange = Range.closed(obs.getPosition().x(), obs.getPosition().x() + obs.getDimension().width());
+            final Range<Double> xRange = Range.closed(obs.getPosition().x(), obs.getPosition().x() + obs.getDimension().width());
             if (obs.getPosition().y() == this.player.getPosition().y() && xRange.contains(this.player.getPosition().x())
                 && !this.gameParameters.isInvincible()) {
                 if (obs.getCollisionType() == CollisionType.DEADLY) {
                     deadlyCollision = true;
-                }
-                else if (obs.getCollisionType() == CollisionType.TRANSPORT) {
+                } else if (obs.getCollisionType() == CollisionType.TRANSPORT) {
                     transportCollision = true;
                 }
             }
@@ -282,7 +278,7 @@ public class GameManagerImpl implements GameManager {
     private void moveMap() {
         //Chunk movement
         this.chunks.forEach(c -> c.increaseY(Y_MAP_MOVEMENT));
-        this.chunks.removeIf(c -> c.getPosition().y() >= Y_DISPOSE_CHUNK_MARK && c.getActivePowerUp().size() == 0);
+        this.chunks.removeIf(c -> c.getPosition().y() >= Y_DISPOSE_CHUNK_MARK && c.getActivePowerUp().isEmpty());
 
         //Elements movement
         for (final Chunk c : this.chunks) {

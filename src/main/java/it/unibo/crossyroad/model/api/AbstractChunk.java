@@ -15,6 +15,9 @@ import it.unibo.crossyroad.model.impl.SlowCars;
  */
 public abstract class AbstractChunk extends AbstractPositionable implements Chunk {
 
+    private static final double FIRST_PROBABILITY = 0.70;
+    private static final double SECOND_PROBABILITY = 0.80;
+    private static final double THIRD_PROBABILITY = 0.90;
     private static final Random RND = new Random();
     private final List<Obstacle> obstacles;
     private final List<Pickable> pickables;
@@ -136,18 +139,14 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
             final int relativeY = RND.nextInt((int) this.getDimension().height());
             final Position randomPosition = new Position(this.getPosition().x() + relativeX, this.getPosition().y() + relativeY);
             if (!this.getPositionables().stream().anyMatch(p -> p.getPosition().equals(randomPosition))) {
-                double number = RND.nextDouble();
-
-                if (number <= 0.70) {
+                final double number = RND.nextDouble();
+                if (number <= FIRST_PROBABILITY) {
                     this.addPickable(new Coin(randomPosition));
-                }
-                else if (this.getActivePowerUp().size() == 0 && number > 0.70 && number <= 0.80) {
+                } else if (this.getActivePowerUp().isEmpty() && number > FIRST_PROBABILITY && number <= SECOND_PROBABILITY) {
                     this.addPickable(new Invincibility(randomPosition));
-                }
-                else if (this.getActivePowerUp().size() == 0 && number > 0.80 && number <= 0.90) {
+                } else if (this.getActivePowerUp().isEmpty() && number > SECOND_PROBABILITY && number <= THIRD_PROBABILITY) {
                     this.addPickable(new SlowCars(randomPosition));
-                }
-                else if (this.getActivePowerUp().size() == 0 && number > 0.90 && number <= 1) {
+                } else if (this.getActivePowerUp().isEmpty() && number > THIRD_PROBABILITY && number <= 1) {
                     this.addPickable(new CoinMultiplier(randomPosition));
                 }
             }
@@ -158,7 +157,7 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
      * {@inheritDoc}
      */
     @Override
-    public void update(GameParameters params, long deltaTime) {
+    public void update(final GameParameters params, final long deltaTime) {
         this.pickables.removeIf(p -> p instanceof AbstractPowerUp powerUp && powerUp.isDone());
 
         this.pickables.stream()

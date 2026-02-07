@@ -49,7 +49,7 @@ public interface Chunk extends Positionable {
      * 
      * @see Pickable
      */
-    void removePickable(final Pickable pick);
+    void removePickable(Pickable pick);
 
     /**
      * Updates the elements present on the Chunk and the Chunk itself.

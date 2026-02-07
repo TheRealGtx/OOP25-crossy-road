@@ -8,7 +8,6 @@ import it.unibo.crossyroad.model.api.Player;
 import it.unibo.crossyroad.model.api.Positionable;
 import it.unibo.crossyroad.model.api.PowerUp;
 import it.unibo.crossyroad.model.impl.Coin;
-import it.unibo.crossyroad.model.impl.WoodLog;
 import it.unibo.crossyroad.view.api.GameView;
 import it.unibo.crossyroad.view.api.UserInput;
 import javafx.application.Platform;
@@ -24,7 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import java.util.Map;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,7 +40,7 @@ public class GameViewImpl implements GameView {
     private final VBox powerUpBox = new VBox(5);
     private final Label coinLabel = new Label();
     private GameController gameController;
-    private final Map<EntityType, Image> images = new HashMap<>();
+    private final Map<EntityType, Image> images = new EnumMap<>(EntityType.class);
     private final Canvas canvas;
     private final GraphicsContext content;
     private double scale;
@@ -114,8 +113,8 @@ public class GameViewImpl implements GameView {
      * Computes the scale for the game;
      */
     private void scale() {
-        double scaleX = this.canvas.getWidth() / GAME_WIDTH;
-        double scaleY = this.canvas.getHeight() / GAME_HEIGHT;
+        final double scaleX = this.canvas.getWidth() / GAME_WIDTH;
+        final double scaleY = this.canvas.getHeight() / GAME_HEIGHT;
         this.scale = Math.min(scaleX, scaleY);
     }
 
@@ -137,14 +136,14 @@ public class GameViewImpl implements GameView {
         });
     }
 
-    private void drawElement(Positionable pos) {
-        Image image = this.images.get(pos.getEntityType());
+    private void drawElement(final Positionable pos) {
+        final Image image = this.images.get(pos.getEntityType());
 
         if (image != null) {
-            double x = Math.round(pos.getPosition().x() * this.scale);
-            double y = Math.round(pos.getPosition().y() * this.scale);
-            double width = Math.round(pos.getDimension().width() * this.scale);
-            double height = Math.round(pos.getDimension().height() * this.scale);
+            final double x = Math.round(pos.getPosition().x() * this.scale);
+            final double y = Math.round(pos.getPosition().y() * this.scale);
+            final double width = Math.round(pos.getDimension().width() * this.scale);
+            final double height = Math.round(pos.getDimension().height() * this.scale);
 
             this.content.drawImage(image, x, y, width, height);
         }
@@ -155,18 +154,18 @@ public class GameViewImpl implements GameView {
      * Load the images for the various elements.
      */
     private void loadImages() {
-        this.images.put(EntityType.PLAYER, new Image("skins/aura_overhead.png"));
+        this.images.put(EntityType.PLAYER, new Image("skins/aura_overhead.png"));   //TODO use appcontroller
         this.images.put(EntityType.GRASS, new Image("assets/grass.png"));
         this.images.put(EntityType.ROAD, new Image("assets/road.png"));
         this.images.put(EntityType.RIVER, new Image("assets/grass.png"));
-        this.images.put(EntityType.CAR_LEFT, new Image("assets/carLeft.png"));
-        this.images.put(EntityType.CAR_RIGHT, new Image("assets/carRight.png"));
+        this.images.put(EntityType.CAR_LEFT, new Image("obstacles/car_left.png"));
+        this.images.put(EntityType.CAR_RIGHT, new Image("obstacles/car_right.png"));
         this.images.put(EntityType.WOOD_LOG, new Image("assets/log.png"));
         this.images.put(EntityType.RAILWAY, new Image("assets/railway.png"));
         this.images.put(EntityType.ROCK, new Image("obstacles/rock.png"));
         this.images.put(EntityType.TREE, new Image("obstacles/tree.png"));
-        this.images.put(EntityType.TRAIN_LEFT, new Image("assets/trainLeft.png"));
-        this.images.put(EntityType.TRAIN_RIGHT, new Image("assets/trainRight.png"));
+        this.images.put(EntityType.TRAIN_LEFT, new Image("obstacles/train_left.png"));
+        this.images.put(EntityType.TRAIN_RIGHT, new Image("obstacles/train_right.png"));
         this.images.put(EntityType.COIN, new Image("pickables/coin.png"));
         this.images.put(EntityType.COIN_MULTIPLIER, new Image("assets/coinMultiplier.png"));
         this.images.put(EntityType.INVINCIBILITY, new Image("assets/invincibility.png"));

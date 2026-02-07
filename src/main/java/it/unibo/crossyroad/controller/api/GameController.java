@@ -39,6 +39,8 @@ public interface GameController {
 
     /**
      * Process the users's input.
+     * 
+     * @param input the user's input.
      */
     void processInput(UserInput input);
 }
