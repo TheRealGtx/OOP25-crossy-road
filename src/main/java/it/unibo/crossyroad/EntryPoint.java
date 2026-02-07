@@ -6,6 +6,12 @@ import it.unibo.crossyroad.controller.api.MenuController;
 import it.unibo.crossyroad.controller.impl.AppControllerImpl;
 import it.unibo.crossyroad.controller.impl.GameControllerImpl;
 import it.unibo.crossyroad.controller.impl.MenuControllerImpl;
+import it.unibo.crossyroad.model.api.GameParameters;
+import it.unibo.crossyroad.model.api.SkinManager;
+import it.unibo.crossyroad.model.api.StateManager;
+import it.unibo.crossyroad.model.impl.GameParametersImpl;
+import it.unibo.crossyroad.model.impl.SkinManagerImpl;
+import it.unibo.crossyroad.model.impl.StateManagerImpl;
 import it.unibo.crossyroad.view.api.GameView;
 import it.unibo.crossyroad.view.api.MenuView;
 import it.unibo.crossyroad.view.impl.GameViewImpl;
@@ -47,14 +53,16 @@ public class EntryPoint extends Application {
         stage.setTitle("Crossy Road");
         stage.setScene(scene);
         stage.show();
-        stage.setResizable(false);
-        
+
+        final GameParameters gameParameters = new GameParametersImpl();
+        final SkinManager skinManager = new SkinManagerImpl();
         final MenuView menuView = new MenuViewImpl(root);
         final GameView gameView = new GameViewImpl(root);
+        final StateManager stateManager = new StateManagerImpl(gameParameters, skinManager);
 
         final AppController appController = new AppControllerImpl();
         final GameController gameController = new GameControllerImpl(appController, gameView);
-        final MenuController menuController = new MenuControllerImpl(appController, menuView/*, stateManager*/);
+        final MenuController menuController = new MenuControllerImpl(appController, menuView, stateManager);
 
         stage.setOnCloseRequest(e -> {
             gameController.endGame();

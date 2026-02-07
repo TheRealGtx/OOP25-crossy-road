@@ -51,6 +51,8 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     // JSON implementation
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
+
+    compileOnly("com.github.spotbugs:spotbugs-annotations:4.9.7")
 }
 
 tasks.withType<Test> {
