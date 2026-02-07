@@ -42,7 +42,6 @@ public interface Chunk extends Positionable {
      */
     List<PowerUp> getActivePowerUp();
 
-
     /**
      * Removes a pickable from the list.
      * 

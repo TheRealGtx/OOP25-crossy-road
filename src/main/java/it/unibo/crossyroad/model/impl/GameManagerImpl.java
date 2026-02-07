@@ -3,6 +3,7 @@ package it.unibo.crossyroad.model.impl;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -247,7 +248,7 @@ public class GameManagerImpl implements GameManager {
     private void checkPowerUpCollisions() {
         for (final Pickable pick : this.getPickablesOnMap()) {
             if (pick instanceof PowerUp && pick.getPosition().equals(this.player.getPosition())
-                && this.getActivePowerUps().size() <= 0) {
+                && !this.getActivePowerUps().containsKey(pick.getEntityType())) {
                 pick.pickUp(this.gameParameters);
             }
         }

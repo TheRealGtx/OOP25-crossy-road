@@ -53,6 +53,7 @@ public class EntryPoint extends Application {
         stage.setTitle("Crossy Road");
         stage.setScene(scene);
         stage.show();
+        stage.setResizable(false);
 
         final GameParameters gameParameters = new GameParametersImpl();
         final SkinManager skinManager = new SkinManagerImpl();
