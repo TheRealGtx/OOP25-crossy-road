@@ -130,10 +130,10 @@ public class GameViewImpl implements GameView {
             this.content.clearRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
 
             positionables.stream().filter(p -> p instanceof Chunk).forEach(this::drawElement);
-            positionables.stream().filter(p -> p instanceof Player).forEach(this::drawElement);
-            positionables.stream().filter(p -> p instanceof Obstacle).forEach(this::drawElement);
             positionables.stream().filter(p -> p instanceof Coin).forEach(this::drawElement);
             positionables.stream().filter(p -> p instanceof PowerUp).map(p -> (PowerUp) p).filter(p -> !p.isPickedUp()).forEach(this::drawElement);
+            positionables.stream().filter(p -> p instanceof Player).forEach(this::drawElement);
+            positionables.stream().filter(p -> p instanceof Obstacle).forEach(this::drawElement);
         });
     }
 
