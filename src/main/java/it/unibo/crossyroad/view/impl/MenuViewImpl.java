@@ -1,5 +1,6 @@
 package it.unibo.crossyroad.view.impl;
 
+import it.unibo.crossyroad.EntryPoint;
 import it.unibo.crossyroad.controller.api.MenuController;
 import it.unibo.crossyroad.view.api.MenuView;
 import javafx.application.Platform;
@@ -19,8 +20,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 /**
  * An implementation of the MenuView interface, that allows the user to interact with the menuPane of the game.
@@ -30,6 +35,9 @@ public class MenuViewImpl implements MenuView {
     private static final double BUTTON_SPACING = 10.0;
     private static final double MENU_RADIUS = 10.0;
     private static final double MENU_PADDING = 10.0;
+
+    private static final Path SAVE_PATH = Paths.get(System.getProperty("user.home"), "crossyroad");
+    private static final Logger LOGGER = Logger.getLogger(EntryPoint.class.getName());
 
     private final StackPane root;
     private final Pane menuPane;
@@ -113,19 +121,23 @@ public class MenuViewImpl implements MenuView {
     private List<Button> createButtons() {
         final List<Button> buttons = List.of(
             createButton("Play", e -> {
-                this.controller.showGame();
+                if (!Objects.isNull(this.controller)) {
+                    this.controller.showGame();
+                    }
             }),
             createButton("Shop", e -> {
-                this.controller.showGame();
+                if (!Objects.isNull(this.controller)) {
+                    this.controller.showShop();
+                }
             }),
-            createButton("Load", e -> {
-                //this.controller.load();
-            }),
-            createButton("Save", e -> {
-                //this.controller.save();
-            }),
-            createButton("Save & exit", e -> {
-                //this.controller.save();
+            createButton("Save & Exit", e -> {
+                if (!Objects.isNull(this.controller)) {
+                    try {
+                        this.controller.save(SAVE_PATH);
+                    } catch (final IOException ex) {
+                        LOGGER.severe("Failed to save game state");
+                    }
+                }
                 Platform.exit();
             })
         );
