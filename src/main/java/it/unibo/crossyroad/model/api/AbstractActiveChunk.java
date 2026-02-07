@@ -40,9 +40,9 @@ public abstract class AbstractActiveChunk extends AbstractChunk {
     private void removeOutOfBoundObstacles() {
         this.getObstacles().stream()
             .filter(obs -> obs instanceof ActiveObstacle
-                    && obs.getPosition().x() < this.getPosition().x() - (obs.getDimension().width() + 2)
+                    && obs.getPosition().x() < this.getPosition().x() - (obs.getDimension().width() + 3)
                     || obs.getPosition().x() > this.getPosition().x() + this.getDimension().width()
-                                                                        + (obs.getDimension().width() + 2))
+                                                                        + (obs.getDimension().width() + 3))
             .forEach(this::removeObstacle);
     }
 

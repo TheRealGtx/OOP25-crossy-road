@@ -144,7 +144,6 @@ public class GameManagerImpl implements GameManager {
      * Generates a new Chunk.
      */
     private void generateChunk() {
-
         if (this.lastGenerated.e1() == EntityType.RAILWAY || (this.lastGenerated.e1() == EntityType.ROAD && this.lastGenerated.e2() >= 2)) {
             this.chunks.add(new Grass(CHUNK_START_POSITION, CHUNK_DIMENSION));
             this.lastGenerated = new Pair<>(EntityType.GRASS, 1);
