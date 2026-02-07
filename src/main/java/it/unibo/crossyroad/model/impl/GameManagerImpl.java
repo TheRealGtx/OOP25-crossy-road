@@ -1,5 +1,6 @@
 package it.unibo.crossyroad.model.impl;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import it.unibo.crossyroad.model.api.EntityType;
 import it.unibo.crossyroad.model.api.GameManager;
 import it.unibo.crossyroad.model.api.GameParameters;
 import it.unibo.crossyroad.model.api.Obstacle;
+import it.unibo.crossyroad.model.api.Pair;
 import it.unibo.crossyroad.model.api.Pickable;
 import it.unibo.crossyroad.model.api.Position;
 import it.unibo.crossyroad.model.api.Positionable;
@@ -44,6 +46,7 @@ public class GameManagerImpl implements GameManager {
     private final GameParameters gameParameters;
     private List<Chunk> chunks;
     private boolean isGameOver;
+    private Pair<EntityType, Integer> lastGenerated;
 
     /**
      * Initializes the GameManager with the GameParameters.
@@ -75,7 +78,7 @@ public class GameManagerImpl implements GameManager {
     public Map<EntityType, Long> getActivePowerUps() {
         return this.chunks.stream()
                           .flatMap(c -> c.getActivePowerUp().stream())
-                          .collect(Collectors.toMap(Pickable::getEntityType, PowerUp::getRemaining, Math::min));
+                          .collect(Collectors.toMap(Pickable::getEntityType, PowerUp::getRemaining, Math::max));
     }
 
     /**
@@ -132,6 +135,7 @@ public class GameManagerImpl implements GameManager {
         this.chunks.add(new Grass(CHUNK_FIRST_POSITION, CHUNK_DIMENSION));
         this.chunks.add(new Grass(CHUNK_SECOND_POSITION, CHUNK_DIMENSION));
         this.chunks.add(new Grass(CHUNK_THIRD_POSITION, CHUNK_DIMENSION));
+        this.lastGenerated = new Pair<>(EntityType.GRASS, 4);
 
         this.chunks.forEach(c -> c.getObstacles().stream().filter(o -> o.getPosition().equals(PLAYER_START_POSITION)));
     }
@@ -140,18 +144,40 @@ public class GameManagerImpl implements GameManager {
      * Generates a new Chunk.
      */
     private void generateChunk() {
-        switch (RANDOM.nextInt(3)) {
-            case 0:
+
+        if (this.lastGenerated.e1() == EntityType.RAILWAY || (this.lastGenerated.e1() == EntityType.ROAD && this.lastGenerated.e2() >= 2)) {
+            this.chunks.add(new Grass(CHUNK_START_POSITION, CHUNK_DIMENSION));
+            this.lastGenerated = new Pair<>(EntityType.GRASS, 1);
+        }
+        else {
+            final double number = RANDOM.nextDouble();
+
+            if (number <= 0.3) {
                 this.chunks.add(new Grass(CHUNK_START_POSITION, CHUNK_DIMENSION));
-                break;
-            case 1:
+                this.updateLastGenerated(EntityType.GRASS);
+            }
+            else if (number > 0.3 && number <= 0.8) {
                 this.chunks.add(new Road(CHUNK_START_POSITION, CHUNK_DIMENSION));
-                break;
-            case 2:
+                this.updateLastGenerated(EntityType.ROAD);
+            }
+            else {
                 this.chunks.add(new Railway(CHUNK_START_POSITION, CHUNK_DIMENSION));
-                break;
-            default:
-                break;
+                this.updateLastGenerated(EntityType.RAILWAY);
+            }
+        }
+    }
+
+    /**
+     * Updates the Pair that tracks the last generated type of Chunk.
+     * 
+     * @param type the last generated type of Chunk.
+     */
+    private void updateLastGenerated(EntityType type) {
+        if (this.lastGenerated.e1() == type) {
+            this.lastGenerated = new Pair<>(type, lastGenerated.e2() + 1);
+        }
+        else {
+            this.lastGenerated = new Pair<>(type, 1);
         }
     }
 
