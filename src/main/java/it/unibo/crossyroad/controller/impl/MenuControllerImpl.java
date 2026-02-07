@@ -31,7 +31,7 @@ public class MenuControllerImpl implements MenuController {
     public MenuControllerImpl(AppController appController, MenuView menuView, StateManager s) {
         this.appController = Objects.requireNonNull(appController, "The application controller cannot be null");
         this.menuView = Objects.requireNonNull(menuView, "The menu view cannot be null");
-        //this.stateManager = Objects.requireNonNull(s, "The state manager cannot be null");
+        this.stateManager = Objects.requireNonNull(s, "The state manager cannot be null");
     }
 
     /**
