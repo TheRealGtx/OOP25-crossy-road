@@ -33,11 +33,10 @@ public final class Grass extends AbstractChunk {
 
     @Override
     protected void generateObstacles() {
-        final int xLimit = (int) Math.ceil(this.getPosition().x() + this.getDimension().height());
-        final int yLlimit = (int) Math.ceil(this.getPosition().y() + this.getDimension().width());
-
         for (int i = 0; i < this.rnd.nextInt(16); i++) {
-            final Position randomPosition = new Position(this.rnd.nextInt(xLimit), this.rnd.nextInt(yLlimit));
+            final int relativeX = this.rnd.nextInt((int) this.getDimension().width());
+            final int relativeY = this.rnd.nextInt((int) this.getDimension().height());
+            final Position randomPosition = new Position(this.getPosition().x() + relativeX, this.getPosition().y() + relativeY);
 
             if (randomPosition != PLAYER_START_POSITION
                 && !this.getPositionables().stream().anyMatch(p -> p.getPosition().equals(randomPosition))) {

@@ -3,7 +3,7 @@ package it.unibo.crossyroad.model.api;
 /**
  * Represents a chunk with active obstacle on top of it.
  */
-public abstract class AbstractActiveChunk extends AbstractChunk implements ActiveChunk {
+public abstract class AbstractActiveChunk extends AbstractChunk {
     /**
      * Initializes the Chunk.
      *
@@ -25,6 +25,8 @@ public abstract class AbstractActiveChunk extends AbstractChunk implements Activ
                 ((ActiveObstacle) obs).update(deltaTime, params);
             }
         }
+
+        super.update(params, deltaTime);
         this.removeOutOfBoundObstacles();
 
         if (this.shouldGenerateNewObstacles(deltaTime)) {

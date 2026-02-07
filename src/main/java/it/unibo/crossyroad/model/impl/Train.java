@@ -12,7 +12,7 @@ import it.unibo.crossyroad.model.api.AbstractActiveObstacle;
  * A class representing a train obstacle in the game.
  */
 public class Train extends AbstractActiveObstacle {
-
+    private final Direction direction;
     /**
      * It creates a new active obstacle (train) with the initial position, speed and direction.
      *
@@ -22,6 +22,7 @@ public class Train extends AbstractActiveObstacle {
      */
     public Train(final Position position, final double speed, final Direction direction) {
         super(position, new Dimension(8, 1), speed, direction);
+        this.direction = direction;
     }
 
     /**
@@ -37,7 +38,11 @@ public class Train extends AbstractActiveObstacle {
      */
     @Override
     public EntityType getEntityType() {
-        return EntityType.TRAIN;
+        if (this.direction == Direction.LEFT) {
+            return EntityType.TRAIN_LEFT;
+        } else {
+            return EntityType.TRAIN_RIGHT;
+        }
     }
 
     /**

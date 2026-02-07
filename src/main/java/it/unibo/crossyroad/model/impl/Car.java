@@ -12,7 +12,7 @@ import it.unibo.crossyroad.model.api.AbstractActiveObstacle;
  * A class representing a car obstacle in the game.
  */
 public class Car extends AbstractActiveObstacle {
-
+    private final Direction direction;
     /**
      * It creates a new active obstacle (car) with the initial position, speed and direction.
      *
@@ -22,6 +22,7 @@ public class Car extends AbstractActiveObstacle {
      */
     public Car(final Position position, final double speed, final Direction direction) {
         super(position, new Dimension(2, 1), speed, direction);
+        this.direction = direction;
     }
 
     /**
@@ -37,7 +38,11 @@ public class Car extends AbstractActiveObstacle {
      */
     @Override
     public EntityType getEntityType() {
-        return EntityType.CAR;
+        if (this.direction == Direction.LEFT) {
+            return EntityType.CAR_LEFT;
+        } else {
+            return EntityType.CAR_RIGHT;
+        }
     }
 
     /**

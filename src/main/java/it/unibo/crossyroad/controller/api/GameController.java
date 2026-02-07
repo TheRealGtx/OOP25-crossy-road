@@ -1,5 +1,7 @@
 package it.unibo.crossyroad.controller.api;
 
+import it.unibo.crossyroad.view.api.UserInput;
+
 /**
  * Controller that manages the Game.
  */
@@ -16,27 +18,27 @@ public interface GameController {
     void hideGame();
 
     /**
-     * Shows the menu view.
-     */
-    void showMenu();
-
-    /**
-     * Starts the gameLoop.
+     * Starts the game loop.
      */
     void startLoop();
 
     /**
+     * Stops the game.
+     */
+    void endGame();
+
+    /**
      * Pauses the game.
      */
-    void pause();
+    void pauseGame();
 
     /**
      * Resumes the game.
      */
-    void resume();
+    void resumeGame();
 
     /**
      * Process the users's input.
      */
-    void processInput();
+    void processInput(UserInput input);
 }

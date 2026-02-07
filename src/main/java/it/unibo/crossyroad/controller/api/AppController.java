@@ -1,9 +1,25 @@
 package it.unibo.crossyroad.controller.api;
 
 /**
- * Main controller, that links Menu and Game controllers.
+ * Main controller, that links Menu, Shop and Game controllers.
  */
 public interface AppController {
+    /**
+     * Sets the game controller.
+     *
+     * @param gc the game controller
+     */
+    void setGameController(GameController gc);
+
+    /**
+     * Sets the menu controller.
+     *
+     * @param mc the menu controller
+     */
+    void setMenuController(MenuController mc);
+
+    // void setShopController(ShopController sc);
+
     /**
      * Shows the game view.
      */
@@ -24,7 +40,7 @@ public interface AppController {
      *
      * @return the active skin id
      */
-    String getActiveSkinId();
+    //String getActiveSkinId();
 
     /**
      * Gets the actual coin count.

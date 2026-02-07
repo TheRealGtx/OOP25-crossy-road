@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.Objects;
 
 import it.unibo.crossyroad.model.impl.Coin;
+import it.unibo.crossyroad.model.impl.CoinMultiplier;
 import it.unibo.crossyroad.model.impl.Invincibility;
 import it.unibo.crossyroad.model.impl.SlowCars;
 
@@ -77,7 +78,7 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
         return List.copyOf(this.pickables.stream()
                                          .filter(p -> p instanceof PowerUp)
                                          .map(p -> (PowerUp) p)
-                                         .filter(Pickable::isPickedUp)
+                                         .filter(p -> !p.isDone() && p.isPickedUp())
                                          .toList());
     }
 
@@ -111,6 +112,15 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removePickable(final Pickable pick) {
+        Objects.requireNonNull(pick, "Pickable cannot be null");
+        this.pickables.remove(pick);
+    }
+
+    /**
      * Deletes all the obstacles present on the Chunk.
      */
     protected final void clearObstacles() {
@@ -121,26 +131,40 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
      * Generates random Pickables objects on the Chunk.
      */
     private void generatePickables() {
-        final int xLimit = (int) Math.round(this.getPosition().x() + this.getDimension().height());
-        final int yLlimit = (int) Math.round(this.getPosition().y() + this.getDimension().width());
-
         for (int i = 0; i < RND.nextInt(3); i++) {
-            final Position randomPosition = new Position(RND.nextInt(xLimit), RND.nextInt(yLlimit));
-
+            final int relativeX = RND.nextInt((int) this.getDimension().width());
+            final int relativeY = RND.nextInt((int) this.getDimension().height());
+            final Position randomPosition = new Position(this.getPosition().x() + relativeX, this.getPosition().y() + relativeY);
             if (!this.getPositionables().stream().anyMatch(p -> p.getPosition().equals(randomPosition))) {
-                switch (RND.nextInt(3)) {
-                    case 0:
-                        this.addPickable(new Invincibility(randomPosition));
-                        break;
-                    case 1:
-                        this.addPickable(new SlowCars(randomPosition));
-                    default:
-                        this.addPickable(new Coin(randomPosition));
-                        break;
+                double number = RND.nextDouble();
+                if (number <= 0.70) {
+                    this.addPickable(new Coin(randomPosition));
+                }
+                else if (number > 0.70 && number <= 0.80) {
+                    this.addPickable(new Invincibility(randomPosition));
+                }
+                else if (number > 0.80 && number <= 0.90) {
+                    this.addPickable(new SlowCars(randomPosition));
+                }
+                else if (number > 0.90 && number <= 1) {
+                    this.addPickable(new CoinMultiplier(randomPosition));
                 }
             }
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(GameParameters params, long deltaTime) {
+        this.pickables.removeIf(p -> p instanceof AbstractPowerUp powerUp && powerUp.isDone());
+
+        this.pickables.stream()
+                      .filter(p -> p instanceof AbstractPowerUp powerUp && powerUp.isPickedUp())
+                      .map(p -> (AbstractPowerUp) p)
+                      .forEach(p -> p.update(deltaTime, params));
+    } 
 
     /**
      * Adds a new pickable to the list.

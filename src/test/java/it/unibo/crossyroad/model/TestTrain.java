@@ -54,7 +54,7 @@ class TestTrain {
     @Test
     void testCollisionTypeAndEntityType() {
         assertEquals(CollisionType.DEADLY, this.train.getCollisionType());
-        assertEquals(EntityType.TRAIN, this.train.getEntityType());
+        assertEquals(EntityType.TRAIN_RIGHT, this.train.getEntityType());
     }
 
     /**

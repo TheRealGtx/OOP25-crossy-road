@@ -51,4 +51,9 @@ public interface GameManager {
      * Resets the game for a new match.
      */
     void reset();
+
+    /**
+     * Stops the game.
+     */
+    void endGame();
 }

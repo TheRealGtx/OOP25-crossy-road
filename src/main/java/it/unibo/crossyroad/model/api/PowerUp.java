@@ -18,4 +18,11 @@ public interface PowerUp extends Pickable {
      * @return the remaining time.
      */
     long getRemaining();
+
+    /**
+     * Returns whether the effecte is stil in place.
+     * 
+     * @return true if the effetc vanished.
+     */
+    boolean isDone();
 }

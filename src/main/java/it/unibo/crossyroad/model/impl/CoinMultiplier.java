@@ -11,7 +11,7 @@ import it.unibo.crossyroad.model.api.Position;
 public class CoinMultiplier extends AbstractPowerUp {
 
     private static final int COIN_MULTIPLIER = 3;
-    private static final long COIN_MULTIPLIER_DURATION = 10_000L;
+    private static final long COIN_MULTIPLIER_DURATION = 100L;
 
     /**
      * Creates a new coin multiplier power-up at the given position.

@@ -57,7 +57,8 @@ class TestCar {
     @Test
     void testCollisionTypeAndEntityType() {
         assertEquals(CollisionType.DEADLY, this.carWithLeftDirection.getCollisionType());
-        assertEquals(EntityType.CAR, this.carWithLeftDirection.getEntityType());
+        assertEquals(EntityType.CAR_LEFT, this.carWithLeftDirection.getEntityType());
+        assertEquals(EntityType.CAR_RIGHT, this.carWithRightDirection.getEntityType());
     }
 
     /**

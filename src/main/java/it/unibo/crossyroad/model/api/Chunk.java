@@ -41,4 +41,25 @@ public interface Chunk extends Positionable {
      * @return a list of the active PowerUps present on the Chunk.
      */
     List<PowerUp> getActivePowerUp();
+
+
+    /**
+     * Removes a pickable from the list.
+     * 
+     * @param pick the pickable to remove from the list.
+     * 
+     * @see Pickable
+     */
+    void removePickable(final Pickable pick);
+
+    /**
+     * Updates the elements present on the Chunk and the Chunk itself.
+     * 
+     * @param params the GameParameters.
+     * 
+     * @param deltaTime time since last update.
+     * 
+     * @see GameParameters
+     */
+    void update(GameParameters params, long deltaTime);
 }

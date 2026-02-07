@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import it.unibo.crossyroad.model.api.ActiveChunk;
+import it.unibo.crossyroad.model.api.AbstractChunk;
 import it.unibo.crossyroad.model.api.ActiveObstacle;
 import it.unibo.crossyroad.model.api.Chunk;
 import it.unibo.crossyroad.model.api.Dimension;
@@ -27,22 +27,23 @@ import it.unibo.crossyroad.model.api.PowerUp;
  */
 public class GameManagerImpl implements GameManager {
 
-    private static final Position PLAYER_START_POSITION = new Position(5, 0);
-    private static final Position CHUNK_START_POSITION = new Position(0, 0);
-    private static final Position CHUNK_FIRST_POSITION = new Position(3, 0);
-    private static final Position CHUNK_SECOND_POSITION = new Position(6, 0);
-    private static final Position CHUNK_THIRD_POSITION = new Position(9, 0);
-    private static final Random RANDOM = new Random();
-    private static final int Y_MOVE_MAP_MARK = 4;
-    private static final int Y_DISPOSE_CHUNK_MARK = 12;
-    private static final int Y_CREATE_CHUNK_MARK = 2;
-    private static final int Y_MAP_MOVEMENT = 1;
-    private static final Dimension CHUNK_DIMENSION = new Dimension(10, 3);
     private static final int MAP_WIDTH = 10;
     private static final int MAP_HEIGHT = 9;
+    private static final Position PLAYER_START_POSITION = new Position(5, 8);
+    private static final Dimension CHUNK_DIMENSION = new Dimension(MAP_WIDTH, MAP_HEIGHT / 3); 
+    private static final Position CHUNK_START_POSITION = new Position(0, -3);
+    private static final Position CHUNK_FIRST_POSITION = new Position(0, 0);
+    private static final Position CHUNK_SECOND_POSITION = new Position(0, 3);
+    private static final Position CHUNK_THIRD_POSITION = new Position(0, 6);
+    private static final Random RANDOM = new Random();
+    private static final int Y_MOVE_MAP_MARK = 4; 
+    private static final int Y_DISPOSE_CHUNK_MARK = MAP_WIDTH + 2;
+    private static final int Y_MAP_MOVEMENT = 1;
+    private static final int Y_CREATE_CHUNK_MARK = (int) CHUNK_DIMENSION.height() - Y_MAP_MOVEMENT;
     private PositionablePlayer player;
     private final GameParameters gameParameters;
     private List<Chunk> chunks;
+    private boolean isGameOver;
 
     /**
      * Initializes the GameManager with the GameParameters.
@@ -51,7 +52,6 @@ public class GameManagerImpl implements GameManager {
      */
     public GameManagerImpl(final GameParameters g) {
         this.gameParameters = new GameParametersImpl(g);
-        this.reset();
     }
 
     /**
@@ -84,8 +84,8 @@ public class GameManagerImpl implements GameManager {
     @Override
     public void update(final long deltaTime) {
         this.chunks.stream()
-                   .filter(c -> c instanceof ActiveChunk)
-                   .map(c -> (ActiveChunk) c)
+                   .filter(c -> c instanceof AbstractChunk)
+                   .map(c -> (AbstractChunk) c)
                    .forEach(ac -> ac.update(this.gameParameters, deltaTime));
 
         this.checkCoinsCollision();
@@ -98,10 +98,11 @@ public class GameManagerImpl implements GameManager {
     @Override
     public void movePlayer(final Direction d) {
         if (this.canPlayerMove(d)) {
-            this.player.move(d, 1);
-
-            if (this.player.getPosition().y() >= Y_MOVE_MAP_MARK) {
+            if (d == Direction.UP && this.player.getPosition().y() <= Y_MOVE_MAP_MARK) {
                 this.moveMap();
+            }
+            else {
+                this.player.move(d, 1);
             }
         }
     }
@@ -111,7 +112,10 @@ public class GameManagerImpl implements GameManager {
      */
     @Override
     public boolean isGameOver() {
-        return this.checkDeadlyCollisions();
+        if (!this.isGameOver) {
+            this.isGameOver = this.checkDeadlyCollisions();
+        }
+        return this.isGameOver;
     }
 
     /**
@@ -121,6 +125,7 @@ public class GameManagerImpl implements GameManager {
     public final void reset() {
         this.player = new PositionablePlayer(PLAYER_START_POSITION);
         this.chunks = new LinkedList<>();
+        this.isGameOver = false;
 
         //Adds the first chunks to start the game
         this.chunks.add(new Grass(CHUNK_START_POSITION, CHUNK_DIMENSION));
@@ -166,7 +171,8 @@ public class GameManagerImpl implements GameManager {
         }
 
         //Checks map border collisions
-        return !(d.apply(this.player.getPosition()).y() > MAP_WIDTH || d.apply(this.player.getPosition()).x() > MAP_HEIGHT);
+        return !(d.apply(this.player.getPosition()).x() >= MAP_WIDTH || d.apply(this.player.getPosition()).x() < 0 ||
+                 d.apply(this.player.getPosition()).y() >=  MAP_HEIGHT || d.apply(this.player.getPosition()).y() < 0);
     }
 
     /**
@@ -191,6 +197,7 @@ public class GameManagerImpl implements GameManager {
         for (final Pickable pick : this.getPickablesOnMap()) {
             if (pick instanceof Coin && pick.getPosition().equals(this.player.getPosition())) {
                 ((Coin) pick).applyEffect(this.gameParameters);
+                this.chunks.forEach(c -> c.removePickable(pick));
             }
         }
     }
@@ -243,9 +250,13 @@ public class GameManagerImpl implements GameManager {
             }
         }
 
-        //Generate new Chunk if necessary
         if (this.chunks.stream().anyMatch(c -> c.getPosition().y() == Y_CREATE_CHUNK_MARK)) {
             this.generateChunk();
         }
+    }
+
+    @Override
+    public void endGame() {
+        this.isGameOver = true;
     }
 }
