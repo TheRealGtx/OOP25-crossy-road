@@ -58,11 +58,11 @@ public class EntryPoint extends Application {
         final SkinManager skinManager = new SkinManagerImpl();
         final MenuView menuView = new MenuViewImpl(root);
         final GameView gameView = new GameViewImpl(root);
-        final StateManager stateManager = new StateManagerImpl(gameParameters, skinManager);
+        //final StateManager stateManager = new StateManagerImpl(gameParameters, skinManager);
 
         final AppController appController = new AppControllerImpl();
         final GameController gameController = new GameControllerImpl(appController, gameView);
-        final MenuController menuController = new MenuControllerImpl(appController, menuView, stateManager);
+        final MenuController menuController = new MenuControllerImpl(appController, menuView);//, stateManager);
 
         stage.setOnCloseRequest(e -> {
             gameController.endGame();

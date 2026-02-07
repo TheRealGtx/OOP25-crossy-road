@@ -18,7 +18,7 @@ import java.util.Objects;
 public class MenuControllerImpl implements MenuController {
 
     private final AppController appController;
-    private final StateManager stateManager;
+    //private final StateManager stateManager;
     private final MenuView menuView;
 
     /**
@@ -28,10 +28,10 @@ public class MenuControllerImpl implements MenuController {
      * @param menuView the menu view.
      * @param s the state manager.
      */
-    public MenuControllerImpl(AppController appController, MenuView menuView, StateManager s) {
+    public MenuControllerImpl(AppController appController, MenuView menuView) {//, StateManager s) {
         this.appController = Objects.requireNonNull(appController, "The application controller cannot be null");
         this.menuView = Objects.requireNonNull(menuView, "The menu view cannot be null");
-        this.stateManager = Objects.requireNonNull(s, "The state manager cannot be null");
+        //this.stateManager = Objects.requireNonNull(s, "The state manager cannot be null");
     }
 
     /**
@@ -63,7 +63,7 @@ public class MenuControllerImpl implements MenuController {
      */
     @Override
     public void save(Path p) throws IOException {
-        this.stateManager.save(p);
+        //this.stateManager.save(p);
     }
 
     /**
@@ -71,7 +71,7 @@ public class MenuControllerImpl implements MenuController {
      */
     @Override
     public void load(Path p) throws IOException {
-        this.stateManager.load(p);
+        //this.stateManager.load(p);
     }
 
 }
