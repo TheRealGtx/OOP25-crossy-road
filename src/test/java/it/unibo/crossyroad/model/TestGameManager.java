@@ -5,12 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import it.unibo.crossyroad.model.api.GameManager;
 import it.unibo.crossyroad.model.api.GameParameters;
-import it.unibo.crossyroad.model.api.Obstacle;
-import it.unibo.crossyroad.model.api.Player;
-import it.unibo.crossyroad.model.api.Position;
-import it.unibo.crossyroad.model.api.Positionable;
-import it.unibo.crossyroad.model.api.PowerUp;
-import it.unibo.crossyroad.model.impl.Coin;
 import it.unibo.crossyroad.model.impl.GameManagerImpl;
 import it.unibo.crossyroad.model.impl.GameParametersBuilder;
 
@@ -18,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Optional;
 
 class TestGameManager {
     private GameManager gameManager;
@@ -34,7 +27,6 @@ class TestGameManager {
                               .setLogSpeedMultiplier(1)
                               .build();
         this.gameManager = new GameManagerImpl(gameParameters);
-        this.printMap();
     }
 
     @Test
