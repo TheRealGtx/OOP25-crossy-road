@@ -120,15 +120,23 @@ public class MenuViewImpl implements MenuView {
 
     private List<Button> createButtons() {
         final List<Button> buttons = List.of(
-            createButton("Play", e -> this.controller.showGame()),
+            createButton("Play", e -> {
+                if (!Objects.isNull(this.controller)) {
+                    this.controller.showGame();
+                    }
+            }),
             createButton("Shop", e -> {
-                this.controller.showGame();  // todo: replace
+                if (!Objects.isNull(this.controller)) {
+                    this.controller.showShop();
+                }
             }),
             createButton("Save & Exit", e -> {
-                try {
-                    this.controller.save(SAVE_PATH);
-                } catch (final IOException ex) {
-                    LOGGER.severe("Failed to save game state");
+                if (!Objects.isNull(this.controller)) {
+                    try {
+                        this.controller.save(SAVE_PATH);
+                    } catch (final IOException ex) {
+                        LOGGER.severe("Failed to save game state");
+                    }
                 }
                 Platform.exit();
             })
