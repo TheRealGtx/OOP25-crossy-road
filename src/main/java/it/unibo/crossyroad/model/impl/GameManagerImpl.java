@@ -79,7 +79,7 @@ public class GameManagerImpl implements GameManager {
     public Map<EntityType, Long> getActivePowerUps() {
         return this.chunks.stream()
                           .flatMap(c -> c.getActivePowerUp().stream())
-                          .collect(Collectors.toMap(Pickable::getEntityType, PowerUp::getRemaining, Math::max));
+                          .collect(Collectors.toMap(Pickable::getEntityType, PowerUp::getRemaining, Math::min));
     }
 
     /**
@@ -209,7 +209,8 @@ public class GameManagerImpl implements GameManager {
     private boolean checkDeadlyCollisions() {
         for (final Obstacle obs : this.getObstaclesOnMap()) {
             Range<Double> xRange = Range.closed(obs.getPosition().x(), obs.getPosition().x() + obs.getDimension().width());
-            if (obs instanceof ActiveObstacle && obs.getPosition().y() == this.player.getPosition().y() && xRange.contains(this.player.getPosition().x())) {
+            if (obs instanceof ActiveObstacle && obs.getPosition().y() == this.player.getPosition().y() && xRange.contains(this.player.getPosition().x())
+                && !this.gameParameters.isInvincible()) {
                 return true;
             }
         }
@@ -234,7 +235,8 @@ public class GameManagerImpl implements GameManager {
      */
     private void checkPowerUpCollisions() {
         for (final Pickable pick : this.getPickablesOnMap()) {
-            if (pick instanceof PowerUp && pick.getPosition().equals(this.player.getPosition())) {
+            if (pick instanceof PowerUp && pick.getPosition().equals(this.player.getPosition())
+                && this.getActivePowerUps().size() <= 0) {
                 pick.pickUp(this.gameParameters);
             }
         }
