@@ -19,6 +19,11 @@ public interface MenuController {
     void hideMenu();
 
     /**
+     * Show the shop view.
+     */
+    void showShop();
+
+    /**
      * Show the game view.
      */
     void showGame();

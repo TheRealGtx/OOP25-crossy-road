@@ -7,7 +7,6 @@ import it.unibo.crossyroad.view.api.MenuView;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.LinkedList;
 import java.util.Objects;
 
 /**
@@ -48,6 +47,14 @@ public class MenuControllerImpl implements MenuController {
     @Override
     public void hideMenu() {
         this.menuView.hide();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void showShop() {
+        this.appController.showShop();
     }
 
     /**

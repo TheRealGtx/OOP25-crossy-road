@@ -48,7 +48,7 @@ public class Road extends AbstractActiveChunk {
         final int activeCars = (int) getObstacles().stream()
                 .filter(obs -> obs instanceof Car)
                 .count();
-        if (elapsedTime >= SPAWN_CAR_INTERVAL_MS && activeCars < MAX_CARS_PER_CHUNKS) {
+        if ((elapsedTime >= SPAWN_CAR_INTERVAL_MS && activeCars < MAX_CARS_PER_CHUNKS) || activeCars == 0) {
             this.elapsedTime = 0;
             return true;
         }
