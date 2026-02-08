@@ -37,7 +37,7 @@ public class PositionablePlayer extends AbstractPositionable implements Player {
     public void move(final Direction direction, final double steps) {
         Objects.requireNonNull(direction, "Direction cannot be null");
         if (steps <= 0) {
-            throw new IllegalArgumentException("Steps must be greater than 0");
+            throw new IllegalArgumentException("Steps must be greater than 0. Received: " + steps);
         }
 
         this.setPosition(direction.getDelta().scale(steps).relative(this.getPosition()));

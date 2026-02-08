@@ -12,7 +12,7 @@ import it.unibo.crossyroad.model.api.Position;
  * Class representing a River chunk in the game.
  */
 public final class River extends AbstractActiveChunk {
-    public static final int LOGS_DISTANCE = 4;
+    public static final int LOGS_DISTANCE = 6;
     public static final double LOGS_SPEED = 1.0;
     private static final int LOGS_LENGTH = 3;
     private static final int CHUNK_SECTIONS = 3;
