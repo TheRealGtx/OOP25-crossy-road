@@ -32,8 +32,8 @@ import java.util.logging.Logger;
  * Entry point of the application. It initializes the MVC components and starts the JavaFX application.
  */
 public class EntryPoint extends Application {
-    private static final double WIDTH = 1000;
-    private static final double HEIGHT = 900;
+    private static final double WIDTH = 10;
+    private static final double HEIGHT = 9;
     private static final double ASPECT_RATIO = WIDTH / HEIGHT;
     private static final String TITLE = "Crossy Road";
     private static final double SCALE = 0.9;
