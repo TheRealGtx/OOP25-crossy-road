@@ -144,7 +144,11 @@ public final class GameManagerImpl implements GameManager {
     private Optional<Obstacle> getTransportCarryingPlayer() {
         return this.getObstaclesOnMap().stream()
             .filter(o -> o.getCollisionType() == CollisionType.TRANSPORT)
-            .filter(o -> o.getDimension().overlaps(o.getPosition(), this.player.getPosition(), this.player.getDimension()))
+            .filter(o -> o.getDimension().containsPoint(
+                o.getPosition(),
+                Position.of(player.getDimension().width() / 2, player.getDimension().height() / 2)
+                    .relative(player.getPosition())
+            ))
             .findFirst();
     }
 
