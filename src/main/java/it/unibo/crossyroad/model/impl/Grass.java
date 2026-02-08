@@ -12,6 +12,7 @@ import it.unibo.crossyroad.model.api.Position;
  */
 public final class Grass extends AbstractChunk {
     private static final Position PLAYER_START_POSITION = new Position(5, 8);
+    private static final Double COMPARING_DELTA = 0.0001;
     private final Random rnd = new Random();
 
     /**
@@ -39,7 +40,7 @@ public final class Grass extends AbstractChunk {
             final Position randomPosition = new Position(this.getPosition().x() + relativeX, this.getPosition().y() + relativeY);
 
             //Leave at least a path
-            if (randomPosition.x() != PLAYER_START_POSITION.x() 
+            if (Math.abs(randomPosition.x() - PLAYER_START_POSITION.x()) < COMPARING_DELTA
                 && !this.getPositionables().stream().anyMatch(p -> p.getPosition().equals(randomPosition))) {
                 switch (this.rnd.nextInt(2)) {
                     case 0:

@@ -31,10 +31,13 @@ import java.util.Objects;
  * Implementation of the GameView interface.
  *
  */
-public class GameViewImpl implements GameView {
+public final class GameViewImpl implements GameView {
 
     private static final int GAME_WIDTH = 10;
     private static final int GAME_HEIGHT = 9;
+    private static final int OVERLAY_PADDING = 20;
+    private static final int OVERLAY_WIDTH = 200;
+    private static final int OVERLAY_HEIGHT = 50;
     private final StackPane root;
     private final StackPane currentPane;
     private final VBox powerUpBox = new VBox(5);
@@ -59,11 +62,11 @@ public class GameViewImpl implements GameView {
 
         //CurrentPane on the canvas
         this.overlay = new VBox(10);
-        this.overlay.setPadding(new Insets(20));
+        this.overlay.setPadding(new Insets(OVERLAY_PADDING));
         this.overlay.setAlignment(Pos.TOP_LEFT);
         this.overlay.setPickOnBounds(false);
-        this.overlay.setMaxWidth(200);
-        this.overlay.setMaxHeight(50);
+        this.overlay.setMaxWidth(OVERLAY_WIDTH);
+        this.overlay.setMaxHeight(OVERLAY_HEIGHT);
         this.overlay.setBackground(Background.fill(Color.WHITE));
 
         //Bind canvas too root size
@@ -93,7 +96,8 @@ public class GameViewImpl implements GameView {
                     break;
                 case ESCAPE:
                     this.gameController.pauseGame();
-                default:
+                    break;
+                default: //A default isn't needed in this case.
                     break;
             }
         });
@@ -111,7 +115,7 @@ public class GameViewImpl implements GameView {
     }
 
     /**
-     * Computes the scale for the game;
+     * Computes the scale for the game.
      */
     private void scale() {
         final double scaleX = this.canvas.getWidth() / GAME_WIDTH;
@@ -130,11 +134,22 @@ public class GameViewImpl implements GameView {
         Platform.runLater(() -> {
             this.content.clearRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
 
-            positionables.stream().filter(p -> p instanceof Chunk).forEach(this::drawElement);
-            positionables.stream().filter(p -> p instanceof Coin).forEach(this::drawElement);
-            positionables.stream().filter(p -> p instanceof PowerUp).map(p -> (PowerUp) p).filter(p -> !p.isPickedUp()).forEach(this::drawElement);
-            positionables.stream().filter(p -> p instanceof Obstacle).forEach(this::drawElement);
-            positionables.stream().filter(p -> p instanceof Player).forEach(this::drawElement);
+            positionables.stream()
+                         .filter(p -> p instanceof Chunk)
+                         .forEach(this::drawElement);
+            positionables.stream()
+                         .filter(p -> p instanceof Coin)
+                         .forEach(this::drawElement);
+            positionables.stream()
+                         .filter(p -> p instanceof PowerUp)
+                         .map(p -> (PowerUp) p).filter(p -> !p.isPickedUp())
+                         .forEach(this::drawElement);
+            positionables.stream()
+                         .filter(p -> p instanceof Obstacle)
+                         .forEach(this::drawElement);
+            positionables.stream()
+                         .filter(p -> p instanceof Player)
+                         .forEach(this::drawElement);
         });
     }
 
@@ -151,7 +166,6 @@ public class GameViewImpl implements GameView {
         }
     }
 
-    //TODO add paths
     /**
      * Load the images for the various elements.
      */

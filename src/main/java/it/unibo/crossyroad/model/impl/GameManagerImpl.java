@@ -47,6 +47,7 @@ public final class GameManagerImpl implements GameManager {
     private static final double FIRST_PROBABILITY = 0.3;
     private static final double SECOND_PROBABILITY = 0.6;
     private static final double THIRD_PROBABILITY = 0.8;
+    private static final Double COMPARING_DELTA = 0.0001;
     private PositionablePlayer player;
     private final GameParameters gameParameters;
     private List<Chunk> chunks;
@@ -194,7 +195,7 @@ public final class GameManagerImpl implements GameManager {
      * {@inheritDoc}
      */
     @Override
-    public final void reset() {
+    public void reset() {
         this.player = new PositionablePlayer(PLAYER_START_POSITION);
         this.chunks = new LinkedList<>();
         this.isGameOver = false;
@@ -205,6 +206,37 @@ public final class GameManagerImpl implements GameManager {
         this.chunks.add(new Grass(CHUNK_SECOND_POSITION, CHUNK_DIMENSION));
         this.chunks.add(new Grass(CHUNK_THIRD_POSITION, CHUNK_DIMENSION));
         this.lastGenerated = new Pair<>(EntityType.GRASS, 4);
+    }
+
+    /**
+     * Checks if the player is colliding with an active obstacle.
+     * 
+     * @return true if there's a collision, false otherwise.
+     */
+    private boolean checkDeadlyCollisions() {
+        //Check if player is outside the map
+        Range<Double> xRange = Range.closed(0.0, (double) MAP_WIDTH);
+        if (!xRange.contains(this.player.getPosition().x())) {
+            return true;
+        }
+
+        boolean deadlyCollision = false;
+        boolean transportCollision = false;
+
+        //Check obstacles collisions
+        for (final Obstacle obs : this.getObstaclesOnMap()) {
+            xRange = Range.closed(obs.getPosition().x(), obs.getPosition().x() + obs.getDimension().width());
+            if (Math.abs(obs.getPosition().y() - this.player.getPosition().y()) < COMPARING_DELTA && xRange.contains(this.player.getPosition().x())
+                && !this.gameParameters.isInvincible()) {
+                if (obs.getCollisionType() == CollisionType.DEADLY) {
+                    deadlyCollision = true;
+                } else if (obs.getCollisionType() == CollisionType.TRANSPORT) {
+                    transportCollision = true;
+                }
+            }
+        }
+
+        return deadlyCollision && !transportCollision;
     }
 
     /**
@@ -266,37 +298,6 @@ public final class GameManagerImpl implements GameManager {
         //Checks map border collisions
         return !(d.apply(this.player.getPosition()).x() >= MAP_WIDTH || d.apply(this.player.getPosition()).x() < 0
                 || d.apply(this.player.getPosition()).y() >= MAP_HEIGHT || d.apply(this.player.getPosition()).y() < 0);
-    }
-
-    /**
-     * Checks if the player is colliding with an active obstacle.
-     * 
-     * @return true if there's a collision, false otherwise.
-     */
-    private boolean checkDeadlyCollisions() {
-        boolean deadlyCollision = false;
-        boolean transportCollision = false;
-
-        //Check if player is outside the map
-        Range<Double> xRange = Range.closed(0.0, (double) MAP_WIDTH);
-        if (!xRange.contains(this.player.getPosition().x())) {
-            return true;
-        }
-
-        //Check obstacles collisions
-        for (final Obstacle obs : this.getObstaclesOnMap()) {
-            xRange = Range.closed(obs.getPosition().x(), obs.getPosition().x() + obs.getDimension().width());
-            if (obs.getPosition().y() == this.player.getPosition().y() && xRange.contains(this.player.getPosition().x())
-                && !this.gameParameters.isInvincible()) {
-                if (obs.getCollisionType() == CollisionType.DEADLY) {
-                    deadlyCollision = true;
-                } else if (obs.getCollisionType() == CollisionType.TRANSPORT) {
-                    transportCollision = true;
-                }
-            }
-        }
-
-        return deadlyCollision && !transportCollision;
     }
 
     /**

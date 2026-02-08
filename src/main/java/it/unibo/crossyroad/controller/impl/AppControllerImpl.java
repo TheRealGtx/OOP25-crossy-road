@@ -74,8 +74,7 @@ public class AppControllerImpl implements AppController {
         if (this.isGameOver) {
             this.isGameOver = false;
             this.gameController.startLoop();
-        }
-        else {
+        } else {
             this.gameController.resumeGame();
         }
         this.gameController.showGame();

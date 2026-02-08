@@ -4,6 +4,8 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Logger;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import it.unibo.crossyroad.EntryPoint;
 import it.unibo.crossyroad.controller.api.AppController;
 import it.unibo.crossyroad.controller.api.GameController;
@@ -41,6 +43,11 @@ public final class GameControllerImpl implements GameController {
      * 
      * @see GameView
      */
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "AppController and GameView references are intentionally shared. " +
+            "These components need to interact with the same instances as per MVC pattern."
+    )
     public GameControllerImpl(final AppController appController, final GameView gameView) {
         this.appController = appController;
         this.gameView = gameView;
