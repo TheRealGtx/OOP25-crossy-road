@@ -31,7 +31,6 @@ val javaFXModules = listOf("base", "controls", "fxml", "swing", "graphics")
 val supportedPlatforms = listOf("linux", "mac", "win") // All required for OOP
 
 dependencies {
-    // Example library: Guava. Add what you need (and use the latest version where appropriate).
     implementation("com.google.guava:guava:33.5.0-jre")
 
     // JavaFX: comment out if you do not need them
