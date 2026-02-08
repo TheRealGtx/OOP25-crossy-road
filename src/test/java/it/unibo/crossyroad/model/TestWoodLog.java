@@ -1,6 +1,7 @@
 package it.unibo.crossyroad.model;
 
 import it.unibo.crossyroad.model.api.CollisionType;
+import it.unibo.crossyroad.model.api.Dimension;
 import it.unibo.crossyroad.model.api.Direction;
 import it.unibo.crossyroad.model.api.EntityType;
 import it.unibo.crossyroad.model.api.GameParameters;
@@ -40,7 +41,7 @@ class TestWoodLog {
         this.direction = random.nextBoolean() ? Direction.LEFT : Direction.RIGHT;
         this.woodLog = new WoodLog(
             direction == Direction.LEFT ? RIGHT_INITIAL_POSITION : LEFT_INITIAL_POSITION,
-            LENGTH,
+            new Dimension(LENGTH, 1.0),
             this.speed,
             direction
         );
