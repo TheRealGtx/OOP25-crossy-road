@@ -2,6 +2,8 @@ package it.unibo.crossyroad.model.api;
 
 import java.util.Objects;
 
+import com.google.common.collect.Range;
+
 /**
  * An abstract class representing an entity that has a position in a 2D space.
  */
@@ -57,5 +59,23 @@ public abstract class AbstractPositionable implements Positionable {
     @Override
     public Dimension getDimension() {
         return dimension;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean overlaps(final Positionable second) {
+        final var firstRangeX = Range.closedOpen(this.getPosition().x(), this.getPosition().x() + this.getDimension().width());
+        final var firstRangeY = Range.closedOpen(this.getPosition().y(), this.getPosition().y() + this.getDimension().height());
+        final var secondRangex = Range.closedOpen(second.getPosition().x(),
+                                                  second.getPosition().x() + second.getDimension().width()
+                                                );
+        final var secondRangeY = Range.closedOpen(second.getPosition().y(),
+                                                  second.getPosition().y() + second.getDimension().height()
+                                                );
+        return firstRangeX.isConnected(secondRangex) && firstRangeY.isConnected(secondRangeY)
+            && !firstRangeX.intersection(secondRangex).isEmpty()
+            && !firstRangeY.intersection(secondRangeY).isEmpty();
     }
 }

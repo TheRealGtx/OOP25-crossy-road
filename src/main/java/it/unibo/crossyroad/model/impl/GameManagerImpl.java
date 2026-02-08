@@ -41,7 +41,6 @@ public final class GameManagerImpl implements GameManager {
     private static final double FIRST_PROBABILITY = 0.3;
     private static final double SECOND_PROBABILITY = 0.6;
     private static final double THIRD_PROBABILITY = 0.8;
-    private static final Double COMPARING_DELTA = 0.0001;
     private static final Dimension CHUNK_DIMENSION = new Dimension(MAP_WIDTH, MAP_HEIGHT / 3); 
     private static final Position PLAYER_START_POSITION = new Position(5, 8);
     private static final Position CHUNK_START_POSITION = new Position(0, -3);
@@ -225,7 +224,7 @@ public final class GameManagerImpl implements GameManager {
      */
     private boolean checkDeadlyCollisions() {
         //Check if player is outside the map (deadly)
-        Range<Double> xRange = Range.closed(0.0, MAP_WIDTH);
+        final Range<Double> xRange = Range.closed(0.0, MAP_WIDTH);
         if (!xRange.contains(this.player.getPosition().x())) {
             return true;
         }
@@ -235,15 +234,11 @@ public final class GameManagerImpl implements GameManager {
 
         //Check obstacles collisions (deadly if player is not on a transport)
         if (!this.gameParameters.isInvincible()) {
-            for (final Obstacle obs : this.getObstaclesOnMap()) {
-                xRange = Range.closed(obs.getPosition().x(), obs.getPosition().x() + obs.getDimension().width());
-                if (Math.abs(obs.getPosition().y() - this.player.getPosition().y()) < COMPARING_DELTA
-                    && xRange.contains(this.player.getPosition().x())) {
-                    if (obs.getCollisionType() == CollisionType.DEADLY) {
-                        deadlyCollision = true;
-                    } else if (obs.getCollisionType() == CollisionType.TRANSPORT) {
-                        transportCollision = true;
-                    }
+            for (final Obstacle obs : this.getObstaclesOnMap().stream().filter(o -> o.overlaps(this.player)).toList()) {
+                if (obs.getCollisionType() == CollisionType.DEADLY) {
+                    deadlyCollision = true;
+                } else if (obs.getCollisionType() == CollisionType.TRANSPORT) {
+                    transportCollision = true;
                 }
             }
         }
@@ -321,7 +316,7 @@ public final class GameManagerImpl implements GameManager {
      */
     private void checkCoinsCollision() {
         this.getPickablesOnMap().stream()
-                                .filter(p -> p instanceof Coin && p.getPosition().equals(this.player.getPosition()))
+                                .filter(p -> p instanceof Coin && p.overlaps(this.player))
                                 .map(p -> (Coin) p)
                                 .forEach(c -> {
                                     c.applyEffect(this.gameParameters);
@@ -334,7 +329,7 @@ public final class GameManagerImpl implements GameManager {
      */
     private void checkPowerUpCollisions() {
         this.getPickablesOnMap().stream()
-                                .filter(p -> p instanceof PowerUp && p.getPosition().equals(this.player.getPosition())
+                                .filter(p -> p instanceof PowerUp && p.overlaps(this.player)
                                         && !this.getActivePowerUps().containsKey(p.getEntityType()))
                                 .forEach(p -> p.pickUp(this.gameParameters));
     }

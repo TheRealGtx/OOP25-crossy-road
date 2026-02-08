@@ -32,4 +32,12 @@ public interface Positionable {
      * @return the type of the entity
      */
     EntityType getEntityType();
+
+    /**
+     * Checks if two Positionables collide with eachother.
+     * 
+     * @param second the second Positionable.
+     * @return true if the Positionables collide, false otherwise.
+     */
+    boolean overlaps(Positionable second);
 }
