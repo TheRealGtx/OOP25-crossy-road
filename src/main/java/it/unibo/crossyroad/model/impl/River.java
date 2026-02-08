@@ -80,7 +80,7 @@ public final class River extends AbstractActiveChunk {
     protected void generateObstacles() {
         final ActiveObstacle log = new WoodLog(
             this.getLogStartPosition(),
-            LOGS_LENGTH,
+            Dimension.of(LOGS_LENGTH, this.sectionHeight),
             LOGS_SPEED,
             this.direction
         );
