@@ -51,7 +51,7 @@ public final class GameManagerImpl implements GameManager {
     private final GameParameters gameParameters;
     private List<Chunk> chunks;
     private Pair<EntityType, Integer> lastGenerated;
-    private Optional<Obstacle> currentTransport;
+    private Optional<Obstacle> currentTransport = Optional.empty();
     private PositionablePlayer player;
     private boolean isGameOver;
     private boolean wasOnTransport;
@@ -196,8 +196,7 @@ public final class GameManagerImpl implements GameManager {
     private Optional<Obstacle> getTransportCarryingPlayer() {
         return this.getObstaclesOnMap().stream()
             .filter(o -> o.getCollisionType() == CollisionType.TRANSPORT)
-            .filter(o -> o.getDimension().containsPoint(
-                o.getPosition(),
+            .filter(o -> o.contains(
                 Position.of(player.getDimension().width() / 2, player.getDimension().height() / 2)
                     .relative(player.getPosition())
             ))
