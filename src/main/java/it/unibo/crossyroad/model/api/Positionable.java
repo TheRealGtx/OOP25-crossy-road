@@ -34,7 +34,15 @@ public interface Positionable {
     EntityType getEntityType();
 
     /**
-     * Checks if two Positionables collide with eachother.
+     * Checks if the Positionable contains a given position.
+     *
+     * @param position the position to check
+     * @return true if the Positionable contains the position
+     */
+    boolean contains(Position position);
+
+    /**
+     * Checks if two Positionables collide with each other.
      * 
      * @param second the second Positionable.
      * @return true if the Positionables collide, false otherwise.

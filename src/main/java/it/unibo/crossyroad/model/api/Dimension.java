@@ -1,7 +1,5 @@
 package it.unibo.crossyroad.model.api;
 
-import com.google.common.collect.Range;
-
 /**
  * A record representing the dimensions of an entity.
  *
@@ -50,18 +48,5 @@ public record Dimension(double width, double height) {
      */
     public static Dimension unit() {
         return square(1);
-    }
-
-    /**
-     * Checks if a given point is contained within the area defined by this dimension relative to an origin position.
-     *
-     * @param origin origin position of the area defined by this dimension
-     * @param point point to check
-     * @return true if the point is contained within the area
-     */
-    public boolean containsPoint(final Position origin, final Position point) {
-        final var xRange = Range.closedOpen(origin.x(), origin.x() + this.width);
-        final var yRange = Range.closedOpen(origin.y(), origin.y() + this.height);
-        return xRange.contains(point.x()) && yRange.contains(point.y());
     }
 }

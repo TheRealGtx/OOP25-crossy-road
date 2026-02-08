@@ -65,17 +65,29 @@ public abstract class AbstractPositionable implements Positionable {
      * {@inheritDoc}
      */
     @Override
+    public boolean contains(final Position p) {
+        final Position pos = Objects.requireNonNull(p, "Position cannot be null");
+
+        final var xRange = Range.closedOpen(this.position.x(), this.position.x() + this.dimension.width());
+        final var yRange = Range.closedOpen(this.position.y(), this.position.y() + this.dimension.height());
+        return xRange.contains(pos.x()) && yRange.contains(pos.y());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean overlaps(final Positionable second) {
         final var firstRangeX = Range.closedOpen(this.getPosition().x(), this.getPosition().x() + this.getDimension().width());
         final var firstRangeY = Range.closedOpen(this.getPosition().y(), this.getPosition().y() + this.getDimension().height());
-        final var secondRangex = Range.closedOpen(second.getPosition().x(),
+        final var secondRangeX = Range.closedOpen(second.getPosition().x(),
                                                   second.getPosition().x() + second.getDimension().width()
                                                 );
         final var secondRangeY = Range.closedOpen(second.getPosition().y(),
                                                   second.getPosition().y() + second.getDimension().height()
                                                 );
-        return firstRangeX.isConnected(secondRangex) && firstRangeY.isConnected(secondRangeY)
-            && !firstRangeX.intersection(secondRangex).isEmpty()
+        return firstRangeX.isConnected(secondRangeX) && firstRangeY.isConnected(secondRangeY)
+            && !firstRangeX.intersection(secondRangeX).isEmpty()
             && !firstRangeY.intersection(secondRangeY).isEmpty();
     }
 }
