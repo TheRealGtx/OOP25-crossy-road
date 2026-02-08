@@ -43,4 +43,11 @@ public interface GameController {
      * @param input the user's input.
      */
     void processInput(UserInput input);
+
+    /**
+     * Get the path to the current selected skin.
+     * 
+     * @return the path to the current selected skin.
+     */
+    String getActiveSkin();
 }

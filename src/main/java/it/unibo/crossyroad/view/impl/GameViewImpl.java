@@ -101,7 +101,6 @@ public class GameViewImpl implements GameView {
         currentPane.requestFocus();
 
         this.content.setImageSmoothing(false);
-        this.loadImages();
 
         this.overlay.getChildren().addAll(this.powerUpBox, this.coinLabel);
         this.currentPane.getChildren().addAll(this.canvas, this.overlay);
@@ -123,6 +122,7 @@ public class GameViewImpl implements GameView {
     @Override
     public void setController(final GameController c) {
         this.gameController = c;
+        this.loadImages();
     }
 
     @Override
@@ -156,22 +156,22 @@ public class GameViewImpl implements GameView {
      * Load the images for the various elements.
      */
     private void loadImages() {
-        this.images.put(EntityType.PLAYER, new Image("skins/aura_overhead.png"));   //TODO use appcontroller
-        this.images.put(EntityType.GRASS, new Image("assets/grass.png"));
-        this.images.put(EntityType.ROAD, new Image("assets/road.png"));
-        this.images.put(EntityType.RIVER, new Image("assets/grass.png"));
+        this.images.put(EntityType.PLAYER, new Image(this.gameController.getActiveSkin()));
+        this.images.put(EntityType.GRASS, new Image("chunks/grass.png"));
+        this.images.put(EntityType.ROAD, new Image("chunks/road.png"));
+        this.images.put(EntityType.RIVER, new Image("chunks/river.png"));
         this.images.put(EntityType.CAR_LEFT, new Image("obstacles/car_left.png"));
         this.images.put(EntityType.CAR_RIGHT, new Image("obstacles/car_right.png"));
-        this.images.put(EntityType.WOOD_LOG, new Image("assets/log.png"));
-        this.images.put(EntityType.RAILWAY, new Image("assets/railway.png"));
+        this.images.put(EntityType.WOOD_LOG, new Image("obstacles/log.png"));
+        this.images.put(EntityType.RAILWAY, new Image("chunks/railway.png"));
         this.images.put(EntityType.ROCK, new Image("obstacles/rock.png"));
         this.images.put(EntityType.TREE, new Image("obstacles/tree.png"));
         this.images.put(EntityType.TRAIN_LEFT, new Image("obstacles/train_left.png"));
         this.images.put(EntityType.TRAIN_RIGHT, new Image("obstacles/train_right.png"));
         this.images.put(EntityType.COIN, new Image("pickables/coin.png"));
-        this.images.put(EntityType.COIN_MULTIPLIER, new Image("assets/coinMultiplier.png"));
-        this.images.put(EntityType.INVINCIBILITY, new Image("assets/invincibility.png"));
-        this.images.put(EntityType.SLOW_CARS, new Image("assets/obstacleSpeed.png"));
+        this.images.put(EntityType.COIN_MULTIPLIER, new Image("pickables/multiplier.png"));
+        this.images.put(EntityType.INVINCIBILITY, new Image("pickables/invincible.png"));
+        this.images.put(EntityType.SLOW_CARS, new Image("pickables/slow.png"));
         this.images.put(EntityType.WATER, new Image("assets/water.png"));
     }
 

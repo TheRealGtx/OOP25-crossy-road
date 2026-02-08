@@ -52,33 +52,51 @@ public final class GameControllerImpl implements GameController {
         this.queue = new LinkedBlockingQueue<>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void showGame() {
         this.gameView.show();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void hideGame() {
         this.gameView.hide();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startLoop() {
         this.loop.start();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void pauseGame() {
         this.pause = true;
         this.appController.showMenu();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void resumeGame() {
         this.pause = false;
         this.gameView.show();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void processInput(final UserInput input) {
         switch (input) {
@@ -97,14 +115,22 @@ public final class GameControllerImpl implements GameController {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void endGame() {
         this.gameManager.endGame();
     }
 
-    // private String getActiveSkin() {
-    //     return this.appController.getActiveSkinId();
-    // }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getActiveSkin() {
+        return "skins/default_overhead.png";
+        //return this.appController.getActiveSkin().getOverheadImage().toString();  //TODO
+    }
 
     private int getCoinCount() {
         return this.appController.getCoinCount();
