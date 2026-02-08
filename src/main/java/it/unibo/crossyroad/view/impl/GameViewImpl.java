@@ -29,6 +29,8 @@ import java.util.Objects;
 
 /**
  * Implementation of the GameView interface.
+ * 
+ * @see GameView
  *
  */
 public final class GameViewImpl implements GameView {
@@ -41,18 +43,18 @@ public final class GameViewImpl implements GameView {
     private final StackPane root;
     private final StackPane currentPane;
     private final VBox powerUpBox = new VBox(5);
+    private final VBox overlay;
     private final Label coinLabel = new Label();
-    private GameController gameController;
-    private final Map<EntityType, Image> images = new EnumMap<>(EntityType.class);
     private final Canvas canvas;
     private final GraphicsContext content;
+    private final Map<EntityType, Image> images = new EnumMap<>(EntityType.class);
+    private GameController gameController;
     private double scale;
-    private final VBox overlay;
 
     /**
-     * Constructor.
+     * Initializes and places the various view's components.
      *
-     * @param root the stack pane.
+     * @param root the application's main StackPane.
      */
     public GameViewImpl(final StackPane root) {
         this.root = Objects.requireNonNull(root, "root cannot be null");
@@ -60,7 +62,7 @@ public final class GameViewImpl implements GameView {
         this.canvas = new Canvas();
         this.content = this.canvas.getGraphicsContext2D();
 
-        //CurrentPane on the canvas
+        //Set up the overlay
         this.overlay = new VBox(10);
         this.overlay.setPadding(new Insets(OVERLAY_PADDING));
         this.overlay.setAlignment(Pos.TOP_LEFT);
@@ -75,7 +77,7 @@ public final class GameViewImpl implements GameView {
         this.canvas.widthProperty().addListener(c -> scale());
         this.canvas.heightProperty().addListener(c -> scale());
 
-        //Keys
+        //Manage key press
         this.currentPane.setOnKeyPressed(e -> {
             switch (e.getCode()) {
                 case UP:
@@ -105,7 +107,6 @@ public final class GameViewImpl implements GameView {
         currentPane.requestFocus();
 
         this.content.setImageSmoothing(false);
-
         this.overlay.getChildren().addAll(this.powerUpBox, this.coinLabel);
         this.currentPane.getChildren().addAll(this.canvas, this.overlay);
         StackPane.setAlignment(this.overlay, Pos.TOP_LEFT);
@@ -115,22 +116,22 @@ public final class GameViewImpl implements GameView {
     }
 
     /**
-     * Computes the scale for the game.
+     * {@inheritDoc}
      */
-    private void scale() {
-        final double scaleX = this.canvas.getWidth() / GAME_WIDTH;
-        final double scaleY = this.canvas.getHeight() / GAME_HEIGHT;
-        this.scale = Math.min(scaleX, scaleY);
-    }
-
     @Override
     public void setController(final GameController c) {
+        Objects.requireNonNull("The Game Controller cannot be null");
         this.gameController = c;
         this.loadImages();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void render(final List<Positionable> positionables) {
+        Objects.requireNonNull("The list of Positionable elements cannot be null");
+
         Platform.runLater(() -> {
             this.content.clearRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
 
@@ -153,6 +154,66 @@ public final class GameViewImpl implements GameView {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updatePowerUpTime(final Map<EntityType, Long> powerUps) {
+        Platform.runLater(() -> {
+            powerUpBox.getChildren().clear();
+            for (final Map.Entry<EntityType, Long> entry: powerUps.entrySet()) {
+                final int duration = (int) (entry.getValue() / 1000);
+                powerUpBox.getChildren().add(new Label(
+                        formatPowerUpText(entry.getKey(), duration)
+                ));
+            }
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updateCoinCount(final int count) {
+        Platform.runLater(() -> {
+            coinLabel.setText("Coins: " + count);
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void show() {
+        Platform.runLater(() -> {
+            this.currentPane.setVisible(true);
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void hide() {
+        Platform.runLater(() -> {
+            this.currentPane.setVisible(false);
+        });
+    }
+
+    /**
+     * Computes the scale for the game.
+     */
+    private void scale() {
+        final double scaleX = this.canvas.getWidth() / GAME_WIDTH;
+        final double scaleY = this.canvas.getHeight() / GAME_HEIGHT;
+        this.scale = Math.min(scaleX, scaleY);
+    }
+
+    /**
+     * Draws the given element on the map.
+     * 
+     * @param pos the element to place on the map.
+     */
     private void drawElement(final Positionable pos) {
         final Image image = this.images.get(pos.getEntityType());
 
@@ -161,7 +222,6 @@ public final class GameViewImpl implements GameView {
             final double y = Math.round(pos.getPosition().y() * this.scale);
             final double width = Math.round(pos.getDimension().width() * this.scale);
             final double height = Math.round(pos.getDimension().height() * this.scale);
-
             this.content.drawImage(image, x, y, width, height);
         }
     }
@@ -190,53 +250,13 @@ public final class GameViewImpl implements GameView {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updatePowerUpTime(final Map<EntityType, Long> powerUps) {
-        Platform.runLater(() -> {
-            powerUpBox.getChildren().clear();
-            for (final Map.Entry<EntityType, Long> entry: powerUps.entrySet()) {
-                final int duration = (int) (entry.getValue() / 1000);
-                powerUpBox.getChildren().add(new Label(
-                        formatPowerUpText(entry.getKey(), duration)
-                ));
-            }
-        });
-    }
-
-    /**
      * Formats the power-up text for display.
      *
-     * @param type the power-up type
-     * @param secondsLeft the remaining time in seconds
-     * @return the formatted text
+     * @param type the power-up type.
+     * @param secondsLeft the remaining time in seconds.
+     * @return the formatted text.
      */
     private String formatPowerUpText(final EntityType type, final int secondsLeft) {
         return type.getDisplayName() + ": " + secondsLeft + "s";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updateCoinCount(final int count) {
-        Platform.runLater(() -> {
-            coinLabel.setText("Coins: " + count);
-        });
-    }
-
-    @Override
-    public void show() {
-        Platform.runLater(() -> {
-            this.currentPane.setVisible(true);
-        });
-    }
-
-    @Override
-    public void hide() {
-        Platform.runLater(() -> {
-            this.currentPane.setVisible(false);
-        });
     }
 }

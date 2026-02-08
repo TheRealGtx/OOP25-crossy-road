@@ -1,14 +1,15 @@
 package it.unibo.crossyroad.model.api;
 
+import java.util.Objects;
+
 /**
- * Represents a chunk with active obstacle on top of it.
+ * Represents a chunk with active obstacles on top of it.
  */
 public abstract class AbstractActiveChunk extends AbstractChunk {
     /**
      * Initializes the Chunk.
      *
      * @param initialPosition the Chunk's initial position.
-     *
      * @param dimension the Chunk's dimension.
      */
     public AbstractActiveChunk(final Position initialPosition, final Dimension dimension) {
@@ -20,12 +21,12 @@ public abstract class AbstractActiveChunk extends AbstractChunk {
      */
     @Override
     public void update(final GameParameters params, final long deltaTime) {
-        for (final Obstacle obs : this.getObstacles()) {
-            if (obs instanceof ActiveObstacle) {
-                ((ActiveObstacle) obs).update(deltaTime, params);
-            }
-        }
-
+        Objects.requireNonNull(params, "Game parameters cannot be null");
+        this.getObstacles().stream()
+                           .filter(o -> o instanceof ActiveObstacle)
+                           .map(o -> (ActiveObstacle) o)
+                           .forEach(ao -> ao.update(deltaTime, params));
+        //Updates pickables
         super.update(params, deltaTime);
         this.removeOutOfBoundObstacles();
 
@@ -33,6 +34,14 @@ public abstract class AbstractActiveChunk extends AbstractChunk {
             this.generateObstacles();
         }
     }
+
+    /**
+     * A method to determine if new obstacles should be generated.
+     *
+     * @param deltaTime the time elapsed since the last update.
+     * @return true if new obstacles should be generated, false otherwise.
+     */
+    protected abstract boolean shouldGenerateNewObstacles(long deltaTime);
 
     /**
      * Removes out of bound obstacles from the chunk.
@@ -45,12 +54,4 @@ public abstract class AbstractActiveChunk extends AbstractChunk {
                                                                         + (obs.getDimension().width() + 3))
             .forEach(this::removeObstacle);
     }
-
-    /**
-     * A method to determine if new obstacles should be generated.
-     *
-     * @param deltaTime the time elapsed since the last update
-     * @return true if new obstacles should be generated, false otherwise
-     */
-    protected abstract boolean shouldGenerateNewObstacles(long deltaTime);
 }

@@ -25,6 +25,8 @@ public interface Chunk extends Positionable {
      * Returns the Pickables present on the Chunk.
      * 
      * @return a list of the Pickables present on the Chunk.
+     * 
+     * @see Pickable
      */
     List<Pickable> getPickables();
 
@@ -32,6 +34,8 @@ public interface Chunk extends Positionable {
      * Returns the Positionables present on the Chunk.
      * 
      * @return a list of the Positionables present on the Chunk.
+     * 
+     * @see Positionables
      */
     List<Positionable> getPositionables();
 
@@ -39,13 +43,15 @@ public interface Chunk extends Positionable {
      * Returns the active PowerUps present on the Chunk.
      * 
      * @return a list of the active PowerUps present on the Chunk.
+     * 
+     * @see PowerUp
      */
     List<PowerUp> getActivePowerUp();
 
     /**
-     * Removes a pickable from the list.
+     * Removes a pickable from the internal list.
      * 
-     * @param pick the pickable to remove from the list.
+     * @param pick the pickable to remove from the internal list.
      * 
      * @see Pickable
      */

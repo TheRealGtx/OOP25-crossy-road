@@ -12,6 +12,8 @@ import it.unibo.crossyroad.model.impl.SlowCars;
 
 /**
  * Represents a Chunk.
+ * 
+ * @see Chunk
  */
 public abstract class AbstractChunk extends AbstractPositionable implements Chunk {
 
@@ -86,16 +88,38 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
     }
 
     /**
-     * Generates random Obstacles objects on the Chunk.
+     * {@inheritDoc}
+     */
+    @Override
+    public void removePickable(final Pickable pick) {
+        Objects.requireNonNull(pick, "Pickable cannot be null");
+        this.pickables.remove(pick);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(final GameParameters params, final long deltaTime) {
+        Objects.requireNonNull(params, "Game parameters cannot be null");
+        this.pickables.removeIf(p -> p instanceof AbstractPowerUp powerUp && powerUp.isDone());
+        this.pickables.stream()
+                      .filter(p -> p instanceof AbstractPowerUp powerUp && powerUp.isPickedUp())
+                      .map(p -> (AbstractPowerUp) p)
+                      .forEach(p -> p.update(deltaTime, params));
+    }
+
+    /**
+     * Generates random Obstacles on the Chunk.
      */
     protected abstract void generateObstacles();
 
     /**
-     * Adds a new obstacle to the list.
+     * Adds a new obstacle to the internal list.
      * 
-     * @param obs the obstacle to add to the list.
+     * @param obs the obstacle to add to the internal list.
      * 
-     * @see Obstacle.
+     * @see Obstacle
      */
     protected void addObstacle(final Obstacle obs) {
         Objects.requireNonNull(obs, "Obstacle cannot be null");
@@ -103,24 +127,15 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
     }
 
     /**
-     * Removes an obstacle from the list.
+     * Removes an obstacle from the internal list.
      * 
-     * @param obs the obstacle to remove from the list.
+     * @param obs the obstacle to remove from the internal list.
      * 
-     * @see Obstacle.
+     * @see Obstacle
      */
     protected void removeObstacle(final Obstacle obs) {
         Objects.requireNonNull(obs, "Obstacle cannot be null");
         this.obstacles.remove(obs);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void removePickable(final Pickable pick) {
-        Objects.requireNonNull(pick, "Pickable cannot be null");
-        this.pickables.remove(pick);
     }
 
     /**
@@ -131,7 +146,14 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
     }
 
     /**
-     * Generates random Pickables objects on the Chunk.
+     * Deletes all the pickables present on the Chunk.
+     */
+    protected final void clearPickables() {
+        this.pickables.clear();
+    }
+
+    /**
+     * Generates random Pickables objects on the Chunk, each one with a different probability.
      */
     private void generatePickables() {
         for (int i = 0; i < RND.nextInt(3); i++) {
@@ -154,33 +176,14 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void update(final GameParameters params, final long deltaTime) {
-        this.pickables.removeIf(p -> p instanceof AbstractPowerUp powerUp && powerUp.isDone());
-
-        this.pickables.stream()
-                      .filter(p -> p instanceof AbstractPowerUp powerUp && powerUp.isPickedUp())
-                      .map(p -> (AbstractPowerUp) p)
-                      .forEach(p -> p.update(deltaTime, params));
-    } 
-
-    /**
-     * Adds a new pickable to the list.
+     * Adds a new pickable to the internal list.
      * 
-     * @param pick the pickable to add to the list.
+     * @param pick the pickable to add to the internal list.
      * 
-     * @see Pickable.
+     * @see Pickable
      */
     private void addPickable(final Pickable pick) {
+        Objects.requireNonNull(pick, "Pickable cannot be null");
         this.pickables.add(pick);
-    }
-
-    /**
-     * Deletes all the pickables present on the Chunk.
-     */
-    protected final void clearPickables() {
-        this.pickables.clear();
     }
 }

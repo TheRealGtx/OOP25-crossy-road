@@ -35,7 +35,6 @@ class TestGrass {
 
             assertTrue(nOfObstacles > 0);
             assertTrue(nOfObstacles < 16);
-            assertTrue(nOfPickables >= 0);
             assertTrue(nOfPickables < 3);
         }
     }

@@ -3,6 +3,7 @@ package it.unibo.crossyroad.model.impl;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -31,29 +32,29 @@ import it.unibo.crossyroad.model.api.CollisionType;
  */
 public final class GameManagerImpl implements GameManager {
 
-    private static final int MAP_WIDTH = 10;
-    private static final int MAP_HEIGHT = 9;
-    private static final Position PLAYER_START_POSITION = new Position(5, 8);
+    private static final double MAP_WIDTH = 10;
+    private static final double MAP_HEIGHT = 9;
+    private static final double Y_MOVE_MAP_MARK = 4; 
+    private static final double Y_DISPOSE_CHUNK_MARK = MAP_WIDTH + 2;
+    private static final double Y_MAP_MOVEMENT = 1;
+    private static final double Y_CREATE_CHUNK_MARK = 0;
+    private static final double FIRST_PROBABILITY = 0.3;
+    private static final double SECOND_PROBABILITY = 0.6;
+    private static final double THIRD_PROBABILITY = 0.8;
+    private static final Double COMPARING_DELTA = 0.0001;
     private static final Dimension CHUNK_DIMENSION = new Dimension(MAP_WIDTH, MAP_HEIGHT / 3); 
+    private static final Position PLAYER_START_POSITION = new Position(5, 8);
     private static final Position CHUNK_START_POSITION = new Position(0, -3);
     private static final Position CHUNK_FIRST_POSITION = new Position(0, 0);
     private static final Position CHUNK_SECOND_POSITION = new Position(0, 3);
     private static final Position CHUNK_THIRD_POSITION = new Position(0, 6);
     private static final Random RANDOM = new Random();
-    private static final int Y_MOVE_MAP_MARK = 4; 
-    private static final int Y_DISPOSE_CHUNK_MARK = MAP_WIDTH + 2;
-    private static final int Y_MAP_MOVEMENT = 1;
-    private static final int Y_CREATE_CHUNK_MARK = 0;
-    private static final double FIRST_PROBABILITY = 0.3;
-    private static final double SECOND_PROBABILITY = 0.6;
-    private static final double THIRD_PROBABILITY = 0.8;
-    private static final Double COMPARING_DELTA = 0.0001;
-    private PositionablePlayer player;
     private final GameParameters gameParameters;
     private List<Chunk> chunks;
-    private boolean isGameOver;
     private Pair<EntityType, Integer> lastGenerated;
     private Optional<Obstacle> currentTransport;
+    private PositionablePlayer player;
+    private boolean isGameOver;
     private boolean wasOnTransport;
 
     /**
@@ -62,6 +63,7 @@ public final class GameManagerImpl implements GameManager {
      * @param g the GameParameters to use in the game.
      */
     public GameManagerImpl(final GameParameters g) {
+        Objects.requireNonNull(g, "Game parameters cannot be null");
         this.gameParameters = new GameParametersImpl(g);
     }
 
@@ -115,58 +117,6 @@ public final class GameManagerImpl implements GameManager {
     }
 
     /**
-     * Handles the player getting off a transport Obstacle, aligning him horizontally to the nearest integer position.
-     */
-    private void handlePlayerOffTransport() {
-        if (this.wasOnTransport && this.currentTransport.isEmpty()) {
-            this.alignHorizontallyPlayer();
-        }
-    }
-
-    /**
-     * Moves the player of the deltaX between the old and new position of the transport obstacle.
-     *
-     * @param oldPosition old position of the transport obstacle
-     * @param newPosition new position of the transport obstacle
-     */
-    private void movePlayerWithTransport(final Position oldPosition, final Position newPosition) {
-        final double deltaX = newPosition.x() - oldPosition.x();
-
-        if (Math.abs(deltaX) > 0) {
-            this.player.move(deltaX > 0 ? Direction.RIGHT : Direction.LEFT, Math.abs(deltaX));
-        }
-    }
-
-    /**
-     * Gets the transport Active Obstacle which the player is on.
-     *
-     * @return the transport Active Obstacle the player is currently on, or null if there is none
-     */
-    private Optional<Obstacle> getTransportCarryingPlayer() {
-        return this.getObstaclesOnMap().stream()
-            .filter(o -> o.getCollisionType() == CollisionType.TRANSPORT)
-            .filter(o -> o.getDimension().containsPoint(
-                o.getPosition(),
-                Position.of(player.getDimension().width() / 2, player.getDimension().height() / 2)
-                    .relative(player.getPosition())
-            ))
-            .findFirst();
-    }
-
-    /**
-     * Aligns the player horizontally after he gets off a transport Obstacle (to the nearest integer position).
-     */
-    private void alignHorizontallyPlayer() {
-        if (this.player.getPosition().x() % 1 != 0) {
-            final double nearestX = Math.round(this.player.getPosition().x());
-            this.player.move(
-                this.player.getPosition().x() < nearestX ? Direction.RIGHT : Direction.LEFT,
-                Math.abs(nearestX - this.player.getPosition().x())
-            );
-        }
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -209,13 +159,73 @@ public final class GameManagerImpl implements GameManager {
     }
 
     /**
-     * Checks if the player is colliding with an active obstacle.
+     * {@inheritDoc}
+     */
+    @Override
+    public void endGame() {
+        this.isGameOver = true;
+    }
+
+    /**
+     * Handles the player getting off a transport Obstacle, aligning him horizontally to the nearest integer position.
+     */
+    private void handlePlayerOffTransport() {
+        if (this.wasOnTransport && this.currentTransport.isEmpty()) {
+            this.alignHorizontallyPlayer();
+        }
+    }
+
+    /**
+     * Moves the player of the deltaX between the old and new position of the transport obstacle.
+     *
+     * @param oldPosition old position of the transport obstacle
+     * @param newPosition new position of the transport obstacle
+     */
+    private void movePlayerWithTransport(final Position oldPosition, final Position newPosition) {
+        final double deltaX = newPosition.x() - oldPosition.x();
+
+        if (Math.abs(deltaX) > 0) {
+            this.player.move(deltaX > 0 ? Direction.RIGHT : Direction.LEFT, Math.abs(deltaX));
+        }
+    }
+
+    /**
+     * Gets the transport Active Obstacle the player is on.
+     *
+     * @return the transport Active Obstacle the player is currently on, or null if there is none.
+     */
+    private Optional<Obstacle> getTransportCarryingPlayer() {
+        return this.getObstaclesOnMap().stream()
+            .filter(o -> o.getCollisionType() == CollisionType.TRANSPORT)
+            .filter(o -> o.getDimension().containsPoint(
+                o.getPosition(),
+                Position.of(player.getDimension().width() / 2, player.getDimension().height() / 2)
+                    .relative(player.getPosition())
+            ))
+            .findFirst();
+    }
+
+    /**
+     * Aligns the player horizontally after he gets off a transport Obstacle (to the nearest integer position).
+     */
+    private void alignHorizontallyPlayer() {
+        if (this.player.getPosition().x() % 1 != 0) {
+            final double nearestX = Math.round(this.player.getPosition().x());
+            this.player.move(
+                this.player.getPosition().x() < nearestX ? Direction.RIGHT : Direction.LEFT,
+                Math.abs(nearestX - this.player.getPosition().x())
+            );
+        }
+    }
+
+    /**
+     * Checks if the player is colliding with an active obstacle or the map border.
      * 
      * @return true if there's a collision, false otherwise.
      */
     private boolean checkDeadlyCollisions() {
-        //Check if player is outside the map
-        Range<Double> xRange = Range.closed(0.0, (double) MAP_WIDTH);
+        //Check if player is outside the map (deadly)
+        Range<Double> xRange = Range.closed(0.0, MAP_WIDTH);
         if (!xRange.contains(this.player.getPosition().x())) {
             return true;
         }
@@ -223,16 +233,17 @@ public final class GameManagerImpl implements GameManager {
         boolean deadlyCollision = false;
         boolean transportCollision = false;
 
-        //Check obstacles collisions
-        for (final Obstacle obs : this.getObstaclesOnMap()) {
-            xRange = Range.closed(obs.getPosition().x(), obs.getPosition().x() + obs.getDimension().width());
-            if (Math.abs(obs.getPosition().y() - this.player.getPosition().y()) < COMPARING_DELTA
-                && xRange.contains(this.player.getPosition().x())
-                && !this.gameParameters.isInvincible()) {
-                if (obs.getCollisionType() == CollisionType.DEADLY) {
-                    deadlyCollision = true;
-                } else if (obs.getCollisionType() == CollisionType.TRANSPORT) {
-                    transportCollision = true;
+        //Check obstacles collisions (deadly if player is not on a transport)
+        if (!this.gameParameters.isInvincible()) {
+            for (final Obstacle obs : this.getObstaclesOnMap()) {
+                xRange = Range.closed(obs.getPosition().x(), obs.getPosition().x() + obs.getDimension().width());
+                if (Math.abs(obs.getPosition().y() - this.player.getPosition().y()) < COMPARING_DELTA
+                    && xRange.contains(this.player.getPosition().x())) {
+                    if (obs.getCollisionType() == CollisionType.DEADLY) {
+                        deadlyCollision = true;
+                    } else if (obs.getCollisionType() == CollisionType.TRANSPORT) {
+                        transportCollision = true;
+                    }
                 }
             }
         }
@@ -244,11 +255,12 @@ public final class GameManagerImpl implements GameManager {
      * Generates a new Chunk.
      */
     private void generateChunk() {
-        if (this.lastGenerated.e1() == EntityType.RAILWAY
+        //Place a Grass chunk after every railway, every river and every 2 roads
+        if (this.lastGenerated.e1() == EntityType.RAILWAY || this.lastGenerated.e1() == EntityType.RIVER
             || this.lastGenerated.e1() == EntityType.ROAD && this.lastGenerated.e2() >= 2) {
             this.chunks.add(new Grass(CHUNK_START_POSITION, CHUNK_DIMENSION));
             this.lastGenerated = new Pair<>(EntityType.GRASS, 1);
-        } else {
+        } else { //Generate a random chunk, each one with different probability
             final double number = RANDOM.nextDouble();
 
             if (number <= FIRST_PROBABILITY) {
@@ -272,6 +284,8 @@ public final class GameManagerImpl implements GameManager {
      * Updates the Pair that tracks the last generated type of Chunk.
      * 
      * @param type the last generated type of Chunk.
+     * 
+     * @see EntityType
      */
     private void updateLastGenerated(final EntityType type) {
         if (this.lastGenerated.e1() == type) {
@@ -297,32 +311,32 @@ public final class GameManagerImpl implements GameManager {
         }
 
         //Checks map border collisions
-        return !(d.apply(this.player.getPosition()).x() >= MAP_WIDTH || d.apply(this.player.getPosition()).x() < 0
-                || d.apply(this.player.getPosition()).y() >= MAP_HEIGHT || d.apply(this.player.getPosition()).y() < 0);
+        final Range<Double> xRange = Range.closed(0.0, MAP_WIDTH - 1);
+        final Range<Double> yRange = Range.closed(0.0, MAP_HEIGHT - 1);
+        return xRange.contains(d.apply(this.player.getPosition()).x()) && yRange.contains(d.apply(this.player.getPosition()).y());
     }
 
     /**
      * Checks if the player is colliding with a Coin, if so pickup the coin.
      */
     private void checkCoinsCollision() {
-        for (final Pickable pick : this.getPickablesOnMap()) {
-            if (pick instanceof Coin && pick.getPosition().equals(this.player.getPosition())) {
-                ((Coin) pick).applyEffect(this.gameParameters);
-                this.chunks.forEach(c -> c.removePickable(pick));
-            }
-        }
+        this.getPickablesOnMap().stream()
+                                .filter(p -> p instanceof Coin && p.getPosition().equals(this.player.getPosition()))
+                                .map(p -> (Coin) p)
+                                .forEach(c -> {
+                                    c.applyEffect(this.gameParameters);
+                                    this.chunks.forEach(ch -> ch.removePickable(c));
+                                });
     }
 
     /**
      * Picks up the PowerUps the player is colliding with. 
      */
     private void checkPowerUpCollisions() {
-        for (final Pickable pick : this.getPickablesOnMap()) {
-            if (pick instanceof PowerUp && pick.getPosition().equals(this.player.getPosition())
-                && !this.getActivePowerUps().containsKey(pick.getEntityType())) {
-                pick.pickUp(this.gameParameters);
-            }
-        }
+        this.getPickablesOnMap().stream()
+                                .filter(p -> p instanceof PowerUp && p.getPosition().equals(this.player.getPosition())
+                                        && !this.getActivePowerUps().containsKey(p.getEntityType()))
+                                .forEach(p -> p.pickUp(this.gameParameters));
     }
 
     /**
@@ -348,27 +362,18 @@ public final class GameManagerImpl implements GameManager {
     }
 
     /**
-     * Handles the map movement.
+     * Handles the map movement and creates new Chunks if necessary.
      */
     private void moveMap() {
-        //Chunk movement
+        //First move the Chunks
         this.chunks.forEach(c -> c.increaseY(Y_MAP_MOVEMENT));
         this.chunks.removeIf(c -> c.getPosition().y() >= Y_DISPOSE_CHUNK_MARK && c.getActivePowerUp().isEmpty());
 
-        //Elements movement
-        for (final Chunk c : this.chunks) {
-            for (final Positionable p : c.getPositionables()) {
-                p.increaseY(Y_MAP_MOVEMENT);
-            }
-        }
+        //Then move the other elements.
+        this.chunks.forEach(c -> c.getPositionables().forEach(p -> p.increaseY(Y_MAP_MOVEMENT)));
 
         if (this.chunks.stream().anyMatch(c -> c.getPosition().y() == Y_CREATE_CHUNK_MARK)) {
             this.generateChunk();
         }
-    }
-
-    @Override
-    public void endGame() {
-        this.isGameOver = true;
     }
 }

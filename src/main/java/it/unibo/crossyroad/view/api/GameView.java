@@ -23,6 +23,8 @@ public interface GameView extends View {
      * Renders all the positionables on the map.
      * 
      * @param positionables the list of items to render.
+     * 
+     * @see Positionables
      */
     void render(List<Positionable> positionables);
 
