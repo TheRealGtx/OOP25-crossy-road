@@ -8,6 +8,7 @@ import it.unibo.crossyroad.view.api.MenuView;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 /**
@@ -78,16 +79,16 @@ public class MenuControllerImpl implements MenuController {
      * {@inheritDoc}
      */
     @Override
-    public void save(Path p) throws IOException {
-        this.stateManager.save(p);
+    public void save() throws IOException {
+        this.stateManager.save(Paths.get(System.getProperty("user.home"), "crossyroad"));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void load(Path p) throws IOException {
-        this.stateManager.load(p);
+    public void load() throws IOException {
+        this.stateManager.load(Paths.get(System.getProperty("user.home"), "crossyroad"));
     }
 
 }

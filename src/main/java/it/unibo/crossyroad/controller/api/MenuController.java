@@ -40,16 +40,14 @@ public interface MenuController {
     /**
      * Save application state.
      *
-     * @param p the file path
      * @throws IOException if an I/O error occurs.
      */
-    void save(Path p) throws IOException;
+    void save() throws IOException;
 
     /**
      * Load application state.
      *
-     * @param p the file path
      * @throws IOException if an I/O error occurs.
      */
-    void load(Path p) throws IOException;
+    void load() throws IOException;
 }

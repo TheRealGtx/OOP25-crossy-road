@@ -98,7 +98,7 @@ public class EntryPoint extends Application {
     private void loadSave(final MenuController menuController) {
         if (SAVE_PATH.toFile().exists()) {
             try {
-                menuController.load(SAVE_PATH);
+                menuController.load();
             } catch (final IOException e) {
                 LOGGER.info("Failed to load past game state");
             }
@@ -108,7 +108,7 @@ public class EntryPoint extends Application {
     private void onClose(final GameController gameController, final MenuController menuController) {
         gameController.endGame();
         try {
-            menuController.save(Paths.get(System.getProperty("user.home"), "crossyroad"));
+            menuController.save();
         } catch (final IOException ex) {
             LOGGER.severe("Failed to save the game state");
         }
