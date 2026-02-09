@@ -150,10 +150,10 @@ public final class GameManagerImpl implements GameManager {
         this.isGameOver = false;
 
         //Adds the first chunks to start the game
-        this.chunks.add(new Grass(CHUNK_START_POSITION, CHUNK_DIMENSION));
-        this.chunks.add(new Grass(CHUNK_FIRST_POSITION, CHUNK_DIMENSION));
-        this.chunks.add(new Grass(CHUNK_SECOND_POSITION, CHUNK_DIMENSION));
-        this.chunks.add(new Grass(CHUNK_THIRD_POSITION, CHUNK_DIMENSION));
+        this.chunks.add(new Grass(CHUNK_START_POSITION, CHUNK_DIMENSION, true));
+        this.chunks.add(new Grass(CHUNK_FIRST_POSITION, CHUNK_DIMENSION, true));
+        this.chunks.add(new Grass(CHUNK_SECOND_POSITION, CHUNK_DIMENSION, true));
+        this.chunks.add(new Grass(CHUNK_THIRD_POSITION, CHUNK_DIMENSION, true));
         this.lastGenerated = new Pair<>(EntityType.GRASS, 4);
     }
 

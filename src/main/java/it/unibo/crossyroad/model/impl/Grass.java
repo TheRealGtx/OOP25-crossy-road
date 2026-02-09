@@ -12,9 +12,8 @@ import it.unibo.crossyroad.model.api.Position;
  */
 public final class Grass extends AbstractChunk {
     private static final Position PLAYER_START_POSITION = new Position(5, 8);
-    private static final Double COMPARING_DELTA = 0.0001;
     private static final int MIN_OBSTACLES_NUMBER = 5;
-    private static final int MAX_OBSTACLES_NUMBER = 16;
+    private static final int MAX_OBSTACLES_NUMBER = 10;
     private final Random rnd = new Random();
 
     /**
@@ -26,6 +25,20 @@ public final class Grass extends AbstractChunk {
      */
     public Grass(final Position initialPosition, final Dimension dimension) {
         super(initialPosition, dimension);
+        this.init();
+    }
+
+    /**
+     * Initializes the Chunk.
+     * 
+     * @param initialPosition the Chunk's initial position.
+     * 
+     * @param dimension the Chunk's dimension.
+     * 
+     * @param firstChunk tells if the Chunk is part of the first set of Chunks of the game.
+     */
+    public Grass(final Position initialPosition, final Dimension dimension, boolean firstChunk) {
+        super(initialPosition, dimension, firstChunk);
         this.init();
     }
 
@@ -44,9 +57,8 @@ public final class Grass extends AbstractChunk {
             final int relativeY = this.rnd.nextInt((int) this.getDimension().height());
             final Position randomPosition = new Position(this.getPosition().x() + relativeX, this.getPosition().y() + relativeY);
 
-            //Leave at least a path
-            if (Math.abs(randomPosition.x() - PLAYER_START_POSITION.x()) > COMPARING_DELTA
-                && !this.getPositionables().stream().anyMatch(p -> p.getPosition().equals(randomPosition))) {
+            if (!this.getPositionables().stream().anyMatch(p -> p.getPosition().equals(randomPosition))
+                && !(this.isFirstChunk() && randomPosition.equals(PLAYER_START_POSITION))) {
                 switch (this.rnd.nextInt(2)) {
                     case 0:
                         this.addObstacle(new Tree(randomPosition, new Dimension(1, 1)));

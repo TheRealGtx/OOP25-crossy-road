@@ -9,11 +9,13 @@ import it.unibo.crossyroad.model.api.Position;
 import it.unibo.crossyroad.model.impl.Grass;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TestGrass {
-    private static final int LOOPS = 10_000;
+    private static final int LOOPS = 100_000;
     private static final Position CHUNK_INITIAL_POSITION = new Position(0, 0);
+    private static final Position PLAYER_START_POSITON = new Position(5, 8);
     private Grass grass;
 
     @BeforeEach
@@ -33,6 +35,8 @@ class TestGrass {
             final int nOfObstacles = this.grass.getObstacles().size();
             final int nOfPickables = this.grass.getPickables().size();
 
+            assertFalse(this.grass.getPickables().stream().anyMatch(p -> p.getPosition().equals(PLAYER_START_POSITON)));
+            assertFalse(this.grass.getObstacles().stream().anyMatch(o -> o.getPosition().equals(PLAYER_START_POSITON)));
             assertTrue(nOfObstacles > 0);
             assertTrue(nOfObstacles < 16);
             assertTrue(nOfPickables < 3);
