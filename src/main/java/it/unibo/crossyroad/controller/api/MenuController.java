@@ -1,5 +1,7 @@
 package it.unibo.crossyroad.controller.api;
 
+import it.unibo.crossyroad.model.api.Skin;
+
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -27,6 +29,13 @@ public interface MenuController {
      * Show the game view.
      */
     void showGame();
+
+    /**
+     * Return the active skin.
+     *
+     * @return the active skin
+     */
+    Skin getActiveSkin();
 
     /**
      * Save application state.
