@@ -40,7 +40,6 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
         }
         this.obstacles = new LinkedList<>();
         this.pickables = new LinkedList<>();
-        this.isFirstChunk = false;
     }
 
     /**

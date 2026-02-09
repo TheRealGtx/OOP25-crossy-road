@@ -154,7 +154,7 @@ public final class GameViewImpl implements GameView {
      */
     @Override
     public void setController(final GameController c) {
-        Objects.requireNonNull("The Game Controller cannot be null");
+        Objects.requireNonNull(c, "The Game Controller cannot be null");
         this.gameController = c;
         this.loadImages();
     }
@@ -164,7 +164,7 @@ public final class GameViewImpl implements GameView {
      */
     @Override
     public void render(final List<Positionable> positionables) {
-        Objects.requireNonNull("The list of Positionable elements cannot be null");
+        Objects.requireNonNull(positionables, "The list of Positionable elements cannot be null");
 
         Platform.runLater(() -> {
             this.content.clearRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());

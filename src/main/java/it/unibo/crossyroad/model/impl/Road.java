@@ -1,8 +1,13 @@
 package it.unibo.crossyroad.model.impl;
 
-import it.unibo.crossyroad.model.api.*;
-
 import java.util.Random;
+
+import it.unibo.crossyroad.model.api.AbstractActiveChunk;
+import it.unibo.crossyroad.model.api.Dimension;
+import it.unibo.crossyroad.model.api.Direction;
+import it.unibo.crossyroad.model.api.EntityType;
+import it.unibo.crossyroad.model.api.Pair;
+import it.unibo.crossyroad.model.api.Position;
 
 /**
  * Chunk representing a road where car can move.

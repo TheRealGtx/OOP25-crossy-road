@@ -37,7 +37,7 @@ public final class Grass extends AbstractChunk {
      * 
      * @param firstChunk tells if the Chunk is part of the first set of Chunks of the game.
      */
-    public Grass(final Position initialPosition, final Dimension dimension, boolean firstChunk) {
+    public Grass(final Position initialPosition, final Dimension dimension, final boolean firstChunk) {
         super(initialPosition, dimension, firstChunk);
         this.init();
     }
