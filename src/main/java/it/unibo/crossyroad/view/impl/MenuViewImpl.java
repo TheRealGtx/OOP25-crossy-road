@@ -167,7 +167,7 @@ public final class MenuViewImpl implements MenuView {
                 if (!Objects.isNull(this.controller)) {
                     // todo: remove try-catch
                     try {
-                        this.controller.save(SAVE_PATH);
+                        this.controller.save();
                     } catch (final IOException ex) {
                         LOGGER.severe("Failed to save game state");
                     }
