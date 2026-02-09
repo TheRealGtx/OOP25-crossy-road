@@ -34,18 +34,22 @@ import java.util.logging.Logger;
  */
 public final class MenuViewImpl implements MenuView {
     private static final String TITLE = "Crossy Road";
-    private static final double TITLE_FONT_SIZE = 50.0;
+
+    private static final double MIN_TITLE_FONT_SIZE = 16.0;
+    private static final double TITLE_FONT_RATIO = 0.05;
 
     private static final String DEFAULT_SKIN_IMAGE_PATH = "/skins/default_front.png";
+    private static final double IMAGE_SIZE_RATIO = 0.25;
     private static final double SKIN_IMAGE_SIZE = 200.0;
     private static final double SHOW_IMAGE_THRESHOLD = 500.0;
 
-    private static final double BUTTON_FONT_SIZE = 20.0;
+    private static final double BUTTON_WIDTH_RATIO = 0.4;
+    private static final double BUTTON_HEIGHT_RATIO = 0.08;
+    private static final double BUTTON_FONT_RATIO = 0.025;
+    private static final double MIN_BUTTON_FONT_SIZE = 12.0;
     private static final double BUTTON_SPACING = 10.0;
-    private static final double BUTTON_WIDTH = 300.0;
-    private static final double BUTTON_HEIGHT = 60.0;
-    private static final double CORNER_RADIUS = 10.0;
     private static final double BORDER_WIDTH = 2.0;
+    private static final double CORNER_RADIUS = 10.0;
     private static final Color TEXT_COLOR = Color.WHITE;
 
     private static final Logger LOGGER = Logger.getLogger(MenuViewImpl.class.getName());
@@ -62,6 +66,7 @@ public final class MenuViewImpl implements MenuView {
      */
     public MenuViewImpl(final StackPane root) {
         this.root = Objects.requireNonNull(root, "root cannot be null");
+
         this.menuPane = this.createMenu();
         this.root.getChildren().add(this.menuPane);
 
@@ -99,27 +104,35 @@ public final class MenuViewImpl implements MenuView {
         final VBox menu = new VBox(BUTTON_SPACING * 2);
         menu.setAlignment(Pos.CENTER);
 
+        final Label title = this.initTitle();
+        this.setupSkinImage();
+        final VBox menuItems = this.initMenuItems();
+
         final Background background = new Background(new BackgroundFill(Color.DARKOLIVEGREEN, CornerRadii.EMPTY, null));
-        final Label title = this.createTitle();
-        final VBox menuItems = this.createMenuItems();
-
-        this.skinImage.setFitWidth(SKIN_IMAGE_SIZE);
-        this.skinImage.setFitHeight(SKIN_IMAGE_SIZE);
-        if (this.root.getWidth() < SHOW_IMAGE_THRESHOLD) {
-            this.skinImage.setVisible(false);
-            this.skinImage.setManaged(false);
-        }
-
         menu.setBackground(background);
+
         menu.getChildren().addAll(title, this.skinImage, menuItems);
         return menu;
     }
 
-    private Label createTitle() {
+    private Label initTitle() {
         final Label title = new Label(TITLE);
-        title.setFont(Font.font(null, FontWeight.BOLD, TITLE_FONT_SIZE));
         title.setTextFill(TEXT_COLOR);
+        title.fontProperty().bind(this.root.widthProperty().map(w ->
+            Font.font(null, FontWeight.BOLD, Math.max(MIN_TITLE_FONT_SIZE, w.doubleValue() * TITLE_FONT_RATIO))
+        ));
         return title;
+    }
+
+    private void setupSkinImage() {
+        this.skinImage.setFitWidth(SKIN_IMAGE_SIZE);
+        this.skinImage.setFitHeight(SKIN_IMAGE_SIZE);
+        skinImage.managedProperty().bind(skinImage.visibleProperty());
+
+        final var widthProperty = this.root.widthProperty();
+        skinImage.fitWidthProperty().bind(widthProperty.multiply(IMAGE_SIZE_RATIO));
+        skinImage.fitHeightProperty().bind(widthProperty.multiply(IMAGE_SIZE_RATIO));
+        skinImage.visibleProperty().bind(widthProperty.greaterThan(SHOW_IMAGE_THRESHOLD));
     }
 
     private Image getSkinImage() {
@@ -140,26 +153,27 @@ public final class MenuViewImpl implements MenuView {
         return new Image(resource.toExternalForm());
     }
 
-    private VBox createMenuItems() {
+    private VBox initMenuItems() {
         final VBox menuItems = new VBox(BUTTON_SPACING);
         menuItems.setAlignment(Pos.CENTER);
-        menuItems.getChildren().addAll(this.createButtons());
+
+        menuItems.getChildren().addAll(this.initButtons());
         return menuItems;
     }
 
-    private List<Button> createButtons() {
+    private List<Button> initButtons() {
         return List.of(
-            createButton("PLAY", Color.GREEN, e -> {
+            initButton("PLAY", Color.GREEN, e -> {
                 if (!Objects.isNull(this.controller)) {
                     this.controller.showGame();
                 }
             }),
-            createButton("SHOP", Color.ORANGE, e -> {
+            initButton("SHOP", Color.ORANGE, e -> {
                 if (!Objects.isNull(this.controller)) {
                     this.controller.showShop();
                 }
             }),
-            createButton("EXIT", Color.CRIMSON, e -> {
+            initButton("EXIT", Color.CRIMSON, e -> {
                 if (!Objects.isNull(this.controller)) {
                     this.controller.save();
                 }
@@ -168,17 +182,20 @@ public final class MenuViewImpl implements MenuView {
         );
     }
 
-    private Button createButton(final String text, final Color bgColor, final EventHandler<ActionEvent> handler) {
+    private Button initButton(final String text, final Color bgColor, final EventHandler<ActionEvent> handler) {
         final Button button = new Button(text);
         button.setOnAction(handler);
-        button.setPrefWidth(BUTTON_WIDTH);
-        button.setPrefHeight(BUTTON_HEIGHT);
-        button.setFont(Font.font(null, FontWeight.BOLD, BUTTON_FONT_SIZE));
         button.setTextFill(TEXT_COLOR);
+
+        final var widthProperty = this.root.widthProperty();
+        button.prefWidthProperty().bind(widthProperty.multiply(BUTTON_WIDTH_RATIO));
+        button.prefHeightProperty().bind(widthProperty.multiply(BUTTON_HEIGHT_RATIO));
+        button.fontProperty().bind(widthProperty.map(w ->
+            Font.font(null, FontWeight.BOLD, Math.max(MIN_BUTTON_FONT_SIZE, w.doubleValue() * BUTTON_FONT_RATIO))
+        ));
 
         final Background background = new Background(new BackgroundFill(bgColor, new CornerRadii(CORNER_RADIUS), null));
         button.setBackground(background);
-
         final Border buttonBorder = new Border(
             new BorderStroke(TEXT_COLOR, BorderStrokeStyle.SOLID, new CornerRadii(CORNER_RADIUS), new BorderWidths(BORDER_WIDTH))
         );
