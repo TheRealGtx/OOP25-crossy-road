@@ -3,11 +3,9 @@ package it.unibo.crossyroad;
 import it.unibo.crossyroad.controller.api.AppController;
 import it.unibo.crossyroad.controller.api.GameController;
 import it.unibo.crossyroad.controller.api.MenuController;
-import it.unibo.crossyroad.controller.api.ShopController;
 import it.unibo.crossyroad.controller.impl.AppControllerImpl;
 import it.unibo.crossyroad.controller.impl.GameControllerImpl;
 import it.unibo.crossyroad.controller.impl.MenuControllerImpl;
-import it.unibo.crossyroad.controller.impl.ShopControllerImpl;
 import it.unibo.crossyroad.model.api.GameParameters;
 import it.unibo.crossyroad.model.api.SkinManager;
 import it.unibo.crossyroad.model.api.StateManager;
@@ -16,10 +14,8 @@ import it.unibo.crossyroad.model.impl.SkinManagerImpl;
 import it.unibo.crossyroad.model.impl.StateManagerImpl;
 import it.unibo.crossyroad.view.api.GameView;
 import it.unibo.crossyroad.view.api.MenuView;
-import it.unibo.crossyroad.view.api.ShopView;
 import it.unibo.crossyroad.view.impl.GameViewImpl;
 import it.unibo.crossyroad.view.impl.MenuViewImpl;
-//import it.unibo.crossyroad.view.impl.ShopViewImpl;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
@@ -52,7 +48,6 @@ public class EntryPoint extends Application {
     @Override
     public void init() throws Exception {
         final GameParameters gameParameters = new GameParametersImpl();
-        gameParameters.setCoinCount(1000);
         final SkinManager skinManager = new SkinManagerImpl();
         skinManager.loadFromResources();
         this.stateManager = new StateManagerImpl(gameParameters, skinManager);
@@ -78,22 +73,19 @@ public class EntryPoint extends Application {
 
         final MenuView menuView = new MenuViewImpl(root);
         final GameView gameView = new GameViewImpl(root);
-        //final ShopView shopView = new ShopViewImpl(root);
+        // todo: add shop view
 
         final AppController appController = new AppControllerImpl(
             ac -> new GameControllerImpl(ac, gameView),
             ac -> new MenuControllerImpl(ac, menuView, this.stateManager),
-            ac -> null
+            ac -> null // todo
         );
-        
-        //ac -> new ShopControllerImpl(ac, this.stateManager, shopView)
         final GameController gameController = appController.getGameController();
         final MenuController menuController = appController.getMenuController();
-        //final ShopController shopController = appController.getShopController();
+        // todo: add shop controller
 
         gameView.setController(gameController);
         menuView.setController(menuController);
-        //shopView.setController(shopController);
         appController.showMenu();
 
         this.loadSave(menuController);
