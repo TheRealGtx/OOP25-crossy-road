@@ -46,6 +46,7 @@ public final class River extends AbstractActiveChunk {
      */
     @Override
     public void init() {
+        super.init();
         this.addWater();
         this.generateObstacles();
     }
