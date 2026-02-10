@@ -128,13 +128,12 @@ public final class GameManagerImpl implements GameManager {
 
         if (this.canPlayerMove(d)) {
             if (d == Direction.UP && this.player.getPosition().y() <= Y_MOVE_MAP_MARK) {
+                if (pathStatus && !this.isThereAPath(Optional.empty())) {
+                    this.isGameOver = true;
+                }
                 this.moveMap();
             } else {
                 this.player.move(d, 1);
-            }
-
-            if (pathStatus && !this.isThereAPath(Optional.empty())) {
-                this.isGameOver = true;
             }
         }
     }
