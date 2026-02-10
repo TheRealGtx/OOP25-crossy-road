@@ -91,7 +91,7 @@ public final class GameManagerImpl implements GameManager {
     public Map<EntityType, Long> getActivePowerUps() {
         return this.chunks.stream()
                           .flatMap(c -> c.getActivePowerUp().stream())
-                          .collect(Collectors.toMap(Pickable::getEntityType, PowerUp::getRemaining, Long::sum));
+                          .collect(Collectors.toMap(Pickable::getEntityType, PowerUp::getRemaining, Math::min));
     }
 
     /**
@@ -404,7 +404,8 @@ public final class GameManagerImpl implements GameManager {
      */
     private void checkPowerUpCollisions() {
         this.getPickablesOnMap().stream()
-                                .filter(p -> p instanceof PowerUp && p.overlaps(this.player))
+                                .filter(p -> p instanceof PowerUp && p.overlaps(this.player)
+                                    && !this.getActivePowerUps().containsKey(p.getEntityType()))
                                 .forEach(p -> p.pickUp(this.gameParameters));
     }
 
