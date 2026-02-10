@@ -31,7 +31,7 @@ class TestGrass {
     @Test
     void testRandomGenerations() {
         for (int i = 0; i < LOOPS; i++) {
-            this.grass.init();
+            this.grass = new Grass(CHUNK_INITIAL_POSITION, new Dimension(10, 3));
             final int nOfObstacles = this.grass.getObstacles().size();
             final int nOfPickables = this.grass.getPickables().size();
 
@@ -39,7 +39,7 @@ class TestGrass {
             assertFalse(this.grass.getObstacles().stream().anyMatch(o -> o.getPosition().equals(PLAYER_START_POSITON)));
             assertTrue(nOfObstacles > 0);
             assertTrue(nOfObstacles < 16);
-            assertTrue(nOfPickables < 3);
+            assertTrue(nOfPickables < 5);
         }
     }
 

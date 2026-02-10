@@ -61,8 +61,6 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
      */
     @Override
     public void init() {
-        this.clearObstacles();
-        this.clearPickables();
         this.generateObstacles();
         this.generatePickables();
     }
