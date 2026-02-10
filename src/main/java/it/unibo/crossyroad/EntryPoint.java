@@ -85,17 +85,16 @@ public class EntryPoint extends Application {
             ac -> new MenuControllerImpl(ac, menuView, this.stateManager),
             ac -> new ShopControllerImpl(ac, this.stateManager, shopView)
         );
-        
+
         final GameController gameController = appController.getGameController();
         final MenuController menuController = appController.getMenuController();
         final ShopController shopController = appController.getShopController();
 
+        this.loadSave(menuController);
         gameView.setController(gameController);
         menuView.setController(menuController);
         shopView.setController(shopController);
         appController.showMenu();
-
-        this.loadSave(menuController);
         stage.setOnCloseRequest(e -> this.onClose(gameController, menuController));
     }
 

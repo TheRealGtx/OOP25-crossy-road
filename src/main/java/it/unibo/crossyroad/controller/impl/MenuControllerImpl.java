@@ -18,8 +18,8 @@ import java.util.logging.Logger;
  * @see MenuController
  */
 public class MenuControllerImpl implements MenuController {
+    
     private static final Path SAVE_PATH = Paths.get(System.getProperty("user.home"), "crossyroad");
-
     private static final Logger LOGGER = Logger.getLogger(MenuControllerImpl.class.getName());
 
     private final AppController appController;
@@ -102,5 +102,4 @@ public class MenuControllerImpl implements MenuController {
             LOGGER.severe("Failed to load game state");
         }
     }
-
 }

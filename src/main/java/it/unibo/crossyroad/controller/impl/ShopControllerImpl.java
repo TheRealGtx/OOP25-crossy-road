@@ -14,14 +14,14 @@ import it.unibo.crossyroad.view.api.ShopView;
  * 
  * @see ShopController
  */
-public class ShopControllerImpl implements ShopController{
-    
-    private AppController appController;
-    private StateManager stateManager;
-    private ShopView shopView;
+public class ShopControllerImpl implements ShopController {
+
+    private final AppController appController;
+    private final StateManager stateManager;
+    private final ShopView shopView;
 
     /**
-     * Constructor
+     * Constructor for the ShopControllerImpl.
      * 
      * @param appController the application controller.
      * @param stateManager the state manager.
@@ -70,7 +70,7 @@ public class ShopControllerImpl implements ShopController{
      */
     @Override
     public Set<Skin> getUnlockedSkins() {
-        return  this.stateManager.getAllUnlockedSkins();
+        return this.stateManager.getAllUnlockedSkins();
     }
 
     /**
@@ -85,7 +85,7 @@ public class ShopControllerImpl implements ShopController{
      * {@inheritDoc}
      */
     @Override
-    public boolean activateSkin(Skin skin) {
+    public boolean activateSkin(final Skin skin) {
         return this.stateManager.activateSkin(skin);
     }
 
@@ -102,7 +102,6 @@ public class ShopControllerImpl implements ShopController{
      */
     @Override
     public int getCoinCount() {
-        System.out.println("" + this.stateManager.getCoinCounter());
         return this.stateManager.getCoinCounter();
     }
 }
