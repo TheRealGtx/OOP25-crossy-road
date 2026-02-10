@@ -13,7 +13,7 @@ import it.unibo.crossyroad.model.api.Position;
 public final class Grass extends AbstractChunk {
     private static final Position PLAYER_START_POSITION = new Position(5, 8);
     private static final int MIN_OBSTACLES_NUMBER = 5;
-    private static final int MAX_OBSTACLES_NUMBER = 10;
+    private static final int MAX_OBSTACLES_NUMBER = 16;
     private final Random rnd = new Random();
 
     /**
