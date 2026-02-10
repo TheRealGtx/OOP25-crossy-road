@@ -32,6 +32,7 @@ public final class Road extends AbstractActiveChunk {
     public Road(final Position initialPosition, final Dimension dimension) {
         super(initialPosition, dimension);
         this.laneSpeed = new Pair<>(RND.nextDouble(MIN_SPEED, MAX_SPEED), RND.nextDouble(MIN_SPEED, MAX_SPEED));
+        this.init();
     }
 
     /**

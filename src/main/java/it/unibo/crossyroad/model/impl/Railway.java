@@ -11,7 +11,7 @@ import it.unibo.crossyroad.model.api.Position;
 /**
  * Chunk representing a railway where trains can move.
  */
-public class Railway extends AbstractActiveChunk {
+public final class Railway extends AbstractActiveChunk {
     private static final Random RND = new Random();
     private static final int MAX_TRAINS = 3;
     private static final long SPAWN_INTERVAL_MS = 1400;
@@ -31,6 +31,7 @@ public class Railway extends AbstractActiveChunk {
         super(initialPosition, dimension);
         this.direction = RND.nextBoolean() ? Direction.LEFT : Direction.RIGHT;
         this.speed = RND.nextDouble(8, 10);
+        this.init();
     }
 
     /**
