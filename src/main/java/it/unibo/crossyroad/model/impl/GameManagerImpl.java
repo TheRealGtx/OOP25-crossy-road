@@ -1,11 +1,14 @@
 package it.unibo.crossyroad.model.impl;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Range;
@@ -41,6 +44,7 @@ public final class GameManagerImpl implements GameManager {
     private static final double FIRST_PROBABILITY = 0.3;
     private static final double SECOND_PROBABILITY = 0.6;
     private static final double THIRD_PROBABILITY = 0.8;
+    private static final double COMPARISON_EPSILON = 0.000_01;
     private static final Dimension CHUNK_DIMENSION = new Dimension(MAP_WIDTH, MAP_HEIGHT / 3); 
     private static final Position PLAYER_START_POSITION = new Position(5, 8);
     private static final Position CHUNK_START_POSITION = new Position(0, -3);
@@ -120,11 +124,17 @@ public final class GameManagerImpl implements GameManager {
      */
     @Override
     public void movePlayer(final Direction d) {
+        final boolean pathStatus = this.isThereAPath();
+
         if (this.canPlayerMove(d)) {
             if (d == Direction.UP && this.player.getPosition().y() <= Y_MOVE_MAP_MARK) {
                 this.moveMap();
             } else {
                 this.player.move(d, 1);
+            }
+
+            if (pathStatus && !this.isThereAPath()) {
+                this.isGameOver = true;
             }
         }
     }
@@ -150,11 +160,15 @@ public final class GameManagerImpl implements GameManager {
         this.isGameOver = false;
 
         //Adds the first chunks to start the game
-        this.chunks.add(new Grass(CHUNK_START_POSITION, CHUNK_DIMENSION, true));
-        this.chunks.add(new Grass(CHUNK_FIRST_POSITION, CHUNK_DIMENSION, true));
-        this.chunks.add(new Grass(CHUNK_SECOND_POSITION, CHUNK_DIMENSION, true));
+        this.chunks.add(new Grass(CHUNK_START_POSITION, CHUNK_DIMENSION));
+        this.chunks.add(new Grass(CHUNK_FIRST_POSITION, CHUNK_DIMENSION));
+        this.chunks.add(new Grass(CHUNK_SECOND_POSITION, CHUNK_DIMENSION));
         this.chunks.add(new Grass(CHUNK_THIRD_POSITION, CHUNK_DIMENSION, true));
         this.lastGenerated = new Pair<>(EntityType.GRASS, 4);
+
+        if (!this.isThereAPath()) {
+            this.reset();
+        }
     }
 
     /**
@@ -163,6 +177,42 @@ public final class GameManagerImpl implements GameManager {
     @Override
     public void endGame() {
         this.isGameOver = true;
+    }
+
+    /**
+     * Checks if there is a valid path the player can use.
+     * 
+     * @return true if there is a valid path, false otherwise.
+     */
+    private boolean isThereAPath() {
+        final Set<Position> visited = new HashSet<>();
+        final Queue<Position> queue = new LinkedList<>();
+
+        queue.add(this.player.getPosition());
+        visited.add(this.player.getPosition());
+
+        while (!queue.isEmpty()) {
+            final Position current = queue.poll();
+
+            if (Math.abs(current.y() - CHUNK_START_POSITION.y()) < COMPARISON_EPSILON) {
+                return true;
+            }
+
+            for (final Direction d : Direction.values()) {
+                final Position newPosition = d.apply(current);
+                if (newPosition.x() >= 0 && newPosition.x() < MAP_WIDTH && newPosition.y() < MAP_HEIGHT
+                    && newPosition.y() >= CHUNK_START_POSITION.y() && !this.getObstaclesOnMap().stream()
+                                                                           .filter(o -> o instanceof Rock || o instanceof Tree)
+                                                                           .anyMatch(o -> o.getPosition().equals(newPosition))
+                    && !visited.contains(newPosition)) {
+
+                    visited.add(newPosition);
+                    queue.add(newPosition);
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -271,6 +321,12 @@ public final class GameManagerImpl implements GameManager {
                 final Direction riverDirection = RANDOM.nextBoolean() ? Direction.LEFT : Direction.RIGHT;
                 this.chunks.add(new River(CHUNK_START_POSITION, CHUNK_DIMENSION, riverDirection));
             }
+        }
+
+        this.chunks.add(new Grass(CHUNK_START_POSITION, CHUNK_DIMENSION));
+        if (!this.isThereAPath()) {
+            this.chunks.removeIf(c -> c.getPosition().equals(CHUNK_START_POSITION));
+            this.generateChunk();
         }
     }
 
