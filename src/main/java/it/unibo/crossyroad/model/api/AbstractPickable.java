@@ -16,7 +16,7 @@ public abstract class AbstractPickable extends AbstractPositionable implements P
      * @param position the initial position of the active pickable.
      */
     public AbstractPickable(final Position position) {
-        super(position, new Dimension(1, 1));
+        super(position, Dimension.unit());
         this.pickedUp = false;
     }
 

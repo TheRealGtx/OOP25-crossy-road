@@ -16,7 +16,7 @@ import it.unibo.crossyroad.model.impl.GameParametersImpl;
  * Test class for the {@link Coin} class.
  */
 class TestCoin {
-    private static final int POS = 0;
+    private static final Position POS = new Position(1 ,1);
     private static final int COIN_MULTIPLIER = 4;
     private Coin coin;
     private GameParameters gameParameters;
@@ -26,7 +26,7 @@ class TestCoin {
      */
     @BeforeEach
     void setUp() {
-        this.coin = new Coin(new Position(POS, POS));
+        this.coin = new Coin(POS);
         this.gameParameters = new GameParametersImpl();
     }
 
