@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TestRoad {
-    private static final long DELTA_TIME = 1200;
+    private static final long DELTA_TIME = 1250;
     private static final int MAX_CARS_PER_CHUNKS = 8;
     private static final int UPDATES_ROAD = 150;
 

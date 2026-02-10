@@ -14,7 +14,7 @@ import it.unibo.crossyroad.model.api.Position;
  */
 public final class Road extends AbstractActiveChunk {
     private static final int MAX_CARS_PER_CHUNKS = 8;
-    private static final long SPAWN_CAR_INTERVAL_MS = 1200;
+    private static final long SPAWN_CAR_INTERVAL_MS = 1250;
     private static final int MAX_SPEED = 5;
     private static final int MIN_SPEED = 3;
     private static final Random RND = new Random();
@@ -69,9 +69,7 @@ public final class Road extends AbstractActiveChunk {
                 speed = this.laneSpeed.e1();
                 break;
             default:
-                dir = null;
-                speed = 0.0;
-                break;
+                throw new IllegalArgumentException("Invalid lane");
         }
         final double y = this.getPosition().y() + lane;
 
