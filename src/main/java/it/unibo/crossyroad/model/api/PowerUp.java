@@ -25,4 +25,11 @@ public interface PowerUp extends Pickable {
      * @return true if the effetc vanished.
      */
     boolean isDone();
+
+    /**
+     * Adds the specified time to the remaining time of the power-up.
+     * 
+     * @param time the time to add to the remaining time.
+     */
+    void addReamainingTime(long time);
 }

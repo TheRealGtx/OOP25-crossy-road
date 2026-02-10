@@ -64,6 +64,14 @@ public abstract class AbstractPowerUp extends AbstractPickable implements PowerU
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addReamainingTime(final long time) {
+        this.remainingTime += time;
+    }
+
+    /**
      * Deactives the power-up and reverts its effect on the game parameters.
      * 
      * @param gameParameters the game parameters affected by this power-up.
@@ -101,4 +109,5 @@ public abstract class AbstractPowerUp extends AbstractPickable implements PowerU
     public int hashCode() {
         return Objects.hash(getEntityType(), getPosition(), getDimension(), getRemaining());
     }
+
 }
