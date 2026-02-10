@@ -38,14 +38,14 @@ public abstract class AbstractPowerUp extends AbstractPickable implements PowerU
             this.deactivate(gameParameters);
         }
     }
-    
+
     /**
      * Checks if the power-up is currently active.
      * 
      * @param gameParameters the game parameters to check against.
      * @return true if the power-up is active, false otherwise.
      */
-    protected abstract boolean isPowerUpActive(final GameParameters gameParameters);
+    protected abstract boolean isPowerUpActive(GameParameters gameParameters);
 
     /**
      * {@inheritDoc}

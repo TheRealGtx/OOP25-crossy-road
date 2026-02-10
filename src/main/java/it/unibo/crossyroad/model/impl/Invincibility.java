@@ -52,4 +52,4 @@ public class Invincibility extends AbstractPowerUp {
     protected boolean isPowerUpActive(final GameParameters gameParameters) {
         return gameParameters.isInvincible();
     }
-}   
+}

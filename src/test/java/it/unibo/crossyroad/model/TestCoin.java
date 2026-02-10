@@ -16,7 +16,7 @@ import it.unibo.crossyroad.model.impl.GameParametersImpl;
  * Test class for the {@link Coin} class.
  */
 class TestCoin {
-    private static final Position POS = new Position(1 ,1);
+    private static final Position POS = new Position(1, 1);
     private static final int COIN_MULTIPLIER = 4;
     private Coin coin;
     private GameParameters gameParameters;

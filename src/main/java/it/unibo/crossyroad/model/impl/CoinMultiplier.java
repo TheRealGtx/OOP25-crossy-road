@@ -21,7 +21,6 @@ public class CoinMultiplier extends AbstractPowerUp {
     public CoinMultiplier(final Position position) {
         super(position, COIN_MULTIPLIER_DURATION);
     }
-    
 
     /**
      * {@inheritDoc}
