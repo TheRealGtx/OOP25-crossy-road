@@ -323,7 +323,6 @@ public final class GameManagerImpl implements GameManager {
             }
         }
 
-        this.chunks.add(new Grass(CHUNK_START_POSITION, CHUNK_DIMENSION));
         if (!this.isThereAPath()) {
             this.chunks.removeIf(c -> c.getPosition().equals(CHUNK_START_POSITION));
             this.generateChunk();
