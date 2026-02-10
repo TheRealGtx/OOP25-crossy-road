@@ -3,9 +3,11 @@ package it.unibo.crossyroad;
 import it.unibo.crossyroad.controller.api.AppController;
 import it.unibo.crossyroad.controller.api.GameController;
 import it.unibo.crossyroad.controller.api.MenuController;
+import it.unibo.crossyroad.controller.api.ShopController;
 import it.unibo.crossyroad.controller.impl.AppControllerImpl;
 import it.unibo.crossyroad.controller.impl.GameControllerImpl;
 import it.unibo.crossyroad.controller.impl.MenuControllerImpl;
+import it.unibo.crossyroad.controller.impl.ShopControllerImpl;
 import it.unibo.crossyroad.model.api.GameParameters;
 import it.unibo.crossyroad.model.api.SkinManager;
 import it.unibo.crossyroad.model.api.StateManager;
@@ -14,30 +16,30 @@ import it.unibo.crossyroad.model.impl.SkinManagerImpl;
 import it.unibo.crossyroad.model.impl.StateManagerImpl;
 import it.unibo.crossyroad.view.api.GameView;
 import it.unibo.crossyroad.view.api.MenuView;
+import it.unibo.crossyroad.view.api.ShopView;
 import it.unibo.crossyroad.view.impl.GameViewImpl;
 import it.unibo.crossyroad.view.impl.MenuViewImpl;
+import it.unibo.crossyroad.view.impl.ShopViewImpl;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.logging.Logger;
 
 /**
  * Entry point of the application. It initializes the MVC components and starts the JavaFX application.
  */
 public class EntryPoint extends Application {
+    private static final String TITLE = "Crossy Road";
     private static final double WIDTH = 10;
     private static final double HEIGHT = 9;
     private static final double ASPECT_RATIO = WIDTH / HEIGHT;
-    private static final String TITLE = "Crossy Road";
     private static final double SCALE = 0.9;
-    private static final Logger LOGGER = Logger.getLogger(EntryPoint.class.getName());
     private static final Path SAVE_PATH = Paths.get(System.getProperty("user.home"), "crossyroad");
 
     private StateManager stateManager;
@@ -50,6 +52,7 @@ public class EntryPoint extends Application {
     @Override
     public void init() throws Exception {
         final GameParameters gameParameters = new GameParametersImpl();
+        gameParameters.setCoinCount(1000);
         final SkinManager skinManager = new SkinManagerImpl();
         skinManager.loadFromResources();
         this.stateManager = new StateManagerImpl(gameParameters, skinManager);
@@ -71,22 +74,25 @@ public class EntryPoint extends Application {
         stage.setScene(scene);
         stage.show();
         stage.setResizable(false);
+        stage.getIcons().add(new Image("skins/default_front.png"));
 
         final MenuView menuView = new MenuViewImpl(root);
         final GameView gameView = new GameViewImpl(root);
-        // todo: add shop view
+        final ShopView shopView = new ShopViewImpl(root);
 
         final AppController appController = new AppControllerImpl(
             ac -> new GameControllerImpl(ac, gameView),
             ac -> new MenuControllerImpl(ac, menuView, this.stateManager),
-            ac -> null // todo
+            ac -> new ShopControllerImpl(ac, this.stateManager, shopView)
         );
+        
         final GameController gameController = appController.getGameController();
         final MenuController menuController = appController.getMenuController();
-        // todo: add shop controller
+        final ShopController shopController = appController.getShopController();
 
         gameView.setController(gameController);
         menuView.setController(menuController);
+        shopView.setController(shopController);
         appController.showMenu();
 
         this.loadSave(menuController);
@@ -95,21 +101,13 @@ public class EntryPoint extends Application {
 
     private void loadSave(final MenuController menuController) {
         if (SAVE_PATH.toFile().exists()) {
-            try {
-                menuController.load(SAVE_PATH);
-            } catch (final IOException e) {
-                LOGGER.info("Failed to load past game state");
-            }
+            menuController.load();
         }
     }
 
     private void onClose(final GameController gameController, final MenuController menuController) {
         gameController.endGame();
-        try {
-            menuController.save(Paths.get(System.getProperty("user.home"), "crossyroad"));
-        } catch (final IOException ex) {
-            LOGGER.severe("Failed to save the game state");
-        }
+        menuController.save();
         Platform.exit();
     }
 }
