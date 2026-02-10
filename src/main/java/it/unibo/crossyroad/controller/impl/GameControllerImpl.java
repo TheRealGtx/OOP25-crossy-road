@@ -133,8 +133,7 @@ public final class GameControllerImpl implements GameController {
      */
     @Override
     public String getActiveSkin() {
-        return "skins/default_overhead.png";
-        //return this.appController.getActiveSkin().getOverheadImage().toString();  //TODO
+        return this.appController.getActiveSkin().getOverheadImage().toString();
     }
 
     private int getCoinCount() {
