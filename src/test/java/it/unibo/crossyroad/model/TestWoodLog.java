@@ -17,8 +17,8 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TestWoodLog {
-    private static final double LENGTH = 4.0;
-    private static final Position LEFT_INITIAL_POSITION = new Position(-LENGTH, 0);
+    private static final Dimension DIMENSION = new Dimension(4.0, 1.0);
+    private static final Position LEFT_INITIAL_POSITION = new Position(-DIMENSION.width(), 0);
     private static final Position RIGHT_INITIAL_POSITION = new Position(10, 0);
     private static final double MAX_SPEED = 5.0;
     private static final double MIN_SPEED = 1;
@@ -41,7 +41,7 @@ class TestWoodLog {
         this.direction = random.nextBoolean() ? Direction.LEFT : Direction.RIGHT;
         this.woodLog = new WoodLog(
             direction == Direction.LEFT ? RIGHT_INITIAL_POSITION : LEFT_INITIAL_POSITION,
-            new Dimension(LENGTH, 1.0),
+            DIMENSION,
             this.speed,
             direction
         );
@@ -50,8 +50,7 @@ class TestWoodLog {
     @Test
     void testWoodLogInit() {
         assertEquals(direction == Direction.LEFT ? RIGHT_INITIAL_POSITION : LEFT_INITIAL_POSITION, woodLog.getPosition());
-        assertEquals(LENGTH, woodLog.getDimension().width());
-        assertEquals(1.0, woodLog.getDimension().height());
+        assertEquals(DIMENSION, woodLog.getDimension());
         assertEquals(EntityType.WOOD_LOG, woodLog.getEntityType());
         assertEquals(CollisionType.TRANSPORT, woodLog.getCollisionType());
     }
