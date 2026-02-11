@@ -276,6 +276,7 @@ public final class GameViewImpl implements GameView {
      */
     @Override
     public void updateScore(final int score) {
+        Platform.runLater(() -> this.scoreLabel.setText(String.valueOf(score)));
     }
 
     /**
