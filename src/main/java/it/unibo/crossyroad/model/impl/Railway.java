@@ -46,7 +46,9 @@ public final class Railway extends AbstractActiveChunk {
             return true;
         }
 
-        if (elapsedTime >= SPAWN_INTERVAL_MS && this.getObstacles().size() < MAX_TRAINS) {
+        final long adjustInterval = (long) (SPAWN_INTERVAL_MS / params.getTrainSpeedMultiplier());
+
+        if (elapsedTime >= adjustInterval && this.getObstacles().size() < MAX_TRAINS) {
             this.elapsedTime = 0;
             return true;
         }
