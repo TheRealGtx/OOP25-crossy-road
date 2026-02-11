@@ -23,7 +23,6 @@ import it.unibo.crossyroad.view.api.UserInput;
  */
 public final class GameControllerImpl implements GameController {
 
-    private static final String SEPARATOR = System.getProperty("file.separator");
     private final AppController appController;
     private final GameView gameView;
     private volatile boolean pause;
