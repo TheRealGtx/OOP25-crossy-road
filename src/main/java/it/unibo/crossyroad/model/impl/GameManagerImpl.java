@@ -185,10 +185,10 @@ public final class GameManagerImpl implements GameManager {
         this.isGameOver = false;
 
         //Parameters reset TODO apposite method in gameparameters
-        /*this.gameParameters.setCarSpeedMultiplier(1.0);
+        this.gameParameters.setCarSpeedMultiplier(1.0);
         this.gameParameters.setTrainSpeedMultiplier(1.0);
         this.gameParameters.setInvincibility(false);
-        this.gameParameters.setInitialScore(0);*/
+        this.gameParameters.setInitialScore(0);
 
         //Adds the first chunks to start the game
         for (int i = Y_UPPER_CHUNK; i <= Y_LOWER_CHUNK; i += 3) {
