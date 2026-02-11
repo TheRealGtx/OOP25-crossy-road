@@ -52,6 +52,11 @@ public final class GameManagerImpl implements GameManager {
     private static final Position PLAYER_START_POSITION = new Position(5, 8);
     private static final Position CHUNK_START_POSITION = new Position(0, -12);
     private static final Random RANDOM = new Random();
+    private static final int INCREASE_SPEED_MULTIPLIER_FREQUENCY = 10;
+    private static final double CAR_SPEED_MULTIPLIER_INCREMENT = 0.1;
+    private static final double TRAIN_SPEED_MULTIPLIER_INCREMENT = 0.1;
+    private static final double MAX_CAR_SPEED_MULTIPLIER = 10.0;
+    private static final double MAX_TRAIN_SPEED_MULTIPLIER = 10.0;
     private final GameParameters gameParameters;
     private List<Chunk> chunks;
     private Pair<EntityType, Integer> lastGenerated;
@@ -137,9 +142,24 @@ public final class GameManagerImpl implements GameManager {
                 } else {
                     this.moveMap();
                     this.gameParameters.incrementScore();
+                    this.increaseSpeedsMultiplier();
                 }
             } else {
                 this.player.move(d, 1);
+            }
+        }
+    }
+
+    private void increaseSpeedsMultiplier() {
+        final double currentCarMultiplier = this.gameParameters.getCarSpeedMultiplier();
+        final double currentTrainMultiplier = this.gameParameters.getTrainSpeedMultiplier();
+
+        if (this.gameParameters.getScore() % INCREASE_SPEED_MULTIPLIER_FREQUENCY == 0) {
+            if (currentCarMultiplier < MAX_CAR_SPEED_MULTIPLIER) {
+                this.gameParameters.setCarSpeedMultiplier(currentCarMultiplier + CAR_SPEED_MULTIPLIER_INCREMENT);
+            }
+            if (currentTrainMultiplier < MAX_TRAIN_SPEED_MULTIPLIER) {
+                this.gameParameters.setTrainSpeedMultiplier(currentTrainMultiplier + TRAIN_SPEED_MULTIPLIER_INCREMENT);
             }
         }
     }
@@ -165,10 +185,10 @@ public final class GameManagerImpl implements GameManager {
         this.isGameOver = false;
 
         //Parameters reset TODO apposite method in gameparameters
-        this.gameParameters.setCarSpeedMultiplier(1.0);
+        /*this.gameParameters.setCarSpeedMultiplier(1.0);
         this.gameParameters.setTrainSpeedMultiplier(1.0);
         this.gameParameters.setInvincibility(false);
-        this.gameParameters.setInitialScore(0);
+        this.gameParameters.setInitialScore(0);*/
 
         //Adds the first chunks to start the game
         for (int i = Y_UPPER_CHUNK; i <= Y_LOWER_CHUNK; i += 3) {
