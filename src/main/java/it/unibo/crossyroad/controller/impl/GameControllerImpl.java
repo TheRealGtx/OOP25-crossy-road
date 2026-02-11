@@ -1,5 +1,6 @@
 package it.unibo.crossyroad.controller.impl;
 
+import java.io.File;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Logger;
@@ -132,7 +133,7 @@ public final class GameControllerImpl implements GameController {
      */
     @Override
     public String getActiveSkin() {
-        return this.appController.getActiveSkin().getOverheadImage().toString();
+        return this.appController.getActiveSkin().getOverheadImage().toString().replace(File.separator, "/").split("/")[2];
     }
 
     private final class Loop extends Thread {
