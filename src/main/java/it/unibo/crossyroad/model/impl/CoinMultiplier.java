@@ -45,12 +45,4 @@ public class CoinMultiplier extends AbstractPowerUp {
     public EntityType getEntityType() {
         return EntityType.COIN_MULTIPLIER; 
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected boolean isPowerUpActive(final GameParameters gameParameters) {
-        return gameParameters.getCoinMultiplier() > 1;
-    }
 }

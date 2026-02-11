@@ -44,12 +44,4 @@ public class Invincibility extends AbstractPowerUp {
     public EntityType getEntityType() {
         return EntityType.INVINCIBILITY; 
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected boolean isPowerUpActive(final GameParameters gameParameters) {
-        return gameParameters.isInvincible();
-    }
 }

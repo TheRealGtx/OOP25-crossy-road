@@ -12,6 +12,7 @@ public class SlowCars extends AbstractPowerUp {
 
     private static final double CAR_SLOW_MOTION = 0.5;
     private static final long CAR_SLOW_MOTION_DURATION = 10_000L;
+    private double previousCarSpeedMultiplier;
 
     /**
      * Creates a new slow cars power-up at the given position.
@@ -27,7 +28,7 @@ public class SlowCars extends AbstractPowerUp {
      */
     @Override
     public void deactivate(final GameParameters gameParameters) {
-        gameParameters.setCarSpeedMultiplier(1.0);
+        gameParameters.setCarSpeedMultiplier(this.previousCarSpeedMultiplier);
     }
 
     /**
@@ -35,7 +36,8 @@ public class SlowCars extends AbstractPowerUp {
      */
     @Override
     protected void applyEffect(final GameParameters gameParameters) {
-        gameParameters.setCarSpeedMultiplier(CAR_SLOW_MOTION);
+        this.previousCarSpeedMultiplier = gameParameters.getCarSpeedMultiplier();
+        gameParameters.setCarSpeedMultiplier(CAR_SLOW_MOTION * this.previousCarSpeedMultiplier);
     }
 
     /**
@@ -44,13 +46,5 @@ public class SlowCars extends AbstractPowerUp {
     @Override
     public EntityType getEntityType() {
         return EntityType.SLOW_CARS; 
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected boolean isPowerUpActive(final GameParameters gameParameters) {
-        return gameParameters.getCarSpeedMultiplier() < 1.0;
     }
 }
