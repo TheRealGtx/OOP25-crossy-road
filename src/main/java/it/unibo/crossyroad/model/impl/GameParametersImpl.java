@@ -220,6 +220,20 @@ public class GameParametersImpl implements GameParameters {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void reset() {
+        this.coinMultiplier = 1;
+        this.carSpeedMultiplier = 1.0;
+        this.trainSpeedMultiplier = 1.0;
+        this.logSpeedMultiplier = 1.0;
+        this.score = 0;
+        this.invincibility = false;
+        this.coinCount = 0;
+    }
+
+    /**
      * Validates the game parameters.
      *
      * @param coinMult the coin multiplier.
@@ -236,11 +250,8 @@ public class GameParametersImpl implements GameParameters {
         if (coinMult < 1) {
             throw new IllegalArgumentException("Coin multiplier must be >= 1");
         }
-        if (carSpeedMult <= 0.0 || trainSpeedMult <= 0.0) {
+        if (carSpeedMult <= 0.0 || trainSpeedMult <= 0.0 || logSpeedMult <= 0.0) {
             throw new IllegalArgumentException("Speed multipliers must be > 0.0");
-        }
-        if (logSpeedMult <= 0.0) {
-            throw new IllegalArgumentException("Log speed multiplier must be > 0.0");
         }
         if (coinStart < 0) {
             throw new IllegalArgumentException("Coin count must be >= 0");

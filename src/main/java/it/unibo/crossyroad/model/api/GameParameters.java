@@ -129,4 +129,9 @@ public interface GameParameters {
      * @throws IOException if an I/O error occurs.
      */
     GameParameters loadFromFile(String filepath) throws IOException;
+
+    /**
+     * Reset the game parameters to default.
+     */
+    void reset();
 }
