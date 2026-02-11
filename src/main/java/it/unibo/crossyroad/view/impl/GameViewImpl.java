@@ -146,7 +146,7 @@ public final class GameViewImpl implements GameView {
         currentPane.setFocusTraversable(true);
         currentPane.requestFocus();
 
-        StackPane scoreLayer = new StackPane();
+        final StackPane scoreLayer = new StackPane();
         scoreLayer.getChildren().add(this.scoreLabel);
         StackPane.setAlignment(this.scoreLabel, Pos.TOP_CENTER);
 
@@ -155,8 +155,6 @@ public final class GameViewImpl implements GameView {
         StackPane.setAlignment(leftBox, Pos.TOP_LEFT);
 
         this.overlay.getChildren().addAll(scoreLayer, leftBox);
-
-        this.overlay.setPadding(new Insets(responsivePadding));
 
         this.content.setImageSmoothing(false);
         this.currentPane.getChildren().addAll(this.canvas, this.overlay);

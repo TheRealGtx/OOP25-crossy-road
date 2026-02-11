@@ -30,7 +30,7 @@ public abstract class AbstractActiveChunk extends AbstractChunk {
         super.update(params, deltaTime);
         this.removeOutOfBoundObstacles();
 
-        if (this.shouldGenerateNewObstacles(deltaTime)) {
+        if (this.shouldGenerateNewObstacles(deltaTime, params)) {
             this.generateObstacles();
         }
     }
@@ -39,9 +39,10 @@ public abstract class AbstractActiveChunk extends AbstractChunk {
      * A method to determine if new obstacles should be generated.
      *
      * @param deltaTime the time elapsed since the last update.
+     * @param params the game parameters.
      * @return true if new obstacles should be generated, false otherwise.
      */
-    protected abstract boolean shouldGenerateNewObstacles(long deltaTime);
+    protected abstract boolean shouldGenerateNewObstacles(long deltaTime, GameParameters params);
 
     /**
      * Removes out of bound obstacles from the chunk.

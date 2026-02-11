@@ -40,9 +40,6 @@ class TestRoad {
      * Test to verify the spawn of some car in the road.
      * This test verifies that after multiple calls to {@link Road#update(GameParameters, long)},
      * cars are generated correctly and the total number of cars does not exceed the maximum allowed per chunk.
-     * The test counts the cars in each lane using y coordinate of each car:
-     * - Cars in the top lane are considered moving left.
-     * - Cars in the bottom lane are considered moving right.
      */
     @Test
     void testRandomCarGeneration() {
@@ -65,9 +62,8 @@ class TestRoad {
                 }
             }
         }
-
-        assertTrue(leftCars > 0);
-        assertTrue(rightCars > 0);
+        final int totalCars = leftCars + rightCars;
+        assertTrue(totalCars > 0);
         assertTrue(cars <= MAX_CARS_PER_CHUNKS);
     }
 

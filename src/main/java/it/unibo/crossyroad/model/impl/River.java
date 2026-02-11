@@ -5,6 +5,7 @@ import it.unibo.crossyroad.model.api.ActiveObstacle;
 import it.unibo.crossyroad.model.api.Dimension;
 import it.unibo.crossyroad.model.api.Direction;
 import it.unibo.crossyroad.model.api.EntityType;
+import it.unibo.crossyroad.model.api.GameParameters;
 import it.unibo.crossyroad.model.api.Obstacle;
 import it.unibo.crossyroad.model.api.Position;
 
@@ -54,7 +55,7 @@ public final class River extends AbstractActiveChunk {
      * {@inheritDoc}
      */
     @Override
-    protected boolean shouldGenerateNewObstacles(final long deltaTime) {
+    protected boolean shouldGenerateNewObstacles(final long deltaTime, final GameParameters params) {
         this.timeSinceLastGeneration += deltaTime;
 
         if (this.timeSinceLastGeneration >= LOG_INTERVAL) {

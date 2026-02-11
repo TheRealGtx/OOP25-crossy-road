@@ -28,6 +28,7 @@ public class GameParametersImpl implements GameParameters {
      * @param invincibility the invincibility status.
      * @param coinCount the initial coin count.
      * @param logSpeedMultiplier the log multiplier.
+     * @param score the initial score.
      */
     public GameParametersImpl(final int coinMultiplier, final double carSpeedMultiplier,
                               final double trainSpeedMultiplier, final boolean invincibility,
@@ -126,7 +127,7 @@ public class GameParametersImpl implements GameParameters {
      * {@inheritDoc}
      */
     @Override
-    public void setInitialScore(int initScore) {
+    public void setInitialScore(final int initScore) {
         if (initScore < 0) {
             throw new IllegalArgumentException("The init score must be >= 0");
         }
@@ -213,8 +214,22 @@ public class GameParametersImpl implements GameParameters {
         final ObjectMapper mapper = new ObjectMapper();
         final GameParameters newParameters = mapper.readValue(new File(filepath), GameParametersImpl.class);
         validateParameters(newParameters.getCoinMultiplier(), newParameters.getCarSpeedMultiplier(),
-                newParameters.getTrainSpeedMultiplier(), newParameters.getLogSpeedMultiplier(), newParameters.getCoinCount(), newParameters.getScore());
+                newParameters.getTrainSpeedMultiplier(), newParameters.getLogSpeedMultiplier(),
+                newParameters.getCoinCount(), newParameters.getScore());
         return newParameters;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void reset() {
+        this.coinMultiplier = 1;
+        this.carSpeedMultiplier = 1.0;
+        this.trainSpeedMultiplier = 1.0;
+        this.logSpeedMultiplier = 1.0;
+        this.score = 0;
+        this.invincibility = false;
     }
 
     /**
@@ -234,11 +249,8 @@ public class GameParametersImpl implements GameParameters {
         if (coinMult < 1) {
             throw new IllegalArgumentException("Coin multiplier must be >= 1");
         }
-        if (carSpeedMult <= 0.0 || trainSpeedMult <= 0.0) {
+        if (carSpeedMult <= 0.0 || trainSpeedMult <= 0.0 || logSpeedMult <= 0.0) {
             throw new IllegalArgumentException("Speed multipliers must be > 0.0");
-        }
-        if (logSpeedMult <= 0.0) {
-            throw new IllegalArgumentException("Log speed multiplier must be > 0.0");
         }
         if (coinStart < 0) {
             throw new IllegalArgumentException("Coin count must be >= 0");
