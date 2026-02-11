@@ -133,7 +133,7 @@ public final class GameControllerImpl implements GameController {
      */
     @Override
     public String getActiveSkin() {
-        return this.appController.getActiveSkin().getOverheadImage().toString().replace(File.separator, "/");
+        return this.appController.getActiveSkin().getOverheadImage().toString().replace(File.separator, "/").split("/")[2];
     }
 
     private final class Loop extends Thread {
