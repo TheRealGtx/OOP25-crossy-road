@@ -38,7 +38,7 @@ public interface GameController {
     void resumeGame();
 
     /**
-     * Process the users's input.
+     * Process the user's input.
      * 
      * @param input the user's input.
      */

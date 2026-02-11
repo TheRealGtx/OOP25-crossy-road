@@ -35,7 +35,7 @@ public interface Chunk extends Positionable {
      * 
      * @return a list of the Positionables present on the Chunk.
      * 
-     * @see Positionables
+     * @see Positionable
      */
     List<Positionable> getPositionables();
 

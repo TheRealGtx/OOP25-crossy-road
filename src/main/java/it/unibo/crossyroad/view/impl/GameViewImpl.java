@@ -55,7 +55,6 @@ public final class GameViewImpl implements GameView {
     private static final double BORDER_WIDTH_RATIO = 0.002;
     private static final double MIN_SCREEN_WIDTH = 720.0;
     private static final Color DEFAULT_COLOR_LABEL = Color.WHITE;
-    private final StackPane root;
     private final StackPane currentPane;
     private final VBox powerUpBox;
     private final StackPane overlay;
@@ -79,7 +78,7 @@ public final class GameViewImpl implements GameView {
      * @param root the application's main StackPane.
      */
     public GameViewImpl(final StackPane root) {
-        this.root = Objects.requireNonNull(root, "root cannot be null");
+        Objects.requireNonNull(root, "root cannot be null");
         this.currentPane = new StackPane();
         this.canvas = new Canvas();
         this.content = this.canvas.getGraphicsContext2D();
@@ -162,7 +161,7 @@ public final class GameViewImpl implements GameView {
         this.content.setImageSmoothing(false);
         this.currentPane.getChildren().addAll(this.canvas, this.overlay);
         StackPane.setAlignment(this.overlay, Pos.TOP_LEFT);
-        this.root.getChildren().add(this.currentPane);
+        root.getChildren().add(this.currentPane);
 
         this.scale();
     }
@@ -294,9 +293,7 @@ public final class GameViewImpl implements GameView {
      */
     @Override
     public void hide() {
-        Platform.runLater(() -> {
-            this.currentPane.setVisible(false);
-        });
+        Platform.runLater(() -> this.currentPane.setVisible(false));
     }
 
     /**

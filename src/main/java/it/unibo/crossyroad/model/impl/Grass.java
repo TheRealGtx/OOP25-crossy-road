@@ -57,7 +57,7 @@ public final class Grass extends AbstractChunk {
             final int relativeY = this.rnd.nextInt((int) this.getDimension().height());
             final Position randomPosition = new Position(this.getPosition().x() + relativeX, this.getPosition().y() + relativeY);
 
-            if (!this.getPositionables().stream().anyMatch(p -> p.getPosition().equals(randomPosition))
+            if (this.getPositionables().stream().noneMatch(p -> p.getPosition().equals(randomPosition))
                 && !(this.isFirstChunk() && randomPosition.equals(PLAYER_START_POSITION))) {
                 switch (this.rnd.nextInt(2)) {
                     case 0:

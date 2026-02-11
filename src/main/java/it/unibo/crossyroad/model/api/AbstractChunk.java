@@ -157,23 +157,9 @@ public abstract class AbstractChunk extends AbstractPositionable implements Chun
     }
 
     /**
-     * Deletes all the obstacles present on the Chunk.
-     */
-    protected final void clearObstacles() {
-        this.obstacles.clear();
-    }
-
-    /**
-     * Deletes all the pickables present on the Chunk.
-     */
-    protected final void clearPickables() {
-        this.pickables.clear();
-    }
-
-    /**
      * Tells if the Chunk is part of the first ones of the game.
      * 
-     * @return ture if the Chunk is part of the first ones of the game.
+     * @return true if the Chunk is part of the first ones of the game.
      */
     protected boolean isFirstChunk() {
         return this.isFirstChunk;

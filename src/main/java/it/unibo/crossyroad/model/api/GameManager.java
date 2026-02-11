@@ -18,9 +18,9 @@ public interface GameManager {
     List<Positionable> getPositionables();
 
     /**
-     * Returns a map of the active power ups in game along with their remaining life time.
+     * Returns a map of the active power ups in game along with their remaining lifetime.
      * 
-     * @return a map of the active power ups and their remaining life time.
+     * @return a map of the active power ups and their remaining lifetime.
      * @see EntityType
      */
     Map<EntityType, Long> getActivePowerUps();
@@ -41,7 +41,7 @@ public interface GameManager {
     void movePlayer(Direction d);
 
     /**
-     * Wether the game ended or not.
+     * Whether the game ended or not.
      * 
      * @return true if the game ended, false otherwise.
      */

@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import it.unibo.crossyroad.EntryPoint;
 import it.unibo.crossyroad.controller.api.AppController;
 import it.unibo.crossyroad.controller.api.GameController;
 import it.unibo.crossyroad.model.api.Direction;
@@ -39,7 +38,7 @@ public final class GameControllerImpl implements GameController {
      * 
      * @param parameters the game parameters.
      * 
-     * @see Appcontroller
+     * @see AppController
      * 
      * @see GameView
      */
@@ -137,7 +136,7 @@ public final class GameControllerImpl implements GameController {
     }
 
     private final class Loop extends Thread {
-        private static final Logger LOGGER = Logger.getLogger(EntryPoint.class.getName());
+        private static final Logger LOGGER = Logger.getLogger(Loop.class.getName());
 
         @Override
         public void run() {

@@ -38,15 +38,15 @@ class TestPassiveObstacles {
 
     @Test
     void testDimension() {
-        assertEquals(this.rock.getDimension().width(), 1);
-        assertEquals(this.tree.getDimension().width(), 1);
-        assertEquals(this.rock.getDimension().height(), 1);
-        assertEquals(this.tree.getDimension().height(), 1);
+        assertEquals(1, this.rock.getDimension().width());
+        assertEquals(1, this.tree.getDimension().width());
+        assertEquals(1, this.rock.getDimension().height());
+        assertEquals(1, this.tree.getDimension().height());
     }
 
     @Test
     void testPosition() {
-        assertEquals(this.rock.getPosition(), OBSTACLE_POS_1);
-        assertEquals(this.tree.getPosition(), OBSTACLE_POS_2);
+        assertEquals(OBSTACLE_POS_1, this.rock.getPosition());
+        assertEquals(OBSTACLE_POS_2, this.tree.getPosition());
     }
 }

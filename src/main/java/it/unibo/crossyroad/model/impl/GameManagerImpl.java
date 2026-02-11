@@ -168,6 +168,7 @@ public final class GameManagerImpl implements GameManager {
         this.gameParameters.setCarSpeedMultiplier(1.0);
         this.gameParameters.setTrainSpeedMultiplier(1.0);
         this.gameParameters.setInvincibility(false);
+        this.gameParameters.setInitialScore(0);
 
         //Adds the first chunks to start the game
         for (int i = Y_UPPER_CHUNK; i <= Y_LOWER_CHUNK; i += 3) {
@@ -179,7 +180,7 @@ public final class GameManagerImpl implements GameManager {
         }
         this.lastGenerated = new Pair<>(EntityType.GRASS, 2);
 
-        //Rigenerate until there's a valid path
+        //Regenerate until there's a valid path
         if (!this.isThereAPath(Optional.empty())) {
             this.reset();
         }
@@ -226,9 +227,9 @@ public final class GameManagerImpl implements GameManager {
             for (final Direction d : Direction.values()) {
                 final Position newPosition = d.apply(current);
                 if (newPosition.x() >= 0 && newPosition.x() < MAP_WIDTH && newPosition.y() < MAP_HEIGHT
-                    && newPosition.y() >= CHUNK_START_POSITION.y() && !this.getObstaclesOnMap().stream()
+                    && newPosition.y() >= CHUNK_START_POSITION.y() && this.getObstaclesOnMap().stream()
                                                                            .filter(o -> o instanceof Rock || o instanceof Tree)
-                                                                           .anyMatch(o -> o.getPosition().equals(newPosition))
+                                                                           .noneMatch(o -> o.getPosition().equals(newPosition))
                     && !visited.contains(newPosition)) {
 
                     visited.add(newPosition);
@@ -306,7 +307,7 @@ public final class GameManagerImpl implements GameManager {
         boolean deadlyCollision = false;
         boolean transportCollision = false;
 
-        //Check obstacles collisions (deadly if player is not on a transport)
+        //Check obstacles collisions (deadly if player is not on transport)
         if (!this.gameParameters.isInvincible()) {
             for (final Obstacle obs : this.getObstaclesOnMap().stream().filter(o -> o.overlaps(this.player)).toList()) {
                 if (obs.getCollisionType() == CollisionType.DEADLY) {
@@ -344,7 +345,7 @@ public final class GameManagerImpl implements GameManager {
         }
         this.chunks.add(newChunk);
 
-        //Rigenerate until there's a valid path
+        //Regenerate until there's a valid path
         if (!this.isThereAPath(Optional.empty())) {
             this.chunks.removeIf(c -> c.getPosition().equals(CHUNK_START_POSITION));
             this.generateChunk();
@@ -380,7 +381,7 @@ public final class GameManagerImpl implements GameManager {
     }
 
     /**
-     * Wheter the player can move in the given direction.
+     * Whether the player can move in the given direction.
      * 
      * @param d the direction the player wants to move upon.
      * 
@@ -420,9 +421,7 @@ public final class GameManagerImpl implements GameManager {
         this.getPickablesOnMap().stream()
                                 .filter(p -> p instanceof PowerUp && p.overlaps(this.player)
                                     && !this.getActivePowerUps().containsKey(p.getEntityType()))
-                                .forEach(p -> {
-                                    p.pickUp(this.gameParameters);
-                                });
+                                .forEach(p -> p.pickUp(this.gameParameters));
     }
 
     /**
