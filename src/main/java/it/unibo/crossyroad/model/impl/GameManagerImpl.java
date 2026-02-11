@@ -52,7 +52,7 @@ public final class GameManagerImpl implements GameManager {
     private static final Position PLAYER_START_POSITION = new Position(5, 8);
     private static final Position CHUNK_START_POSITION = new Position(0, -12);
     private static final Random RANDOM = new Random();
-    private static final int INCREASE_SPEED_MULTIPLIER_FREQUENCY = 10;
+    private static final int INCREASE_SPEED_MULTIPLIER_FREQUENCY = 25;
     private static final double CAR_SPEED_MULTIPLIER_INCREMENT = 0.1;
     private static final double TRAIN_SPEED_MULTIPLIER_INCREMENT = 0.1;
     private static final double MAX_CAR_SPEED_MULTIPLIER = 10.0;
