@@ -1,5 +1,6 @@
 package it.unibo.crossyroad.view.impl;
 
+import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,10 @@ public final class GameViewImpl implements GameView {
     private static final double BORDER_WIDTH_RATIO = 0.002;
     private static final double MIN_SCREEN_WIDTH = 720.0;
     private static final Color DEFAULT_COLOR_LABEL = Color.WHITE;
+    private static final String CHUNKS_FOLDER = "chunks";
+    private static final String OBSTACLES_FOLDER = "obstacles";
+    private static final String PICKABLES_FOLDER = "pickables";
+    private static final String SKINS_FOLDER = "skins";
     private final StackPane currentPane;
     private final VBox powerUpBox;
     private final StackPane overlay;
@@ -354,23 +359,34 @@ public final class GameViewImpl implements GameView {
      * Load the images for the various elements.
      */
     private void loadImages() {
-        this.images.put(EntityType.PLAYER, new Image(this.gameController.getActiveSkin()));
-        this.images.put(EntityType.GRASS, new Image("chunks/grass.png"));
-        this.images.put(EntityType.ROAD, new Image("chunks/road.png"));
-        this.images.put(EntityType.RIVER, new Image("chunks/river.png"));
-        this.images.put(EntityType.CAR_LEFT, new Image("obstacles/car_left.png"));
-        this.images.put(EntityType.CAR_RIGHT, new Image("obstacles/car_right.png"));
-        this.images.put(EntityType.WOOD_LOG, new Image("obstacles/log.png"));
-        this.images.put(EntityType.RAILWAY, new Image("chunks/railway.png"));
-        this.images.put(EntityType.ROCK, new Image("obstacles/rock.png"));
-        this.images.put(EntityType.TREE, new Image("obstacles/tree.png"));
-        this.images.put(EntityType.TRAIN_LEFT, new Image("obstacles/train_left.png"));
-        this.images.put(EntityType.TRAIN_RIGHT, new Image("obstacles/train_right.png"));
-        this.images.put(EntityType.COIN, new Image("pickables/coin.png"));
-        this.images.put(EntityType.COIN_MULTIPLIER, new Image("pickables/multiplier.png"));
-        this.images.put(EntityType.INVINCIBILITY, new Image("pickables/invincible.png"));
-        this.images.put(EntityType.SLOW_CARS, new Image("pickables/slow.png"));
-        this.images.put(EntityType.WATER, new Image("obstacles/water.png"));
+        this.images.put(EntityType.PLAYER, getImage(SKINS_FOLDER, this.gameController.getActiveSkin()));
+        this.images.put(EntityType.GRASS, getImage(CHUNKS_FOLDER, "grass.png"));
+        this.images.put(EntityType.ROAD, getImage(CHUNKS_FOLDER, "road.png"));
+        this.images.put(EntityType.RIVER, getImage(CHUNKS_FOLDER, "river.png"));
+        this.images.put(EntityType.RAILWAY, getImage(CHUNKS_FOLDER, "railway.png"));
+        this.images.put(EntityType.CAR_LEFT, getImage(OBSTACLES_FOLDER, "car_left.png"));
+        this.images.put(EntityType.CAR_RIGHT, getImage(OBSTACLES_FOLDER, "car_right.png"));
+        this.images.put(EntityType.WOOD_LOG, getImage(OBSTACLES_FOLDER, "log.png"));
+        this.images.put(EntityType.ROCK, getImage(OBSTACLES_FOLDER, "rock.png"));
+        this.images.put(EntityType.TREE, getImage(OBSTACLES_FOLDER, "tree.png"));
+        this.images.put(EntityType.TRAIN_LEFT, getImage(OBSTACLES_FOLDER, "train_left.png"));
+        this.images.put(EntityType.TRAIN_RIGHT, getImage(OBSTACLES_FOLDER, "train_right.png"));
+        this.images.put(EntityType.WATER, getImage(OBSTACLES_FOLDER, "water.png"));
+        this.images.put(EntityType.COIN, getImage(PICKABLES_FOLDER, "coin.png"));
+        this.images.put(EntityType.COIN_MULTIPLIER, getImage(PICKABLES_FOLDER, "multiplier.png"));
+        this.images.put(EntityType.INVINCIBILITY, getImage(PICKABLES_FOLDER, "invincible.png"));
+        this.images.put(EntityType.SLOW_CARS, getImage(PICKABLES_FOLDER, "slow.png"));
+    }
+
+    /**
+     * Retrieves an Image given it's path.
+     * 
+     * @param folder folder the image is in.
+     * @param file image file.
+     * @return the respective Image.
+     */
+    private Image getImage(final String folder, final String file) {
+        return new Image(Paths.get(folder, file).toString());
     }
 
     /**

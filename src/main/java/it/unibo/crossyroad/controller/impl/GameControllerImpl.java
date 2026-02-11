@@ -22,6 +22,7 @@ import it.unibo.crossyroad.view.api.UserInput;
  */
 public final class GameControllerImpl implements GameController {
 
+    private static final String SEPARATOR = System.getProperty("file.separator");
     private final AppController appController;
     private final GameView gameView;
     private volatile boolean pause;
@@ -132,7 +133,7 @@ public final class GameControllerImpl implements GameController {
      */
     @Override
     public String getActiveSkin() {
-        return this.appController.getActiveSkin().getOverheadImage().toString();
+        return this.appController.getActiveSkin().getOverheadImage().toString().split(SEPARATOR)[2];
     }
 
     private final class Loop extends Thread {
