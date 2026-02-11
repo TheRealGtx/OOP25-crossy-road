@@ -75,13 +75,9 @@ public final class Road extends AbstractActiveChunk {
         final double y = this.getPosition().y() + lane;
 
         final double x;
-        if (this.getObstacles().isEmpty()) {
-            x = this.getPosition().x() + RND.nextDouble() * this.getDimension().width();
-        } else {
-            x = dir == Direction.RIGHT
-                    ? this.getPosition().x() - 2
-                    : this.getPosition().x() + this.getDimension().width() + 2;
-        }
+        x = dir == Direction.RIGHT
+                ? this.getPosition().x() - 2
+                : this.getPosition().x() + this.getDimension().width() + 2;
 
         this.addObstacle(new Car(new Position(x, y), speed, dir));
     }
