@@ -15,7 +15,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import it.unibo.crossyroad.model.api.Skin;
 import it.unibo.crossyroad.model.api.SkinManager;
-import it.unibo.crossyroad.model.impl.SkinImpl;
+import it.unibo.crossyroad.model.impl.SkinFactory;
 import it.unibo.crossyroad.model.impl.SkinManagerImpl;
 
 /**
@@ -124,12 +124,12 @@ class TestSkinManager {
      * @return the new skin created.
      */
     private Skin createSkin(final String name, final String id, final int price) {
-        return new SkinImpl(
+        return SkinFactory.create(
             name,
             id,
             price,
             Path.of(id + "_overhead.png"),
-            Path.of(id + "_front.png")
+            Path.of(id + "front.png")
         );
     }
 

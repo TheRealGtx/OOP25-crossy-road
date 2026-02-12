@@ -1,6 +1,7 @@
 package it.unibo.crossyroad.model.impl;
 
 import java.nio.file.Path;
+import java.util.Objects;
 
 import it.unibo.crossyroad.model.api.Skin;
 
@@ -18,25 +19,16 @@ public final class SkinImpl implements Skin {
     private final Path frontImagePath;
 
     /**
-     * Create a new skin with the specified name, id, price, overhead image and front image.
+     * Creates a {@link Skin} instance using the values provided by the builder.
      * 
-     * @param name the name of the skin.
-     * @param id the id of the skin.
-     * @param price the price of the skin.
-     * @param overheadImagePath the path to the overhead image of the skin.
-     * @param frontImagePath the path to the front image of the skin.
+     * @param builder the builder containing the skin configuration.
      */
-    public SkinImpl(
-            final String name,
-            final String id,
-            final int price,
-            final Path overheadImagePath,
-            final Path frontImagePath) {
-        this.name = name;
-        this.id = id;
-        this.price = price;
-        this.overheadImagePath = overheadImagePath;
-        this.frontImagePath = frontImagePath;
+    public SkinImpl(final Builder builder) {
+        this.name = Objects.requireNonNull(builder.name, "Name cannot be null");
+        this.id = Objects.requireNonNull(builder.id, "Id cannot be null");
+        this.price = Objects.requireNonNull(builder.price, "Price cannot be null");
+        this.overheadImagePath = Objects.requireNonNull(builder.overheadImagePath, "Overhead image path cannot be null");
+        this.frontImagePath = Objects.requireNonNull(builder.frontImagePath, "Front image path cannot be null");
     }
 
     /**
@@ -77,5 +69,81 @@ public final class SkinImpl implements Skin {
     @Override
     public Path getOverheadImage() {
         return this.overheadImagePath;
+    }
+
+    /**
+     * Builder for skin instances.
+     */
+    public static final class Builder {
+
+        private String name;
+        private String id;
+        private int price;
+        private Path overheadImagePath;
+        private Path frontImagePath;
+
+        /**
+         * Set the name of the skin.
+         * 
+         * @param skinName the name to set.
+         * @return this build instance.
+         */
+        public Builder name(final String skinName) {
+            this.name = skinName;
+            return this;
+        }
+
+        /**
+         * Set the id of the skin.
+         * 
+         * @param skinId the id to set.
+         * @return this build instance.
+         */
+        public Builder id(final String skinId) {
+            this.id = skinId;
+            return this;
+        }
+
+        /**
+         * Set the price of the skin.
+         * 
+         * @param skinPrice the price to set.
+         * @return this build instance.
+         */
+        public Builder price(final int skinPrice) {
+            this.price = skinPrice;
+            return this;
+        }
+
+        /**
+         * Set the overhead image path.
+         * 
+         * @param path the overhead image path to set.
+         * @return this builder instance.
+         */
+        public Builder overheadImagePath(final Path path) {
+            this.overheadImagePath = path;
+            return this;
+        }
+
+        /**
+         * Set the front image path.
+         * 
+         * @param path the front image path to set.
+         * @return this builder instance.
+         */
+        public Builder frontImagePath(final Path path) {
+            this.frontImagePath = path;
+            return this;
+        }
+
+        /**
+         * Build and return the skin instance.
+         * 
+         * @return a new skin instance.
+         */
+        public Skin build() {
+            return new SkinImpl(this);
+        }
     }
 }

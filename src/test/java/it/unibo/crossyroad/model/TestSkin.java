@@ -28,7 +28,13 @@ class TestSkin {
      */
     @BeforeEach
     void setUp() {
-        this.skin = new SkinImpl(NAME, ID, PRICE, OVERHEAD_PATH, FRONT_PATH);
+        this.skin = new SkinImpl.Builder()
+            .name(NAME)
+            .id(ID)
+            .price(PRICE)
+            .overheadImagePath(OVERHEAD_PATH)
+            .frontImagePath(FRONT_PATH)
+            .build();
     }
 
     /**

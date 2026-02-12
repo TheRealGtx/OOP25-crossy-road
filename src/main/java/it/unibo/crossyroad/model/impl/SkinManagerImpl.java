@@ -2,7 +2,6 @@ package it.unibo.crossyroad.model.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -74,13 +73,7 @@ public final class SkinManagerImpl implements SkinManager {
      * @param node the json node containing the skin data.
      */
     private void parseSkin(final JsonNode node) {
-        final Skin skin = new SkinImpl(
-            node.get("name").asText(),
-            node.get("id").asText(),
-            node.get("price").asInt(),
-            Path.of(node.get("overheadImage").asText()),
-            Path.of(node.get("frontalImage").asText())
-        );
+        final Skin skin = SkinFactory.loadFromJson(node);
         this.skins.add(skin);
     }
 

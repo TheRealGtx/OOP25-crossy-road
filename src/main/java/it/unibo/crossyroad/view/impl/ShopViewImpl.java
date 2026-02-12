@@ -645,8 +645,9 @@ public class ShopViewImpl implements ShopView {
     private Button createEquipButton(final Skin skin) {
         final Button equipButton = new Button("Equip");
         equipButton.setOnAction(e -> {
-            this.shopController.activateSkin(skin);
-            this.updateShop();
+            if (this.shopController.activateSkin(skin)) {
+                this.updateShop();
+            }
         });
         this.setStyleButton(equipButton, BLUE);
         return equipButton;
