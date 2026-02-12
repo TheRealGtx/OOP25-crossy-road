@@ -37,6 +37,7 @@ public class EntryPoint extends Application {
     private static final double HEIGHT = 9;
     private static final double ASPECT_RATIO = WIDTH / HEIGHT;
     private static final double SCALE = 0.9;
+    private static final int INITIAL_BALANCE = 200;
 
     private GameParameters gameParameters;
     private StateManager stateManager;
@@ -49,7 +50,7 @@ public class EntryPoint extends Application {
     @Override
     public void init() throws Exception {
         this.gameParameters = new GameParametersImpl();
-        gameParameters.setCoinCount(1000);
+        gameParameters.setCoinCount(INITIAL_BALANCE);
         final SkinManager skinManager = new SkinManagerImpl();
         skinManager.loadFromResources();
         this.stateManager = new StateManagerImpl(gameParameters, skinManager);
