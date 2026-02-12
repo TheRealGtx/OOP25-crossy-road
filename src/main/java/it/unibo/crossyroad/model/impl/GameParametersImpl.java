@@ -1,10 +1,10 @@
 package it.unibo.crossyroad.model.impl;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import it.unibo.crossyroad.model.api.GameParameters;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -217,11 +217,17 @@ public class GameParametersImpl implements GameParameters {
         if (!file.exists() || !file.canRead()) {
             throw new IOException("Cannot access file: " + filepath);
         }
-        final ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.readerForUpdating(this).readValue(file);
-        validateParameters(this.getCoinMultiplier(), this.getCarSpeedMultiplier(),
-                this.getTrainSpeedMultiplier(), this.getLogSpeedMultiplier(),
-                this.getCoinCount(), this.getScore());
+        validateParameters(
+            this.getCoinMultiplier(),
+            this.getCarSpeedMultiplier(),
+            this.getTrainSpeedMultiplier(),
+            this.getLogSpeedMultiplier(),
+            this.getCoinCount(),
+            this.getScore()
+        );
     }
 
     /**
