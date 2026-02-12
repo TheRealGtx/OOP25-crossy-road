@@ -207,15 +207,16 @@ class TestGameParameters {
                     }
                 """);
 
-        assertThrows(IOException.class, () -> this.gameParameters.loadFromFile(invalidFilepath));
+        assertThrows(IOException.class,
+                () -> this.gameParameters.loadFromFile(invalidFilepath)
+        );
 
-        final Optional<GameParameters> corrupt = this.gameParameters.loadFromFile(corruptFile.toString());
-        assertTrue(corrupt.isEmpty());
+        assertThrows(IOException.class,
+                () -> this.gameParameters.loadFromFile(corruptFile.toString())
+        );
 
-        final Optional<GameParameters> loaded = new GameParametersImpl().loadFromFile(tmpFile.toString());
-        assertTrue(loaded.isPresent());
+        this.gameParameters.loadFromFile(tmpFile.toString());
 
-        this.gameParameters = loaded.get();
         assertEquals(TEST_COIN_MULTIPLIER, this.gameParameters.getCoinMultiplier());
         assertEquals(TEST_CAR_SPEED_MULTIPLIER, this.gameParameters.getCarSpeedMultiplier());
         assertEquals(TEST_TRAIN_SPEED_MULTIPLIER, this.gameParameters.getTrainSpeedMultiplier());

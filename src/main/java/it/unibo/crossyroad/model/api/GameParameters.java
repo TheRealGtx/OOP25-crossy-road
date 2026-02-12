@@ -126,11 +126,9 @@ public interface GameParameters {
      * Loads game parameters from a JSON file.
      *
      * @param filepath the path to the file.
-     * @return an {@link Optional} containing the loaded {@link GameParameters} if successful,
-     *      or {@link Optional#empty()} if the file does not exist or cannot be read.
      * @throws IOException if an I/O error occurs.
      */
-    Optional<GameParameters> loadFromFile(String filepath) throws IOException;
+    void loadFromFile(String filepath) throws IOException;
 
     /**
      * Reset the game parameters to default.

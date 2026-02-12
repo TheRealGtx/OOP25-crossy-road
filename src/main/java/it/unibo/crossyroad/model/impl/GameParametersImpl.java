@@ -212,21 +212,16 @@ public class GameParametersImpl implements GameParameters {
      * {@inheritDoc}
      */
     @Override
-    public Optional<GameParameters> loadFromFile(final String filepath) throws IOException {
+    public void loadFromFile(final String filepath) throws IOException {
         final File file = new File(filepath);
         if (!file.exists() || !file.canRead()) {
             throw new IOException("Cannot access file: " + filepath);
         }
-        try {
-            final ObjectMapper mapper = new ObjectMapper();
-            mapper.readerForUpdating(this).readValue(file);
-            validateParameters(this.getCoinMultiplier(), this.getCarSpeedMultiplier(),
-                    this.getTrainSpeedMultiplier(), this.getLogSpeedMultiplier(),
-                    this.getCoinCount(), this.getScore());
-            return Optional.of(this);
-        } catch (final IOException e) {
-            return Optional.empty();
-        }
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.readerForUpdating(this).readValue(file);
+        validateParameters(this.getCoinMultiplier(), this.getCarSpeedMultiplier(),
+                this.getTrainSpeedMultiplier(), this.getLogSpeedMultiplier(),
+                this.getCoinCount(), this.getScore());
     }
 
     /**
