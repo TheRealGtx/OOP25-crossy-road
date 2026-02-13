@@ -1,5 +1,7 @@
 package it.unibo.crossyroad.model.api;
 
+import com.google.common.collect.Range;
+
 import java.util.Objects;
 
 /**
@@ -49,10 +51,21 @@ public abstract class AbstractActiveChunk extends AbstractChunk {
      */
     private void removeOutOfBoundObstacles() {
         this.getObstacles().stream()
-            .filter(obs -> obs instanceof ActiveObstacle
-                    && (obs.getPosition().x() < this.getPosition().x() - (obs.getDimension().width() + 3)
-                    || obs.getPosition().x() > this.getPosition().x() + this.getDimension().width()
-                                                                        + (obs.getDimension().width() + 3)))
-            .forEach(this::removeObstacle);
+                .filter(obs -> obs instanceof ActiveObstacle && !getValidXRange(obs).contains(obs.getPosition().x()))
+                .forEach(this::removeObstacle);
+    }
+
+    /**
+     * Calculates the valid X-coordinate range for an obstacle.
+     *
+     * @param obstacle the obstacle to check
+     * @return a closed range representing the valid X-coordinates for the obstacle
+     */
+    private Range<Double> getValidXRange(final Obstacle obstacle) {
+        final double margin = obstacle.getDimension().width() + 3;
+        return Range.closed(
+                this.getPosition().x() - margin,
+                this.getPosition().x() + this.getDimension().width() + margin
+        );
     }
 }
