@@ -6,13 +6,8 @@ import java.util.Map;
 import java.util.Objects;
 
 import it.unibo.crossyroad.controller.api.GameController;
-import it.unibo.crossyroad.model.api.Chunk;
 import it.unibo.crossyroad.model.api.EntityType;
-import it.unibo.crossyroad.model.api.Obstacle;
-import it.unibo.crossyroad.model.api.Player;
 import it.unibo.crossyroad.model.api.Positionable;
-import it.unibo.crossyroad.model.api.PowerUp;
-import it.unibo.crossyroad.model.impl.Coin;
 import it.unibo.crossyroad.view.api.GameView;
 import it.unibo.crossyroad.view.api.UserInput;
 import javafx.application.Platform;
@@ -189,20 +184,19 @@ public final class GameViewImpl implements GameView {
             this.content.clearRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
 
             positionables.stream()
-                         .filter(p -> p instanceof Chunk)
+                         .filter(p -> p.getEntityType().isChunk())
                          .forEach(this::drawElement);
             positionables.stream()
-                         .filter(p -> p instanceof Coin)
+                         .filter(p -> p.getEntityType() == EntityType.COIN)
                          .forEach(this::drawElement);
             positionables.stream()
-                         .filter(p -> p instanceof PowerUp)
-                         .map(p -> (PowerUp) p).filter(p -> !p.isPickedUp())
+                         .filter(p -> p.getEntityType().isPowerup())
                          .forEach(this::drawElement);
             positionables.stream()
-                         .filter(p -> p instanceof Obstacle)
+                         .filter(p -> p.getEntityType().isObstacle())
                          .forEach(this::drawElement);
             positionables.stream()
-                         .filter(p -> p instanceof Player)
+                         .filter(p -> p.getEntityType() == EntityType.PLAYER)
                          .forEach(this::drawElement);
         });
     }

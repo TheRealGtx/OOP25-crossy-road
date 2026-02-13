@@ -93,7 +93,7 @@ public final class GameManagerImpl implements GameManager {
         positionables.add(this.player);
         positionables.addAll(this.chunks);
         positionables.addAll(this.getObstaclesOnMap());
-        positionables.addAll(this.getPickablesOnMap());
+        positionables.addAll(this.getPickablesOnMap().stream().filter(p -> !p.isPickedUp()).toList());
 
         return List.copyOf(positionables);
     }

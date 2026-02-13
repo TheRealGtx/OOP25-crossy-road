@@ -36,4 +36,35 @@ public enum EntityType {
     public String getDisplayName() {
         return displayName;
     }
+
+    /**
+     * Checks if the current EntityType is an obstacle.
+     * 
+     * @return ture if it's a obstacle
+     */
+    public boolean isObstacle() {
+        return this == CAR_LEFT || this == CAR_RIGHT || this == TRAIN_LEFT
+                || this == TRAIN_RIGHT || this == WATER || this == WOOD_LOG
+                || this == TREE || this == ROCK;
+    }
+
+    /**
+     * Checks if the current EntityType is a powerup.
+     * 
+     * @return ture if it's a powerup
+     */
+    public boolean isPowerup() {
+        return this == SLOW_CARS || this == INVINCIBILITY 
+                || this == COIN_MULTIPLIER;
+    }
+
+    /**
+     * Checks if the current EntityType is a chunk.
+     * 
+     * @return ture if it's a chunk
+     */
+    public boolean isChunk() {
+        return this == GRASS || this == RAILWAY 
+            || this == ROAD || this == RIVER;
+    }
 }
