@@ -43,4 +43,9 @@ public interface MenuController {
      * Load application state.
      */
     void load();
+
+    /**
+     * Reset the state manager.
+     */
+    void reset();
 }

@@ -102,4 +102,12 @@ public class MenuControllerImpl implements MenuController {
             LOGGER.info("Failed to load game state");
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void reset() {
+        this.stateManager.reset();
+    }
 }
