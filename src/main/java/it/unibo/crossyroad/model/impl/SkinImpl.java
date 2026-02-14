@@ -23,7 +23,7 @@ public final class SkinImpl implements Skin {
      * 
      * @param builder the builder containing the skin configuration.
      */
-    public SkinImpl(final Builder builder) {
+    private SkinImpl(final Builder builder) {
         this.name = Objects.requireNonNull(builder.name, "Name cannot be null");
         this.id = Objects.requireNonNull(builder.id, "Id cannot be null");
         this.price = Objects.requireNonNull(builder.price, "Price cannot be null");
