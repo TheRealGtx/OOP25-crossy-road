@@ -6,7 +6,9 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -37,7 +39,7 @@ public final class MenuViewImpl implements MenuView {
 
     private static final String DEFAULT_SKIN_IMAGE_PATH = "/skins/default_front.png";
     private static final double SKIN_IMAGE_RATIO = 0.2;
-    private static final double SHOW_SKIN_THRESHOLD = 500.0;
+    private static final double SHOW_SKIN_THRESHOLD = 700.0;
 
     private static final double BUTTON_WIDTH_RATIO = 0.4;
     private static final double BUTTON_HEIGHT_RATIO = 0.08;
@@ -162,7 +164,21 @@ public final class MenuViewImpl implements MenuView {
                     this.controller.showShop();
                 }
             }),
-            initButton("EXIT", Color.CRIMSON, e -> {
+            initButton("RESET", Color.RED, e -> {
+                if (!Objects.isNull(this.controller)) {
+                    final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Reset Game");
+                    alert.setHeaderText("Are you sure you want to reset the game?");
+                    alert.setContentText("You will lose all your coins and unlocked skins.");
+
+                    final var result = alert.showAndWait();
+                    if (result.isPresent() && result.get() == ButtonType.OK) {
+                        this.controller.reset();
+                        this.skinImageView.setImage(this.getSkinImage());
+                    }
+                }
+            }),
+            initButton("EXIT", Color.DIMGRAY, e -> {
                 if (!Objects.isNull(this.controller)) {
                     this.controller.save();
                 }
