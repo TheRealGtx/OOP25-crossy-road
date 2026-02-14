@@ -48,6 +48,11 @@ public interface AppController {
     void gameOver();
 
     /**
+     * Closes the game and ends all the threads.
+     */
+    void exitGame();
+
+    /**
      * Gets the active skin.
      *
      * @return the active skin

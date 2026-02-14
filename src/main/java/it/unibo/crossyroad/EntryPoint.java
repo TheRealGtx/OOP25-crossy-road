@@ -21,7 +21,6 @@ import it.unibo.crossyroad.view.impl.GameViewImpl;
 import it.unibo.crossyroad.view.impl.MenuViewImpl;
 import it.unibo.crossyroad.view.impl.ShopViewImpl;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -93,9 +92,8 @@ public class EntryPoint extends Application {
         shopView.setController(shopController);
         appController.showMenu();
         stage.setOnCloseRequest(e -> {
-            gameController.endGame();
             menuController.save();
-            Platform.exit();
+            appController.exitGame();
         });
     }
 }

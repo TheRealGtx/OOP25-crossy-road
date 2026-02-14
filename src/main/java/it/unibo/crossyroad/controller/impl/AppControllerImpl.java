@@ -5,6 +5,7 @@ import it.unibo.crossyroad.controller.api.GameController;
 import it.unibo.crossyroad.controller.api.MenuController;
 import it.unibo.crossyroad.controller.api.ShopController;
 import it.unibo.crossyroad.model.api.Skin;
+import javafx.application.Platform;
 
 import java.util.function.Function;
 
@@ -106,6 +107,15 @@ public class AppControllerImpl implements AppController {
         this.hideAllViews();
         this.isGameOver = true;
         this.menuController.showMenu();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void exitGame() {
+        this.gameController.endGame();
+        Platform.exit();
     }
 
     /**
